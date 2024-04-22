@@ -85,3 +85,7 @@ func DeleteCategory(ctx echo.Context) error {
 		"Message":  "Delete category successfully",
 	})
 }
+
+func UpdateCategory(ctx echo.Context) error {
+	return nil
+}

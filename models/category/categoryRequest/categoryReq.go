@@ -1,6 +1,10 @@
 package categoryRequest
 
-import "gorm.io/gorm"
+import (
+	"log"
+
+	"gorm.io/gorm"
+)
 
 type CategoryModelHelper struct {
 	DB *gorm.DB
@@ -43,7 +47,7 @@ func (u *CategoryModelHelper) DeleleteCategory(id int) ([]*Category, error) {
 	category := []*Category{}
 	tx := u.DB.Begin()
 
-	if err := tx.Debug().Where("id = ?", id).Delete(category).Error; err != nil {
+	if err := tx.Debug().Where("id = ?", id).Delete(&category).Error; err != nil {
 		tx.Rollback()
 		return nil, nil
 	}
@@ -51,8 +55,30 @@ func (u *CategoryModelHelper) DeleleteCategory(id int) ([]*Category, error) {
 	return category, nil
 }
 
-func (u *CategoryModelHelper) UpdateCategory(id int, categoryupdate []CategoryUpdate) ([]Category, error) {
+func (u *CategoryModelHelper) UpdateCategory(id int, categoryData []Category) ([]Category, error) {
+	tx := u.DB.Begin()
 
-	//tx.Debug().Model(&User{}).Where("id = ?", User_id).Updates(&user);
-	return nil, nil
+	updateCategory := []Category{}
+
+	for _, category := range categoryData {
+		if err := tx.Debug().Model(&Category{}).Where("id = ?", id).Updates(&category).Error; err != nil {
+			log.Println("Error updating category:", err)
+			tx.Rollback()
+			return nil, err
+		}
+
+		updateCategory = append(updateCategory, category)
+
+	}
+
+	// if err := tx.Commit().Error; err != nil {
+	// 	log.Println("Error committing transaction:", err)
+	// 	return nil, err
+	// }
+	// if err := u.DB.Find(&updateCategory).Error; err != nil {
+	// 	log.Println("Error fetching updated categories:", err)
+	// 	return nil, err
+	// }
+
+	return updateCategory, nil
 }
