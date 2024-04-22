@@ -18,3 +18,11 @@ type Product struct {
 func (Product) Tablename() string {
 	return "products"
 }
+
+type InsertProduct struct {
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price" gorm:"price"`
+	Quantity    int     `json:"quantity" gorm:"quantity"`
+	Imageurl    string  `json:"imageurl" gorm:"imageURl"`
+}

@@ -3,8 +3,10 @@ package productController
 import (
 	"Intern_shopping/database"
 	"Intern_shopping/models/product/productRequest"
+	"Intern_shopping/models/product/productResponse"
 	"log"
 	"strconv"
+	"time"
 
 	"github.com/labstack/echo/v4"
 )
@@ -53,8 +55,43 @@ func GetProductBy(ctx echo.Context) error {
 
 }
 
-// func InsertproductBy(ctx echo.Context) error {
+func InsertproductBy(ctx echo.Context) error {
 
-// 	userModelHelper := userModel.UserModelHelper{DB: database.DBMYSQL}
+	productdata := []productResponse.InsertProduct{}
 
-// }
+	productModelHelper := productRequest.ProductModelHelper{DB: database.DBMYSQL}
+	now := time.Now()
+
+	if err := ctx.Bind(&productdata); err != nil {
+		log.Println("Error Bind Product")
+	}
+
+	products := []productResponse.Product{}
+
+	for _, p := range productdata {
+		product := productResponse.Product{
+
+			Name:        p.Name,
+			Description: p.Description,
+			Price:       p.Price,
+			Quantity:    p.Quantity,
+			Imageurl:    p.Imageurl,
+			Created_at:  &now,
+			Update_at:   &now,
+			Delete_at:   nil,
+		}
+		products = append(products, product)
+	}
+
+	if err := productModelHelper.Insertproduct(products); err != nil {
+		return ctx.JSON(400, map[string]interface{}{
+			"message": "Error inserting product",
+		})
+	}
+
+	return ctx.JSON(200, map[string]interface{}{
+		"Product": products,
+		"Message": "success",
+	})
+
+}

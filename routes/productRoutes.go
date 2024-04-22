@@ -9,5 +9,6 @@ import (
 func ProductRoutes(e *echo.Echo) {
 
 	e.GET("/product/get", productController.GetProductBy)
+	e.POST("/product/create", productController.InsertproductBy)
 
 }

@@ -34,7 +34,7 @@ func (u *ProductModelHelper) Getproduct(pname string, limit, page int) (*product
 
 }
 
-func (u *ProductModelHelper) Insertproduct(*productResponse.Product) error {
+func (u *ProductModelHelper) Insertproduct([]productResponse.Product) error {
 
 	product := []productResponse.Product{}
 	tx := u.DB.Begin()
