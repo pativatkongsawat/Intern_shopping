@@ -3,7 +3,6 @@ package productController
 import (
 	"Intern_shopping/database"
 	"Intern_shopping/models/product/productRequest"
-	"Intern_shopping/models/product/productResponse"
 	"log"
 	"strconv"
 	"time"
@@ -56,29 +55,30 @@ func GetProductBy(ctx echo.Context) error {
 }
 
 func InsertproductBy(ctx echo.Context) error {
-
-	productdata := []productResponse.InsertProduct{}
-
+	productdata := []productRequest.ProductInsert{}
 	productModelHelper := productRequest.ProductModelHelper{DB: database.DBMYSQL}
 	now := time.Now()
 
 	if err := ctx.Bind(&productdata); err != nil {
-		log.Println("Error Bind Product")
+		return ctx.JSON(400, map[string]interface{}{
+			"Message": "Error request Insert Product",
+		})
 	}
 
-	products := []productResponse.Product{}
+	products := []productRequest.Product{}
 
 	for _, p := range productdata {
-		product := productResponse.Product{
+		product := productRequest.Product{
 
 			Name:        p.Name,
 			Description: p.Description,
 			Price:       p.Price,
 			Quantity:    p.Quantity,
-			Imageurl:    p.Imageurl,
+			Image:       p.Image,
 			Created_at:  &now,
 			Update_at:   &now,
-			Delete_at:   nil,
+			Deleted_at:  nil,
+			Category_id: p.Category_id,
 		}
 		products = append(products, product)
 	}
@@ -93,7 +93,6 @@ func InsertproductBy(ctx echo.Context) error {
 		"Product": products,
 		"Message": "Product insert successfully",
 	})
-
 }
 
 func DeleteproductBy(ctx echo.Context) error {

@@ -15,6 +15,7 @@ func main() {
 	config.Init()
 	database.Init()
 	routes.ProductRoutes(e)
+	routes.CategoryRoutes(e)
 
 	e.Logger.Fatal(e.Start(":1323"))
 
