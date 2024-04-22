@@ -46,3 +46,22 @@ func (u *ProductModelHelper) Insertproduct([]productResponse.Product) error {
 	tx.Commit()
 	return nil
 }
+
+// func (u *ProductModelHelper) Updateproduct(product []productResponse.Product, id int) (*productResponse.Product, error) {
+
+// 	productupdate := []productResponse.Product{}
+// 	// tx.Debug().Model(&User{}).Where("id = ?", User_id).Updates(&user)
+
+// 	return nil, nil
+// }
+
+func (u *ProductModelHelper) Deleteproduct(id int) ([]productResponse.Product, error) {
+	product := []productResponse.Product{}
+	tx := u.DB.Begin()
+
+	if err := tx.Debug().Where("id = ?", id).Delete(&product).Error; err != nil {
+		return nil, err
+	}
+	return product, nil
+
+}

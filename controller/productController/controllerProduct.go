@@ -84,14 +84,40 @@ func InsertproductBy(ctx echo.Context) error {
 	}
 
 	if err := productModelHelper.Insertproduct(products); err != nil {
-		return ctx.JSON(400, map[string]interface{}{
+		return ctx.JSON(500, map[string]interface{}{
 			"message": "Error inserting product",
 		})
 	}
 
 	return ctx.JSON(200, map[string]interface{}{
 		"Product": products,
-		"Message": "success",
+		"Message": "Product insert successfully",
 	})
 
+}
+
+func DeleteproductBy(ctx echo.Context) error {
+
+	getid := ctx.QueryParam("id")
+	id, err := strconv.Atoi(getid)
+
+	if err != nil {
+		return ctx.JSON(400, map[string]interface{}{
+			"message": "Error request",
+		})
+	}
+	productModelHelper := productRequest.ProductModelHelper{DB: database.DBMYSQL}
+
+	product, err := productModelHelper.Deleteproduct(id)
+
+	if err != nil {
+		return ctx.JSON(500, map[string]interface{}{
+			"Message": "Error deleting product",
+		})
+	}
+
+	return ctx.JSON(200, map[string]interface{}{
+		"Product": product,
+		"Message": "Product deleted successfully",
+	})
 }
