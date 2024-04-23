@@ -30,4 +30,9 @@ func userRoute(e *echo.Echo) {
 
 	//!SECTION - PUT
 
+	// SECTION - DELETE
+	userGroup.DELETE("/:id", userController.DeleteById)
+
+	// !SECTION - DELETE
+
 }

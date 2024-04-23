@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"Intern_shopping/controller/auth"
-	"log"
 	"strings"
 
 	"github.com/golang-jwt/jwt"
@@ -17,7 +16,6 @@ func JWTAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		str := c.Request().Header.Get("Authorization")
 		tokenString := strings.TrimPrefix(str, "Bearer ")
 
-		log.Print(tokenString)
 		if tokenString == "" {
 			return echo.NewHTTPError(401, "Unauthorized missing JWT token")
 		}
@@ -25,9 +23,8 @@ func JWTAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		token, err := jwt.ParseWithClaims(tokenString, &auth.Claims{}, func(token *jwt.Token) (interface{}, error) {
 			return jwtSecret, nil
 		})
-		log.Println(token.Claims)
 		if !token.Valid {
-			log.Print(token.Valid)
+			// log.Print(token.Valid)
 			return echo.NewHTTPError(401, "invalid JWT token")
 		}
 		if err != nil {
@@ -42,11 +39,11 @@ func JWTAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 // NOTE - Admin only
 func AdminMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		claims := auth.ExtractClaims(c)
+		claims := extractClaims(c)
 		if claims == nil {
-			return echo.NewHTTPError(401, "Unauthorized missing JWT token")
+			return echo.NewHTTPError(401, "Please Login")
 		}
-
+		// log.Println("Permission id", claims.PermissionID)
 		if claims.PermissionID != 1 {
 			return echo.NewHTTPError(403, "Admin permission required")
 		}
@@ -57,13 +54,9 @@ func AdminMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 
 func CustomerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		user := c.Get("user").(*jwt.Token)
-		log.Println("user", user)
-		claims := user.Claims.(*auth.Claims)
-
-		log.Println("claim", claims)
+		claims := extractClaims(c)
 		if claims == nil {
-			return echo.NewHTTPError(401, "Unauthorized missing JWT token")
+			return echo.NewHTTPError(401, "Please Login")
 		}
 
 		if claims.PermissionID != 0 {
@@ -72,4 +65,13 @@ func CustomerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 
 		return next(c)
 	}
+}
+
+func extractClaims(c echo.Context) *auth.Claims {
+	user := c.Get("user").(*jwt.Token)
+	if claims, ok := user.Claims.(*auth.Claims); ok && user.Valid {
+		// log.Print("Claims in extract", claims)
+		return claims
+	}
+	return nil
 }

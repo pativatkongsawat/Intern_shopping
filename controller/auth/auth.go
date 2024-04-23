@@ -4,7 +4,6 @@ import (
 	"Intern_shopping/controller/userController"
 	"Intern_shopping/database"
 	"Intern_shopping/models/users"
-	"log"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -34,15 +33,6 @@ func GenerateToken(userID string, PermissionID uint) (string, error) {
 	return token.SignedString(jwtSecret)
 }
 
-func ExtractClaims(c echo.Context) *Claims {
-	user := c.Get("user").(*jwt.Token)
-	if claims, ok := user.Claims.(*Claims); ok && user.Valid {
-		log.Print(claims)
-		return claims
-	}
-	return nil
-}
-
 func Login(ctx echo.Context) error {
 	// Bind data from request body
 	var loginUser users.Users
@@ -52,7 +42,7 @@ func Login(ctx echo.Context) error {
 
 	// Find user by email
 	var user users.Users
-	if err := database.DBMYSQL.Where("email = ?", loginUser.Email).First(&user).Error; err != nil {
+	if err := database.DBMYSQL.Debug().Where("email = ?", loginUser.Email).First(&user).Error; err != nil {
 		return echo.NewHTTPError(401, "Invalid email or unknown password")
 	}
 

@@ -85,7 +85,7 @@ func CreateUsers(ctx echo.Context) error {
 // !SECTION - Create
 
 // SECTION - Read
-// Get user by Id
+// NOTE - Get user by Id
 func GetUserSelf(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
@@ -98,7 +98,7 @@ func GetUserSelf(ctx echo.Context) error {
 	return ctx.JSON(200, user)
 }
 
-// Get all users
+// NOTE - Get all users
 func GetUsers(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
@@ -120,6 +120,34 @@ func GetUsers(ctx echo.Context) error {
 	}
 
 	users, err := userModelHelper.SelectAll(pagination, filter)
+	if err != nil {
+		return ctx.JSON(500, map[string]interface{}{"Error": err.Error()})
+	}
+	return ctx.JSON(200, map[string]interface{}{"data": users, "pagination": pagination, "message": "success"})
+}
+
+// NOTE - Get all deleted users
+func GetDeletedUsers(ctx echo.Context) error {
+	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
+
+	pagination := &helper.Pagination{Row: 5}
+	filter := &helper.UserFilter{}
+
+	// *ANCHOR - ดึงค่าจาก QueryParams
+	err := echo.QueryParamsBinder(ctx).
+		Int("row", &pagination.Row).
+		Int("page", &pagination.Page).
+		String("sort", &pagination.Sort).
+		String("firstname", &filter.Firstname).
+		String("lastname", &filter.Lastname).
+		String("email", &filter.Email).
+		String("add", &filter.Address).
+		BindError()
+	if err != nil {
+		return ctx.JSON(400, map[string]interface{}{"massage": "Error query param"})
+	}
+
+	users, err := userModelHelper.SelectDeleted(pagination, filter)
 	if err != nil {
 		return ctx.JSON(500, map[string]interface{}{"Error": err.Error()})
 	}
@@ -153,3 +181,30 @@ func UpdateById(ctx echo.Context) error {
 }
 
 // !SECTION - Update
+
+// SECTION - Delete
+func DeleteById(ctx echo.Context) error {
+	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
+
+	id := ctx.Param("id")
+	result, Dtime, err := userModelHelper.SoftDelete(id)
+	if result != "" {
+		return ctx.JSON(500, map[string]interface{}{"message": result, "time": Dtime})
+	} else if err != nil {
+		return ctx.JSON(500, map[string]interface{}{"message": "Delete user error"})
+	}
+	return ctx.JSON(200, map[string]interface{}{"message": "Delete user successfully", "time": Dtime})
+}
+
+func RemoveUser(ctx echo.Context) error {
+	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
+
+	id := ctx.Param("id")
+	result := userModelHelper.Delete(id)
+	if result != nil {
+		return ctx.JSON(500, map[string]interface{}{"message": "Remove user error"})
+	}
+	return ctx.JSON(200, map[string]interface{}{"message": "Removed successfully"})
+}
+
+// !SECTION - Delete
