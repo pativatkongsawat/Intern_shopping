@@ -2,7 +2,7 @@ package productController
 
 import (
 	"Intern_shopping/database"
-	"Intern_shopping/models/product/productRequest"
+	"Intern_shopping/models/product"
 	"log"
 	"strconv"
 	"time"
@@ -30,7 +30,7 @@ func GetProductBy(ctx echo.Context) error {
 
 	// userModelHelper := {DB: database.DBMYSQL}
 
-	productModelHelper := productRequest.ProductModelHelper{DB: database.DBMYSQL}
+	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
 
 	user, count, err := productModelHelper.Getproduct(pname, limit, page)
 
@@ -55,8 +55,8 @@ func GetProductBy(ctx echo.Context) error {
 }
 
 func InsertproductBy(ctx echo.Context) error {
-	productdata := []productRequest.ProductInsert{}
-	productModelHelper := productRequest.ProductModelHelper{DB: database.DBMYSQL}
+	productdata := []product.ProductInsert{}
+	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
 	now := time.Now()
 
 	if err := ctx.Bind(&productdata); err != nil {
@@ -65,10 +65,10 @@ func InsertproductBy(ctx echo.Context) error {
 		})
 	}
 
-	products := []productRequest.Product{}
+	products := []product.Product{}
 
 	for _, p := range productdata {
-		product := productRequest.Product{
+		product := product.Product{
 
 			Name:        p.Name,
 			Description: p.Description,
@@ -105,7 +105,7 @@ func DeleteproductBy(ctx echo.Context) error {
 			"message": "Error request",
 		})
 	}
-	productModelHelper := productRequest.ProductModelHelper{DB: database.DBMYSQL}
+	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
 
 	product, err := productModelHelper.Deleteproduct(id)
 

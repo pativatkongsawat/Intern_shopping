@@ -1,4 +1,4 @@
-package categoryRequest
+package category
 
 import (
 	"log"
@@ -8,18 +8,6 @@ import (
 
 type CategoryModelHelper struct {
 	DB *gorm.DB
-}
-
-type Category struct {
-	Id   int    `json:"id" gorm:"id"`
-	Name string `json:"name" gorm:"name"`
-}
-type CategoryUpdate struct {
-	Name string `json:"name" gorm:"name"`
-}
-
-func (c Category) TableName() string {
-	return "category"
 }
 
 func (u *CategoryModelHelper) GetAllCategory() ([]Category, error) {
@@ -55,30 +43,27 @@ func (u *CategoryModelHelper) DeleleteCategory(id int) ([]*Category, error) {
 	return category, nil
 }
 
-func (u *CategoryModelHelper) UpdateCategory(id int, categoryData []Category) ([]Category, error) {
+func (u *CategoryModelHelper) UpdateCategory(categoryData []Category) ([]Category, error) {
 	tx := u.DB.Begin()
 
 	updateCategory := []Category{}
 
 	for _, category := range categoryData {
-		if err := tx.Debug().Model(&Category{}).Where("id = ?", id).Updates(&category).Error; err != nil {
+
+		updateValues := map[string]interface{}{
+			"Name": category.Name,
+		}
+
+		if err := tx.Debug().Model(&Category{}).Where("id = ?", category.Id).Updates(updateValues).Error; err != nil {
 			log.Println("Error updating category:", err)
 			tx.Rollback()
 			return nil, err
 		}
 
 		updateCategory = append(updateCategory, category)
-
 	}
 
-	// if err := tx.Commit().Error; err != nil {
-	// 	log.Println("Error committing transaction:", err)
-	// 	return nil, err
-	// }
-	// if err := u.DB.Find(&updateCategory).Error; err != nil {
-	// 	log.Println("Error fetching updated categories:", err)
-	// 	return nil, err
-	// }
+	tx.Commit()
 
 	return updateCategory, nil
 }

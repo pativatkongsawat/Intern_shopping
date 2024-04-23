@@ -2,16 +2,17 @@ package categoryController
 
 import (
 	"Intern_shopping/database"
-	"Intern_shopping/models/category/categoryRequest"
+	"Intern_shopping/models/category"
+	"log"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
 
 func InsertCategory(ctx echo.Context) error {
-	categorydata := []categoryRequest.Category{}
+	categorydata := []category.Category{}
 
-	categoryModelHelper := categoryRequest.CategoryModelHelper{DB: database.DBMYSQL}
+	categoryModelHelper := category.CategoryModelHelper{DB: database.DBMYSQL}
 
 	if err := ctx.Bind(&categorydata); err != nil {
 		return ctx.JSON(400, map[string]interface{}{
@@ -19,10 +20,10 @@ func InsertCategory(ctx echo.Context) error {
 		})
 	}
 
-	categorys := []categoryRequest.Category{}
+	categorys := []category.Category{}
 
 	for _, i := range categorydata {
-		category := categoryRequest.Category{
+		category := category.Category{
 			Id:   i.Id,
 			Name: i.Name,
 		}
@@ -44,7 +45,7 @@ func InsertCategory(ctx echo.Context) error {
 func GetAllCategory(ctx echo.Context) error {
 
 	// category := []categoryRequest.Category{}
-	categoryModelHelper := categoryRequest.CategoryModelHelper{DB: database.DBMYSQL}
+	categoryModelHelper := category.CategoryModelHelper{DB: database.DBMYSQL}
 
 	category, err := categoryModelHelper.GetAllCategory()
 
@@ -70,7 +71,7 @@ func DeleteCategory(ctx echo.Context) error {
 		})
 	}
 
-	categoryModelHelper := categoryRequest.CategoryModelHelper{DB: database.DBMYSQL}
+	categoryModelHelper := category.CategoryModelHelper{DB: database.DBMYSQL}
 
 	category, err := categoryModelHelper.DeleleteCategory(id)
 
@@ -87,5 +88,32 @@ func DeleteCategory(ctx echo.Context) error {
 }
 
 func UpdateCategory(ctx echo.Context) error {
-	return nil
+
+	categorydata := []category.CategoryUpdate{}
+
+	if err := ctx.Bind(&categorydata); err != nil {
+		log.Println("Error Bind ")
+		return err
+	}
+
+	categoryModelHelper := category.CategoryModelHelper{DB: database.DBMYSQL}
+	categorys := []category.Category{}
+
+	for _, i := range categorydata {
+
+		newCategory := category.CategoryUpdate{
+			Id:   i.Id,
+			Name: i.Name,
+		}
+		categorys = append(categorys, category.Category(newCategory))
+	}
+
+	if err, _ := categoryModelHelper.UpdateCategory(categorys); err != nil {
+		log.Println("Error Update category")
+	}
+
+	return ctx.JSON(200, map[string]interface{}{
+		"category": categorys,
+		"Message":  "Updated category Successfully",
+	})
 }
