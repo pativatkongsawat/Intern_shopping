@@ -28,8 +28,19 @@ func (u *ProductModelHelper) Getproduct(pname string, limit, page int) ([]Produc
 		return nil, 0, err
 	}
 
-	return nil, count, nil
+	return product, count, nil
 
+}
+
+func (u *ProductModelHelper) GetproductAll() ([]Product, error) {
+
+	product := []Product{}
+
+	if err := u.DB.Find(&product).Error; err != nil {
+		return nil, err
+	}
+
+	return product, nil
 }
 
 func (u *ProductModelHelper) Insertproduct(products []Product) error {
@@ -43,14 +54,6 @@ func (u *ProductModelHelper) Insertproduct(products []Product) error {
 	tx.Commit()
 	return nil
 }
-
-// func (u *ProductModelHelper) Updateproduct(product []productResponse.Product, id int) (*productResponse.Product, error) {
-
-// 	productupdate := []productResponse.Product{}
-// 	// tx.Debug().Model(&User{}).Where("id = ?", User_id).Updates(&user)
-
-// 	return nil, nil
-// }
 
 func (u *ProductModelHelper) Deleteproduct(id int) ([]*Product, error) {
 	product := []*Product{}
