@@ -66,7 +66,30 @@ func (u *ProductModelHelper) Deleteproduct(id int) ([]*Product, error) {
 
 }
 
-func (u *ProductModelHelper) SoftDelete(id int) ([]Product, error) {
+func (u *ProductModelHelper) UpdateProduct(Productdata []Product) ([]Product, error) {
 
-	return nil, nil
+	tx := u.DB.Begin()
+
+	newProductdata := []Product{}
+
+	for _, product := range Productdata {
+		newProduct := map[string]interface{}{
+			"Name":        product.Name,
+			"Description": product.Description,
+			"Price":       product.Price,
+			"Quantity":    product.Quantity,
+			"Image":       product.Image,
+			"Category_id": product.Category_id,
+		}
+
+		if err := tx.Debug().Model(&Product{}).Where("id = ?", product.Id).Updates(newProduct).Error; err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+
+		newProductdata = append(newProductdata, product)
+	}
+
+	tx.Commit()
+	return newProductdata, nil
 }

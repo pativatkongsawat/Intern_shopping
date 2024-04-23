@@ -121,3 +121,60 @@ func DeleteproductBy(ctx echo.Context) error {
 		"Message": "Product deleted successfully",
 	})
 }
+
+func ProductGetAll(ctx echo.Context) error {
+
+	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
+
+	product, err := productModelHelper.GetproductAll()
+
+	if err != nil {
+		log.Println("Error getting all products")
+	}
+
+	return ctx.JSON(200, map[string]interface{}{
+		"Product": product,
+		"Message": "Successfully retrieved all products",
+	})
+}
+
+func UpdateProduct(ctx echo.Context) error {
+
+	productdata := []product.ProductUpdate{}
+
+	if err := ctx.Bind(&productdata); err != nil {
+		return ctx.JSON(400, map[string]interface{}{
+			"Message": "Bind Error updating product",
+		})
+	}
+	now := time.Now()
+	newproduct := []product.Product{}
+
+	for _, i := range productdata {
+
+		newproductsdata := product.Product{
+			Name:        i.Name,
+			Description: i.Description,
+			Price:       i.Price,
+			Quantity:    i.Quantity,
+			Image:       i.Image,
+			Update_at:   &now,
+			Category_id: i.Category_id,
+		}
+
+		newproduct = append(newproduct, product.Product(newproductsdata))
+	}
+
+	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
+
+	product, err := productModelHelper.UpdateProduct(newproduct)
+
+	if err != nil {
+		log.Println("Error updating product")
+	}
+
+	return ctx.JSON(200, map[string]interface{}{
+		"product": product,
+		"Message": "Updated product successfully",
+	})
+}

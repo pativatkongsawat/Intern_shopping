@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"Intern_shopping/controller/categoryController.go"
+	"Intern_shopping/controller/categoryController"
 
 	"github.com/labstack/echo/v4"
 )
