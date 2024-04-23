@@ -79,7 +79,7 @@ func (u *ProductModelHelper) UpdateProduct(Productdata []Product) ([]Product, er
 			"Price":       product.Price,
 			"Quantity":    product.Quantity,
 			"Image":       product.Image,
-			"Category_id": product.Category_id,
+			"Update_at":   product.Update_at,
 		}
 
 		if err := tx.Debug().Model(&Product{}).Where("id = ?", product.Id).Updates(newProduct).Error; err != nil {

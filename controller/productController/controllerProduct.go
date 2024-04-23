@@ -153,13 +153,13 @@ func UpdateProduct(ctx echo.Context) error {
 	for _, i := range productdata {
 
 		newproductsdata := product.Product{
+			Id:          i.Id,
 			Name:        i.Name,
 			Description: i.Description,
 			Price:       i.Price,
 			Quantity:    i.Quantity,
 			Image:       i.Image,
 			Update_at:   &now,
-			Category_id: i.Category_id,
 		}
 
 		newproduct = append(newproduct, product.Product(newproductsdata))

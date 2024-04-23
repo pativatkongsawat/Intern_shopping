@@ -25,6 +25,7 @@ type ProductInsert struct {
 }
 
 type ProductUpdate struct {
+	Id          int        `json:"id" gorm:"primaryKey;autoIncrement;not null"`
 	Name        string     `json:"name" gorm:"name"`
 	Description string     `json:"description" gorm:"description"`
 	Price       float64    `json:"price" gorm:"price"`
