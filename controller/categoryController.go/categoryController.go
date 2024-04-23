@@ -108,12 +108,13 @@ func UpdateCategory(ctx echo.Context) error {
 		categorys = append(categorys, category.Category(newCategory))
 	}
 
-	if err, _ := categoryModelHelper.UpdateCategory(categorys); err != nil {
+	newCategory, err := categoryModelHelper.UpdateCategory(categorys)
+	if err != nil {
 		log.Println("Error Update category")
 	}
 
 	return ctx.JSON(200, map[string]interface{}{
-		"category": categorys,
+		"category": newCategory,
 		"Message":  "Updated category Successfully",
 	})
 }

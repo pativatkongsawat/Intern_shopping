@@ -32,7 +32,7 @@ func GetProductBy(ctx echo.Context) error {
 
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
 
-	user, count, err := productModelHelper.Getproduct(pname, limit, page)
+	product, count, err := productModelHelper.Getproduct(pname, limit, page)
 
 	if err != nil {
 		log.Println("Error getting product")
@@ -49,7 +49,7 @@ func GetProductBy(ctx echo.Context) error {
 			Prevpage:      page - 1,
 			Nextpage:      page + 1,
 		},
-		"user": user,
+		"Product": product,
 	})
 
 }
@@ -69,7 +69,6 @@ func InsertproductBy(ctx echo.Context) error {
 
 	for _, p := range productdata {
 		product := product.Product{
-
 			Name:        p.Name,
 			Description: p.Description,
 			Price:       p.Price,
@@ -83,9 +82,11 @@ func InsertproductBy(ctx echo.Context) error {
 		products = append(products, product)
 	}
 
-	if err := productModelHelper.Insertproduct(products); err != nil {
+	err := productModelHelper.Insertproduct(products)
+	if err != nil {
+		log.Println("Error inserting product:", err)
 		return ctx.JSON(500, map[string]interface{}{
-			"message": "Error inserting product",
+			"Message": "Error inserting product",
 		})
 	}
 

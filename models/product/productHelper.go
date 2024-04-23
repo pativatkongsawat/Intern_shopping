@@ -36,10 +36,11 @@ func (u *ProductModelHelper) Insertproduct(products []Product) error {
 	tx := u.DB.Begin()
 
 	if err := tx.Debug().Create(&products).Error; err != nil {
-
+		tx.Rollback()
 		return err
 	}
 
+	tx.Commit()
 	return nil
 }
 
