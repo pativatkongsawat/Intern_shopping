@@ -3,7 +3,8 @@ package userController
 import (
 	"Intern_shopping/database"
 	"Intern_shopping/helper"
-	"Intern_shopping/models/user/userRequest"
+	"Intern_shopping/models/users"
+	"log"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -15,16 +16,16 @@ var now = time.Now()
 // SECTION - Create
 // NOTE - สร้าง User เดียว
 func CreateUser(ctx echo.Context) error {
-	userModelHelper := userRequest.DatabaseRequest{DB: database.DBMYSQL}
+	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
 	// ANCHOR -  - ดึงข้อมูลจาก Body มาใส่ตัวแปร
-	var newUser userRequest.CreateUser
+	var newUser users.CreateUser
 	if err := ctx.Bind(&newUser); err != nil {
 		return ctx.JSON(400, map[string]interface{}{"message": "Invalid request body"})
 	} else if newUser.Email == "" {
 		return ctx.JSON(400, map[string]interface{}{"message": "Please enter an email address"})
 	}
-	var CheckEmail userRequest.User
+	var CheckEmail users.Users
 	duplicate := userModelHelper.DB.Debug().Where("email = ?", newUser.Email).Find(&CheckEmail)
 	if duplicate.RowsAffected != 0 {
 		return ctx.JSON(400, map[string]interface{}{"message": "Email already exists"})
@@ -39,7 +40,7 @@ func CreateUser(ctx echo.Context) error {
 	}
 	newUser.Password = string(hashedPassword)
 
-	user := userRequest.User{
+	user := users.Users{
 		ID:        helper.GenerateUUID(),
 		Firstname: newUser.Firstname,
 		Lastname:  newUser.Lastname,
@@ -58,15 +59,15 @@ func CreateUser(ctx echo.Context) error {
 
 // NOTE * สร้างหลาย Users
 func CreateUsers(ctx echo.Context) error {
-	userModelHelper := userRequest.DatabaseRequest{DB: database.DBMYSQL}
+	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
 	// ANCHOR -  - ดึงข้อมูลจาก Body มาใส่ตัวแปร
-	data := []userRequest.User{}
+	data := []users.Users{}
 	err := ctx.Bind(&data)
 	if err != nil {
 		return ctx.JSON(400, map[string]interface{}{"message": "Invalid request body"})
 	}
-	users := []*userRequest.User{}
+	users := []*users.Users{}
 	for _, user := range data {
 		user.ID = helper.GenerateUUID()
 		user.CreatedAt = &now
@@ -84,13 +85,24 @@ func CreateUsers(ctx echo.Context) error {
 // !SECTION - Create
 
 // SECTION - Read
+// Get user by Id
+func GetUserSelf(ctx echo.Context) error {
+	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
-func GetUsers(ctx echo.Context) error {
-	userModelHelper := userRequest.DatabaseRequest{DB: database.DBMYSQL}
-	pagination := &helper.Pagination{
-		Row:  5,
-		Page: 1,
+	id := ctx.Param("id")
+	user, err := userModelHelper.SelectById(id)
+	log.Print(id)
+	if err != nil {
+		return ctx.JSON(500, map[string]interface{}{"message": "Select Error"})
 	}
+	return ctx.JSON(200, user)
+}
+
+// Get all users
+func GetUsers(ctx echo.Context) error {
+	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
+
+	pagination := &helper.Pagination{Row: 5}
 	filter := &helper.UserFilter{}
 
 	// *ANCHOR - ดึงค่าจาก QueryParams
@@ -100,6 +112,8 @@ func GetUsers(ctx echo.Context) error {
 		String("sort", &pagination.Sort).
 		String("firstname", &filter.Firstname).
 		String("lastname", &filter.Lastname).
+		String("email", &filter.Email).
+		String("add", &filter.Address).
 		BindError()
 	if err != nil {
 		return ctx.JSON(400, map[string]interface{}{"massage": "Error query param"})
@@ -117,11 +131,12 @@ func GetUsers(ctx echo.Context) error {
 // SECTION - Update
 
 func UpdateById(ctx echo.Context) error {
-	userModelHelper := userRequest.DatabaseRequest{DB: database.DBMYSQL}
+	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
+
 	id := ctx.Param("id")
-	fields := userRequest.UserUpdate{}
+	fields := users.UserUpdate{}
 	err := ctx.Bind(&fields)
-	user := userRequest.User{
+	user := users.Users{
 		Firstname: fields.Firstname,
 		Lastname:  fields.Lastname,
 		Email:     fields.Email,
