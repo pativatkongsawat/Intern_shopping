@@ -3,7 +3,7 @@ package ordercontroller
 import (
 	"Intern_shopping/database"
 	"Intern_shopping/models/order"
-	"log"
+	"time"
 
 	"github.com/labstack/echo/v4"
 )
@@ -29,22 +29,37 @@ func GetOrderAll(ctx echo.Context) error {
 
 func InsertOrderAll(ctx echo.Context) error {
 
-	Order := []order.Order{}
+	orderdata := []order.OrderInsert{}
+
+	now := time.Now()
 
 	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}
 
-	if err := ctx.Bind(&Order); err != nil {
-		return ctx.JSON(500, map[string]interface{}{
-			"Message": err.Error,
+	if err := ctx.Bind(&orderdata); err != nil {
+		return ctx.JSON(400, map[string]interface{}{
+			"Message": err.Error(),
 		})
 	}
 
-	if err, _ := orderModelHelper.Insertorder(Order); err != nil {
-		log.Println("Error inserting order")
+	neworder := []order.Order{}
+
+	for _, i := range orderdata {
+		orderss := order.Order{
+			Create_at:  &now,
+			Updated_at: &now,
+			Deleted_at: nil,
+			User_id:    i.User_id,
+		}
+
+		neworder = append(neworder, order.Order(orderss))
 	}
 
-	return ctx.JSON(200, map[string]interface{}{
-		"order":   Order,
-		"Message": "Success",
-	})
+	order, err := orderModelHelper.Insertorder(neworder)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+
 }
