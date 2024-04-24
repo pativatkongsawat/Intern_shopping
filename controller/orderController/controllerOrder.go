@@ -60,6 +60,9 @@ func InsertOrderAll(ctx echo.Context) error {
 		return err
 	}
 
-	return nil
+	return ctx.JSON(200, map[string]interface{}{
+		"Order":   order,
+		"Message": "Success",
+	})
 
 }
