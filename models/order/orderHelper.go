@@ -17,7 +17,12 @@ func (u *OrderModelHelper) GetAllorder() ([]Order, error) {
 
 }
 
-func (u *OrderModelHelper) Insertorder([]Order) ([]Order, error) {
+func (u *OrderModelHelper) Insertorder(order []Order) ([]Order, error) {
 
-	return nil, nil
+	tx := u.DB.Begin()
+	if err := tx.Debug().Create(&order).Error; err != nil {
+		return nil, err
+	}
+	return order, nil
+
 }

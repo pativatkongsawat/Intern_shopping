@@ -7,10 +7,9 @@ import (
 )
 
 func CategoryRoutes(e *echo.Echo) {
-
-	e.POST("/category/create", categoryController.InsertCategory)
 	e.GET("/category", categoryController.GetAllCategory)
-	e.DELETE("/category/del/:id", categoryController.DeleteCategory)
+	e.POST("/category/create", categoryController.InsertCategory)
 	e.PUT("/category/update/", categoryController.UpdateCategory)
+	e.DELETE("/category/del/:id", categoryController.DeleteCategory)
 
 }

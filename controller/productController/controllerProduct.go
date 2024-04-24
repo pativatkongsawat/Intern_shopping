@@ -96,29 +96,26 @@ func InsertproductBy(ctx echo.Context) error {
 	})
 }
 
-func DeleteproductBy(ctx echo.Context) error {
-
-	getid := ctx.QueryParam("id")
-	id, err := strconv.Atoi(getid)
-
+func DeleteProductBy(ctx echo.Context) error {
+	idStr := ctx.QueryParam("id")
+	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		return ctx.JSON(400, map[string]interface{}{
-			"message": "Error request",
+			"message": "Invalid ID format",
 		})
 	}
+
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
-
-	product, err := productModelHelper.Deleteproduct(id)
-
+	deletedProduct, err := productModelHelper.DeleteProduct(id)
 	if err != nil {
 		return ctx.JSON(500, map[string]interface{}{
-			"Message": "Error deleting product",
+			"message": "Error deleting product",
 		})
 	}
 
 	return ctx.JSON(200, map[string]interface{}{
-		"Product": product,
-		"Message": "Product deleted successfully",
+		"product": deletedProduct,
+		"message": "Product deleted successfully",
 	})
 }
 
@@ -160,6 +157,7 @@ func UpdateProduct(ctx echo.Context) error {
 			Quantity:    i.Quantity,
 			Image:       i.Image,
 			Update_at:   &now,
+			Category_id: i.Category_id,
 		}
 
 		newproduct = append(newproduct, product.Product(newproductsdata))
@@ -176,5 +174,46 @@ func UpdateProduct(ctx echo.Context) error {
 	return ctx.JSON(200, map[string]interface{}{
 		"product": product,
 		"Message": "Updated product successfully",
+	})
+}
+
+func DeleteProductSoft(ctx echo.Context) error {
+
+	// getid := ctx.QueryParam("id")
+
+	now := time.Now()
+
+	// id, _ := strconv.Atoi(getid)
+	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
+
+	productdata := []product.ProductUpdate{}
+
+	if err := ctx.Bind(productdata); err != nil {
+		return err
+	}
+
+	newproduct := []product.Product{}
+
+	for _, i := range productdata {
+		productss := product.Product{
+			Id:         i.Id,
+			Deleted_at: &now,
+		}
+
+		newproduct = append(newproduct, product.Product(productss))
+	}
+
+	productnewdata, err := productModelHelper.SoftDelete(newproduct)
+
+	if err != nil {
+
+		return ctx.JSON(500, map[string]interface{}{
+			"Message": err.Error,
+		})
+	}
+
+	return ctx.JSON(200, map[string]interface{}{
+		"Product": productnewdata,
+		"Message": "Successfully deleted product",
 	})
 }

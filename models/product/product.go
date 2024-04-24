@@ -15,6 +15,10 @@ type Product struct {
 	Category_id int        `json:"category_id" gorm:"category_id"`
 }
 
+func (Product) TableName() string {
+	return "products"
+}
+
 type ProductInsert struct {
 	Name        string  `json:"name" gorm:"name"`
 	Description string  `json:"description" gorm:"description"`
@@ -35,6 +39,6 @@ type ProductUpdate struct {
 	Category_id int        `json:"category_id" gorm:"category_id"`
 }
 
-func (Product) TableName() string {
-	return "products"
+type ProductDeleteSoft struct {
+	Deleted_at *time.Time `json:"deleted_at" gorm:"deleted_at"`
 }

@@ -55,15 +55,21 @@ func (u *ProductModelHelper) Insertproduct(products []Product) error {
 	return nil
 }
 
-func (u *ProductModelHelper) Deleteproduct(id int) ([]*Product, error) {
-	product := []*Product{}
+func (u *ProductModelHelper) DeleteProduct(id int) ([]Product, error) {
+	product := []Product{}
 	tx := u.DB.Begin()
 
-	if err := tx.Debug().Where("id = ?", id).Delete(product).Error; err != nil {
+	if err := tx.Debug().Where("id = ?", id).First(&product).Error; err != nil {
+		tx.Rollback()
 		return nil, err
 	}
-	return product, nil
 
+	if err := tx.Debug().Delete(&product).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	tx.Commit()
+	return product, nil
 }
 
 func (u *ProductModelHelper) UpdateProduct(Productdata []Product) ([]Product, error) {
@@ -80,6 +86,7 @@ func (u *ProductModelHelper) UpdateProduct(Productdata []Product) ([]Product, er
 			"Quantity":    product.Quantity,
 			"Image":       product.Image,
 			"Update_at":   product.Update_at,
+			"Category_id": product.Category_id,
 		}
 
 		if err := tx.Debug().Model(&Product{}).Where("id = ?", product.Id).Updates(newProduct).Error; err != nil {
@@ -92,4 +99,27 @@ func (u *ProductModelHelper) UpdateProduct(Productdata []Product) ([]Product, er
 
 	tx.Commit()
 	return newProductdata, nil
+}
+
+func (u *ProductModelHelper) SoftDelete(productdata []Product) ([]Product, error) {
+
+	tx := u.DB.Begin()
+	newproduct := []Product{}
+
+	for _, p := range productdata {
+		newproductdata := map[string]interface{}{
+			"Deleted_at": p.Deleted_at,
+		}
+
+		if err := tx.Debug().Model(&Product{}).Where("id = ?", p.Id).Update("update_at = ?", newproductdata).Error; err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+
+		newproduct = append(newproduct, p)
+
+	}
+	tx.Commit()
+	return newproduct, nil
+
 }
