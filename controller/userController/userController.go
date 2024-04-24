@@ -158,11 +158,17 @@ func UpdateById(ctx echo.Context) error {
 	id := ctx.Param("id")
 	fields := users.UserUpdate{}
 	err := ctx.Bind(&fields)
+
 	user := users.Users{
 		Firstname: fields.Firstname,
 		Lastname:  fields.Lastname,
 		Email:     fields.Email,
 		Address:   fields.Address,
+	}
+	if hashedPassword, err := bcrypt.GenerateFromPassword([]byte(fields.Password), bcrypt.DefaultCost); err != nil {
+		return ctx.JSON(500, "Failed to hash password")
+	} else {
+		user.Password = string(hashedPassword)
 	}
 	if err != nil {
 		return ctx.JSON(500, map[string]interface{}{"message": "Invalid request body"})
@@ -172,6 +178,20 @@ func UpdateById(ctx echo.Context) error {
 		return ctx.JSON(500, map[string]interface{}{"message": "Update user error"})
 	}
 	return ctx.JSON(200, map[string]interface{}{"message": "Update user successfully"})
+}
+
+func AdminUpdateUsers(ctx echo.Context) error {
+	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
+
+	data := []*users.Users{}
+	err := ctx.Bind(&data)
+	if err != nil {
+		return ctx.JSON(500, map[string]interface{}{"massage": "Invalid request body"})
+	}
+	if result := userModelHelper.UpdateUserArray(data); result != nil {
+		return ctx.JSON(500, map[string]interface{}{"Error": result.Error()})
+	}
+	return ctx.JSON(200, map[string]interface{}{"massage": "User updated success"})
 }
 
 // !SECTION - Update

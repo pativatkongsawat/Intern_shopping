@@ -2,7 +2,9 @@ package users
 
 import (
 	"Intern_shopping/helper"
+	"errors"
 	"fmt"
+	"log"
 	"math"
 	"strings"
 	"time"
@@ -125,6 +127,45 @@ func (d DatabaseRequest) UpdateUser(user_id string, fields Users) error {
 		tx.Rollback()
 		return result.Error
 	}
+	tx.Commit()
+	return nil
+}
+
+// NOTE - แก้ไขข้อมูล Users/ Update Users หลายตัวพร้อมกัน
+func (d *DatabaseRequest) UpdateUserArray(fields []*Users) error {
+	// Start a new transaction
+	tx := d.DB.Begin()
+
+	defer func() {
+		// If the function exits with an error, rollback the transaction
+		if r := recover(); r != nil {
+			tx.Rollback()
+			panic(r)
+		}
+	}()
+	log.Print("fields: ", fields)
+	for _, item := range fields {
+		var user Users
+		if result := tx.Debug().First(&user, "id = ?", item.ID).Error; result != nil {
+			if errors.Is(result, gorm.ErrRecordNotFound) {
+				tx.Rollback()
+				return fmt.Errorf("%s Article with ID %s not found", "Error 404", fmt.Sprint(item.ID))
+			}
+			tx.Rollback()
+			return fmt.Errorf("failed to update user %w", result)
+		}
+		user.Firstname = item.Firstname
+		user.Lastname = item.Lastname
+		user.Email = item.Email
+		user.Password = item.Password
+		user.Address = item.Address
+		user.PermissionID = item.PermissionID
+		if result := tx.Debug().Updates(&user).Error; result != nil {
+			tx.Rollback()
+			return fmt.Errorf("%s Failed to update article with ID %s", "Error 500", fmt.Sprint(item.ID))
+		}
+	}
+
 	tx.Commit()
 	return nil
 }

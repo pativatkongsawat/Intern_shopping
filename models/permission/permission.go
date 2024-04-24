@@ -1,4 +1,4 @@
-package permissionrequest
+package permission
 
 type Permission struct {
 	ID   int    `gorm:"primaryKey" json:"id"`
