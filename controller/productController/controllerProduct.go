@@ -188,7 +188,7 @@ func DeleteProductSoft(ctx echo.Context) error {
 
 	productdata := []product.ProductUpdate{}
 
-	if err := ctx.Bind(productdata); err != nil {
+	if err := ctx.Bind(&productdata); err != nil {
 		return err
 	}
 

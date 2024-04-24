@@ -111,7 +111,7 @@ func (u *ProductModelHelper) SoftDelete(productdata []Product) ([]Product, error
 			"Deleted_at": p.Deleted_at,
 		}
 
-		if err := tx.Debug().Model(&Product{}).Where("id = ?", p.Id).Update("update_at = ?", newproductdata).Error; err != nil {
+		if err := tx.Debug().Model(&Product{}).Where("id = ?", p.Id).Updates(newproductdata).Error; err != nil {
 			tx.Rollback()
 			return nil, err
 		}
