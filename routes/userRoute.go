@@ -12,23 +12,22 @@ func userRoute(e *echo.Echo) {
 
 	userGroup.Use(middleware.JWTAuthMiddleware, middleware.CustomerMiddleware)
 
-	//SECTION - GET
+	//SECTION - READ
 
-	//NOTE - Select
 	userGroup.GET("/profile/:id", userController.GetUserSelf)
 
-	// !SECTION - GET
+	// !SECTION - READ
 
-	//SECTION - POST
+	//SECTION - CREATE
 
-	// !SECTION - POST
+	// !SECTION - CREATE
 
-	//SECTION - PUT
+	//SECTION - UPDATE
 
 	//NOTE - Update
 	userGroup.PUT("/:id", userController.UpdateById)
 
-	//!SECTION - PUT
+	//!SECTION - UPDATE
 
 	// SECTION - DELETE
 	userGroup.DELETE("/:id", userController.DeleteById)

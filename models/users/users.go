@@ -49,6 +49,10 @@ type UserAuth struct {
 	PermissionID int    `json:"permission_id"`
 }
 
+type UserDelete struct {
+	ID string `json:"id"`
+}
+
 func (Users) TableName() string {
 	return "users"
 }

@@ -4,6 +4,7 @@ import (
 	"Intern_shopping/helper"
 	"fmt"
 	"math"
+	"strings"
 	"time"
 
 	"gorm.io/gorm"
@@ -13,14 +14,28 @@ type DatabaseRequest struct {
 	DB *gorm.DB
 }
 
+var now = time.Now()
+
+// REVIEW - Function เช็คว่าเป็น Error Duplicate รึป่าว
+func isDuplicateError(err error) bool {
+	if err == nil {
+		return false
+	}
+	// Check for specific MySQL error code 1062 or SQL state 23000
+	return strings.Contains(err.Error(), "1062") || strings.Contains(err.Error(), "23000")
+}
+
 // SECTION - Create
 // NOTE Insert
 func (d DatabaseRequest) Insert(user *Users) error {
 	tx := d.DB.Begin()
 	result := tx.Debug().Create(&user)
 	if result.Error != nil {
+		if isDuplicateError(result.Error) {
+			return fmt.Errorf("duplicate email")
+		}
 		tx.Rollback()
-		return result.Error
+		return fmt.Errorf("error creating user: %v", result.Error)
 	}
 	tx.Commit()
 	return nil
@@ -29,11 +44,14 @@ func (d DatabaseRequest) Insert(user *Users) error {
 // NOTE - Insert array
 func (d DatabaseRequest) InsertArray(users []*Users) error {
 	tx := d.DB.Begin()
-	result := tx.Create(&users)
-	if result.Error != nil {
+	if result := tx.Create(&users); result.Error != nil {
+		if isDuplicateError(result.Error) {
+			return fmt.Errorf("duplicate email")
+		}
 		tx.Rollback()
-		return result.Error
+		return fmt.Errorf("error creating user: %v", result.Error)
 	}
+
 	tx.Commit()
 	return nil
 }
@@ -115,7 +133,7 @@ func (d DatabaseRequest) UpdateUser(user_id string, fields Users) error {
 
 // SECTION - Delete
 
-// NOTE - SoftDelete
+// NOTE - Soft Delete
 func (d DatabaseRequest) SoftDelete(id string) (string, time.Time, error) {
 	now := time.Now()
 	tx := d.DB.Begin()
@@ -132,11 +150,49 @@ func (d DatabaseRequest) SoftDelete(id string) (string, time.Time, error) {
 	return "", *user.DeletedAt, nil
 }
 
-// NOTE - Delete แบบ Remove from database
-func (d DatabaseRequest) Delete(id string) error {
+// NOTE - Soft Delete แบบหลายคนพร้อมกัน
+func (d DatabaseRequest) SoftArrayDelete(ids []UserDelete) error {
 	tx := d.DB.Begin()
-	result := tx.Debug().Model(&Users{}).Where("id = ?", id).Delete(&Users{})
-	if result.Error != nil {
+	listId := []string{}
+	for _, v := range ids {
+		listId = append(listId, v.ID)
+	}
+	if result := tx.Debug().Model(&Users{}).Where("id IN (?) and deleted_at IS NULL", listId).Update("deleted_at", now); result.RowsAffected == 0 {
+		tx.Rollback()
+		return fmt.Errorf("%v", "Already deleted users")
+	} else if result.Error != nil {
+		tx.Rollback()
+		return result.Error
+	}
+	tx.Commit()
+	return nil
+}
+
+// NOTE - Delete แบบ Remove from database
+func (d DatabaseRequest) Remove(id string) error {
+	tx := d.DB.Begin()
+	if result := tx.Debug().Model(&Users{}).Where("id = ?", id).Delete(&Users{}); result.RowsAffected == 0 {
+		tx.Rollback()
+		return fmt.Errorf("no user id %v in database", id)
+	} else if result.Error != nil {
+		tx.Rollback()
+		return result.Error
+	}
+	tx.Commit()
+	return nil
+}
+
+// NOTE - Delete หลาย Users แบบ Remove from database
+func (d DatabaseRequest) RemoveUsers(ids []UserDelete) error {
+	tx := d.DB.Begin()
+	listId := []string{}
+	for _, v := range ids {
+		listId = append(listId, v.ID)
+	}
+	if result := tx.Debug().Model(&Users{}).Where("id IN (?)", listId).Delete(&Users{}); result.RowsAffected == 0 {
+		tx.Rollback()
+		return fmt.Errorf("%v", "No this user in the database")
+	} else if result.Error != nil {
 		tx.Rollback()
 		return result.Error
 	}

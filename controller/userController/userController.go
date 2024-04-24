@@ -25,21 +25,12 @@ func CreateUser(ctx echo.Context) error {
 	} else if newUser.Email == "" {
 		return ctx.JSON(400, map[string]interface{}{"message": "Please enter an email address"})
 	}
-	var CheckEmail users.Users
-	duplicate := userModelHelper.DB.Debug().Where("email = ?", newUser.Email).Find(&CheckEmail)
-	if duplicate.RowsAffected != 0 {
-		return ctx.JSON(400, map[string]interface{}{"message": "Email already exists"})
-	}
-	if duplicate.Error != nil {
-		return ctx.JSON(500, map[string]interface{}{"message": "Email Select Error"})
-	}
 
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
-	if err != nil {
+	if hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost); err != nil {
 		return ctx.JSON(500, "Failed to hash password")
+	} else {
+		newUser.Password = string(hashedPassword)
 	}
-	newUser.Password = string(hashedPassword)
-
 	user := users.Users{
 		ID:        helper.GenerateUUID(),
 		Firstname: newUser.Firstname,
@@ -63,20 +54,23 @@ func CreateUsers(ctx echo.Context) error {
 
 	// ANCHOR -  - ดึงข้อมูลจาก Body มาใส่ตัวแปร
 	data := []users.Users{}
-	err := ctx.Bind(&data)
-	if err != nil {
+	if err := ctx.Bind(&data); err != nil {
 		return ctx.JSON(400, map[string]interface{}{"message": "Invalid request body"})
 	}
 	users := []*users.Users{}
-	for _, user := range data {
+	for index, user := range data {
 		user.ID = helper.GenerateUUID()
 		user.CreatedAt = &now
 		user.UpdatedAt = now
 		users = append(users, &user)
+		if hashedPassword, err := bcrypt.GenerateFromPassword([]byte(data[index].Password), bcrypt.DefaultCost); err != nil {
+			return ctx.JSON(500, "Failed to hash password")
+		} else {
+			users[index].Password = string(hashedPassword)
+		}
 	}
-	errors := userModelHelper.InsertArray(users)
-	if errors != nil {
-		return ctx.JSON(400, map[string]interface{}{"message": "Invalid insert body"})
+	if errors := userModelHelper.InsertArray(users); errors != nil {
+		return ctx.JSON(500, map[string]interface{}{"Error": errors.Error()})
 	}
 
 	return ctx.JSON(200, map[string]interface{}{"message": "User created successfully"})
@@ -196,13 +190,42 @@ func DeleteById(ctx echo.Context) error {
 	return ctx.JSON(200, map[string]interface{}{"message": "Delete user successfully", "time": Dtime})
 }
 
+// NOTE - Delete user with array
+func DeleteUsers(ctx echo.Context) error {
+	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
+	ids := []users.UserDelete{}
+
+	if err := ctx.Bind(&ids); err != nil {
+		return ctx.JSON(400, map[string]interface{}{"Error": err.Error()})
+	}
+	if result := userModelHelper.SoftArrayDelete(ids); result != nil {
+		return ctx.JSON(403, map[string]interface{}{"Error": result.Error()})
+	}
+	return ctx.JSON(200, map[string]interface{}{"message": "Delete user successfully"})
+
+}
+
+// NOTE - Hard Delete User
 func RemoveUser(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
 	id := ctx.Param("id")
-	result := userModelHelper.Delete(id)
-	if result != nil {
-		return ctx.JSON(500, map[string]interface{}{"message": "Remove user error"})
+	if result := userModelHelper.Remove(id); result != nil {
+		return ctx.JSON(500, map[string]interface{}{"Error": result.Error()})
+	}
+	return ctx.JSON(200, map[string]interface{}{"message": "Removed successfully"})
+}
+
+// NOTE - Hard Delete Users
+func RemoveUsers(ctx echo.Context) error {
+	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
+	ids := []users.UserDelete{}
+
+	if err := ctx.Bind(&ids); err != nil {
+		return ctx.JSON(500, map[string]interface{}{"Error": "Invalid request body"})
+	}
+	if result := userModelHelper.RemoveUsers(ids); result != nil {
+		return ctx.JSON(403, map[string]interface{}{"Error": result.Error()})
 	}
 	return ctx.JSON(200, map[string]interface{}{"message": "Removed successfully"})
 }

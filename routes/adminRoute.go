@@ -11,28 +11,32 @@ func adminRoute(e *echo.Echo) {
 	adminGroup := e.Group("/admin")
 	adminGroup.Use(middleware.JWTAuthMiddleware, middleware.AdminMiddleware)
 
-	// SECTION - GET
+	// SECTION - READ
 	// NOTE - Get all users
 	adminGroup.GET("/users", userController.GetUsers)
 	// NOTE - GET all deleted users
 	adminGroup.GET("/deleted-users", userController.GetDeletedUsers)
 
-	// !SECTION - GET
+	// !SECTION - READ
 
-	//SECTION - POST
+	//SECTION - CREATE
 	// adminGroup.POST("/signup", adminController.CreateAdmin)
+	// NOTE - Create Multiple Users
+	adminGroup.POST("/users/create", userController.CreateUsers)
 
-	// !SECTION - POST
+	// !SECTION - CREATE
 
-	//SECTION - PUT
+	//SECTION - UPDATE
 	// adminGroup.PUT("/:id", adminController.UpdateAdmin)
 
-	// !SECTION - PUT
+	// !SECTION - UPDATE
 
 	//SECTION - DELETE
 	// adminGroup.DELETE("/:id", adminController.DeleteAdmin)
-	adminGroup.DELETE("/user/:id", userController.DeleteById)
+	adminGroup.DELETE("/user/delete/:id", userController.DeleteById)
+	adminGroup.DELETE("/users/delete", userController.DeleteUsers)
 	adminGroup.DELETE("/user/remove/:id", userController.RemoveUser)
+	adminGroup.DELETE("/users/remove", userController.RemoveUsers)
 
 	// !SECTION - DELETE
 }

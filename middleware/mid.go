@@ -60,7 +60,7 @@ func CustomerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		if claims.PermissionID != 0 {
-			return echo.NewHTTPError(403, "Please Sign in")
+			return echo.NewHTTPError(403, "Customer permission required")
 		}
 
 		return next(c)
