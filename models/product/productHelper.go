@@ -1,6 +1,8 @@
 package product
 
 import (
+	"time"
+
 	"gorm.io/gorm"
 )
 
@@ -101,25 +103,18 @@ func (u *ProductModelHelper) UpdateProduct(Productdata []Product) ([]Product, er
 	return newProductdata, nil
 }
 
-func (u *ProductModelHelper) SoftDelete(productdata []Product) ([]Product, error) {
-
+func (u *ProductModelHelper) SoftDelete(id int) error {
 	tx := u.DB.Begin()
-	newproduct := []Product{}
 
-	for _, p := range productdata {
-		newproductdata := map[string]interface{}{
-			"Deleted_at": p.Deleted_at,
-		}
-
-		if err := tx.Debug().Model(&Product{}).Where("id = ?", p.Id).Updates(newproductdata).Error; err != nil {
-			tx.Rollback()
-			return nil, err
-		}
-
-		newproduct = append(newproduct, p)
-
+	now := time.Now()
+	if err := tx.Debug().Model(&Product{}).Where("id = ?", id).Update("deleted_at", &now).Error; err != nil {
+		tx.Rollback()
+		return err
 	}
-	tx.Commit()
-	return newproduct, nil
 
+	if err := tx.Commit().Error; err != nil {
+		return err
+	}
+
+	return nil
 }
