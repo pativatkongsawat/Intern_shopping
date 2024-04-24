@@ -18,11 +18,17 @@ func main() {
 	e.Use(middleware.CORS())
 	config.Init()
 	database.Init()
+<<<<<<< HEAD
 	msg, err := routes.Init(e)
 	if err != nil {
 		panic(err)
 	}
 	fmt.Print(msg)
+=======
+	routes.ProductRoutes(e)
+	routes.CategoryRoutes(e)
+	routes.OrderRoutes(e)
+>>>>>>> origin/golf
 
 	e.Logger.Fatal(e.Start(":1323"))
 
