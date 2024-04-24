@@ -37,9 +37,11 @@ func adminRoute(e *echo.Echo) {
 	//SECTION - DELETE
 	// adminGroup.DELETE("/:id", adminController.DeleteAdmin)
 	adminGroup.DELETE("/user/delete/:id", userController.DeleteById)
-	adminGroup.DELETE("/users/delete", userController.DeleteUsers)
-	adminGroup.DELETE("/user/remove/:id", userController.RemoveUser)
-	adminGroup.DELETE("/users/remove", userController.RemoveUsers)
+	// adminGroup.DELETE("/users/delete", userController.DeleteUsers)
+
+	// TODO - For only Request Needed
+	// adminGroup.DELETE("/user/remove/:id", userController.RemoveUser)
+	// adminGroup.DELETE("/users/remove", userController.RemoveUsers)
 
 	// !SECTION - DELETE
 }
