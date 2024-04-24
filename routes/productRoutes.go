@@ -2,17 +2,20 @@ package routes
 
 import (
 	"Intern_shopping/controller/productController"
+	"Intern_shopping/middleware"
 
 	"github.com/labstack/echo/v4"
 )
 
 func ProductRoutes(e *echo.Echo) {
+	userProductGroup := e.Group("/user/product")
 
-	e.GET("/product/get", productController.GetProductBy)
-	e.GET("/product", productController.ProductGetAll)
-	e.POST("/product/create", productController.InsertproductBy)
-	e.PUT("/product/update", productController.UpdateProduct)
-	e.PUT("/product/delete/soft", productController.DeleteProductSoft)
-	e.DELETE("/product/delete/", productController.DeleteProductBy)
+	userProductGroup.Use(middleware.JWTAuthMiddleware, middleware.CustomerMiddleware)
+	userProductGroup.GET("/get", productController.GetProductBy)
+	userProductGroup.GET("", productController.ProductGetAll)
+	userProductGroup.POST("/create", productController.InsertproductBy)
+	userProductGroup.PUT("/update", productController.UpdateProduct)
+	userProductGroup.DELETE("/delete", productController.DeleteProductSoft)
+	userProductGroup.DELETE("/remove", productController.DeleteProductBy)
 
 }

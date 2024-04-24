@@ -64,22 +64,18 @@ func (d DatabaseRequest) InsertArray(users []*Users) error {
 // SECTION - Read
 // NOTE Select
 func (d DatabaseRequest) SelectById(id string) (*Users, error) {
-	tx := d.DB.Debug().Begin()
 	user := &Users{}
-	result := tx.First(&user, "id =?", id)
+	result := d.DB.First(&user, "id =?", id)
 	if result.Error != nil {
-		tx.Rollback()
 		return nil, result.Error
 	}
-	tx.Commit()
 	return user, nil
 }
 
 // NOTE - Select Deleted user
 func (d DatabaseRequest) SelectDeleted(p *helper.Pagination, f *helper.UserFilter) ([]*Users, error) {
-	tx := d.DB.Debug().Begin()
 	var users []*Users
-	result := tx.Model(&users).Where("deleted_at IS NOT NULL").Where("firstname like ? and lastname like ? and email like ? and address like ?", "%"+f.Firstname+"%", "%"+f.Lastname+"%", "%"+f.Email+"%", "%"+f.Address+"%").Order(p.Sort).Count(&p.TotalRows)
+	result := d.DB.Model(&users).Where("deleted_at IS NOT NULL").Where("firstname like ? and lastname like ? and email like ? and address like ?", "%"+f.Firstname+"%", "%"+f.Lastname+"%", "%"+f.Email+"%", "%"+f.Address+"%").Order(p.Sort).Count(&p.TotalRows)
 	result.Debug().Limit(p.Row).Offset((p.Page - 1) * p.Row).Find(&users)
 	p.TotalPages = math.Ceil(float64(p.TotalRows) / float64(p.Row))
 	if p.Page >= int(p.TotalPages) {
@@ -88,19 +84,16 @@ func (d DatabaseRequest) SelectDeleted(p *helper.Pagination, f *helper.UserFilte
 		p.Page = 1
 	}
 	if result.Error != nil || p.TotalPages == 0 && p.TotalRows == 0 {
-		tx.Rollback()
 		return nil, fmt.Errorf("no users found")
 	}
-	tx.Commit()
 	return users, nil
 }
 
 // NOTE - Select All users
 func (d DatabaseRequest) SelectAll(p *helper.Pagination, f *helper.UserFilter) ([]*Users, error) {
-	tx := d.DB.Begin()
 	var users []*Users
 
-	result := tx.Model(&users).Where("deleted_at", nil).Where("firstname like ? and lastname like ? and email like ? and address like ?", "%"+f.Firstname+"%", "%"+f.Lastname+"%", "%"+f.Email+"%", "%"+f.Address+"%").Order(p.Sort).Count(&p.TotalRows)
+	result := d.DB.Model(&users).Where("deleted_at", nil).Where("firstname like ? and lastname like ? and email like ? and address like ?", "%"+f.Firstname+"%", "%"+f.Lastname+"%", "%"+f.Email+"%", "%"+f.Address+"%").Order(p.Sort).Count(&p.TotalRows)
 	result.Debug().Limit(p.Row).Offset((p.Page - 1) * p.Row).Find(&users)
 	p.TotalPages = math.Ceil(float64(p.TotalRows) / float64(p.Row))
 	if p.Page >= int(p.TotalPages) {
@@ -109,10 +102,8 @@ func (d DatabaseRequest) SelectAll(p *helper.Pagination, f *helper.UserFilter) (
 		p.Page = 1
 	}
 	if result.Error != nil || p.TotalPages == 0 && p.TotalRows == 0 {
-		tx.Rollback()
 		return nil, fmt.Errorf("no users found")
 	}
-	tx.Commit()
 	return users, nil
 }
 
