@@ -55,6 +55,21 @@ type UserDelete struct {
 	ID string `json:"id"`
 }
 
+type GetUsersResponse struct {
+	ID           string     `gorm:"primaryKey" json:"id"`
+	Firstname    string     `gorm:"not null" json:"firstname"`
+	Lastname     string     `gorm:"not null" json:"lastname"`
+	Address      string     `json:"address"`
+	Email        string     `gorm:"unique" json:"email"`
+	CreatedAt    *time.Time `json:"created_at"`
+	UpdatedAt    time.Time  `json:"updated_at"`
+	PermissionID int        `json:"permission_id" default:"0"`
+}
+
 func (Users) TableName() string {
+	return "users"
+}
+
+func (GetUsersResponse) TableName() string {
 	return "users"
 }

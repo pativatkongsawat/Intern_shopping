@@ -108,6 +108,7 @@ func GetUsers(ctx echo.Context) error {
 		String("lastname", &filter.Lastname).
 		String("email", &filter.Email).
 		String("add", &filter.Address).
+		String("permission_id", &filter.PermissionId).
 		BindError()
 	if err != nil {
 		return ctx.JSON(400, map[string]interface{}{"massage": "Error query param"})
@@ -156,27 +157,33 @@ func UpdateById(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
 	id := ctx.Param("id")
-	fields := users.UserUpdate{}
-	err := ctx.Bind(&fields)
+	userReq := users.UserUpdate{}
+	err := ctx.Bind(&userReq)
+	if err != nil {
+		return ctx.JSON(500, map[string]interface{}{"message": "Invalid request body"})
+	}
+	err = ctx.Validate(userReq)
+	if err != nil {
+		return ctx.JSON(400, map[string]interface{}{"message": "Invalid Validate User Request " + err.Error()})
+	}
 
 	user := users.Users{
-		Firstname: fields.Firstname,
-		Lastname:  fields.Lastname,
-		Email:     fields.Email,
-		Address:   fields.Address,
+		Firstname: userReq.Firstname,
+		Lastname:  userReq.Lastname,
+		Email:     userReq.Email,
+		Address:   userReq.Address,
 	}
-	if hashedPassword, err := bcrypt.GenerateFromPassword([]byte(fields.Password), bcrypt.DefaultCost); err != nil {
+
+	if hashedPassword, err := bcrypt.GenerateFromPassword([]byte(userReq.Password), bcrypt.DefaultCost); err != nil {
 		return ctx.JSON(500, "Failed to hash password")
 	} else {
 		user.Password = string(hashedPassword)
 	}
-	if err != nil {
-		return ctx.JSON(500, map[string]interface{}{"message": "Invalid request body"})
-	}
-	result := userModelHelper.UpdateUser(id, user)
-	if result != nil {
+
+	if result := userModelHelper.UpdateUser(id, user); result != nil {
 		return ctx.JSON(500, map[string]interface{}{"message": "Update user error"})
 	}
+
 	return ctx.JSON(200, map[string]interface{}{"message": "Update user successfully"})
 }
 
