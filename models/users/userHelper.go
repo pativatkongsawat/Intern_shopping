@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -154,10 +155,14 @@ func (d *DatabaseRequest) UpdateUserArray(fields []*Users) error {
 			tx.Rollback()
 			return fmt.Errorf("failed to update user %w", result)
 		}
+		if hashedPassword, err := bcrypt.GenerateFromPassword([]byte(item.Password), bcrypt.DefaultCost); err != nil {
+			return fmt.Errorf("%s %d Failed to hash password", "Error", 500)
+		} else {
+			user.Password = string(hashedPassword)
+		}
 		user.Firstname = item.Firstname
 		user.Lastname = item.Lastname
 		user.Email = item.Email
-		user.Password = item.Password
 		user.Address = item.Address
 		user.PermissionID = item.PermissionID
 		if result := tx.Debug().Updates(&user).Error; result != nil {
