@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"math"
+	"strconv"
 	"strings"
 	"time"
 
@@ -90,10 +91,16 @@ func (d DatabaseRequest) SelectDeleted(p *helper.Pagination, f *helper.UserFilte
 }
 
 // NOTE - Select All users
-func (d DatabaseRequest) SelectAll(p *helper.Pagination, f *helper.UserFilter) ([]*Users, error) {
-	var users []*Users
+func (d DatabaseRequest) SelectAll(p *helper.Pagination, f *helper.UserFilter) ([]*GetUsersResponse, error) {
+	var users []*GetUsersResponse
 
-	result := d.DB.Model(&users).Where("deleted_at", nil).Where("firstname like ? and lastname like ? and email like ? and address like ?", "%"+f.Firstname+"%", "%"+f.Lastname+"%", "%"+f.Email+"%", "%"+f.Address+"%").Order(p.Sort).Count(&p.TotalRows)
+	result := d.DB.Model(&users).Where("deleted_at is null").Where("firstname like ? and lastname like ? and email like ? and address like ?", "%"+f.Firstname+"%", "%"+f.Lastname+"%", "%"+f.Email+"%", "%"+f.Address+"%").Order(p.Sort).Count(&p.TotalRows)
+
+	if f.PermissionId != "" {
+		permissionId, _ := strconv.Atoi(f.PermissionId)
+		result.Where("permission_id = ?", permissionId)
+	}
+
 	result.Debug().Limit(p.Row).Offset((p.Page - 1) * p.Row).Find(&users)
 	p.TotalPages = math.Ceil(float64(p.TotalRows) / float64(p.Row))
 	if p.Page >= int(p.TotalPages) {
@@ -112,9 +119,9 @@ func (d DatabaseRequest) SelectAll(p *helper.Pagination, f *helper.UserFilter) (
 // SECTION - Update
 
 // NOTE - แก้ไขข้อมูล User/ Update User
-func (d DatabaseRequest) UpdateUser(user_id string, fields Users) error {
+func (d DatabaseRequest) UpdateUser(user_id string, userReq Users) error {
 	tx := d.DB.Begin()
-	result := tx.Debug().Model(&Users{}).Where("id =?", user_id).Updates(fields)
+	result := tx.Debug().Model(&Users{}).Where("id =?", user_id).Updates(userReq)
 	if result.Error != nil {
 		tx.Rollback()
 		return result.Error
@@ -171,6 +178,7 @@ func (d *DatabaseRequest) UpdateUserArray(fields []*Users) error {
 // SECTION - Delete
 
 // NOTE - Soft Delete
+// TODO - Check in controller before sending to func
 func (d DatabaseRequest) SoftDelete(id string) (string, time.Time, error) {
 	now := time.Now()
 	tx := d.DB.Begin()
@@ -182,7 +190,7 @@ func (d DatabaseRequest) SoftDelete(id string) (string, time.Time, error) {
 		tx.Rollback()
 		return "", *user.DeletedAt, result.Error
 	}
-	result.Debug().Model(user).Where("id =?", id).Update("deleted_at", now)
+	result.Debug().Model(user).Where("id =? and deleted_at is null", id).Update("deleted_at", now)
 	tx.Commit()
 	return "", *user.DeletedAt, nil
 }
