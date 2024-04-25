@@ -8,13 +8,9 @@ import (
 	"github.com/labstack/echo"
 )
 
-<<<<<<< HEAD
 // TODO //Read //Create //Update //Delete func of order | order_has_products | product
 
 func GetOrderAll(ctx echo.Context) error {
-=======
-func InsertOrder(ctx echo.Context) error {
->>>>>>> origin/dev
 
 	// reqorder := new(order.Requestorder)
 	reqorder := []order.Requestorder{}
