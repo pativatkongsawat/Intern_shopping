@@ -25,7 +25,7 @@ func userRoute(e *echo.Echo) {
 	//SECTION - UPDATE
 
 	//NOTE - Update
-	userGroup.PUT("/:id", userController.UpdateById)
+	userGroup.PUT("edit/:id", userController.UpdateById)
 
 	//!SECTION - UPDATE
 
