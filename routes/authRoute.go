@@ -12,4 +12,11 @@ func authRoute(e *echo.Echo) {
 	authRoute.POST("/signup", auth.Signup)
 	authRoute.POST("/login", auth.Login)
 
+	authAdminBackOffice(e)
+}
+
+func authAdminBackOffice(e *echo.Echo) {
+	authRoute := e.Group("/api/intern-shop/admin")
+
+	authRoute.POST("/login", auth.BackOfficeLogin)
 }

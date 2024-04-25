@@ -1,10 +1,10 @@
 package middleware
 
 import (
-	"Intern_shopping/controller/auth"
+	"Intern_shopping/models/auth"
 	"strings"
 
-	"github.com/golang-jwt/jwt"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
 )
@@ -32,6 +32,21 @@ func JWTAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 			return echo.NewHTTPError(500, "Error")
 		}
 		c.Set("user", token)
+		return next(c)
+	}
+}
+
+// NOTE - Super admin / Back office admin
+func SuperAdminMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		claims := extractClaims(c)
+		if claims == nil {
+			return echo.NewHTTPError(401, "Please Login")
+		}
+		if claims.PermissionID != 2 {
+			return echo.NewHTTPError(403, "Super admin permission required")
+		}
+
 		return next(c)
 	}
 }
