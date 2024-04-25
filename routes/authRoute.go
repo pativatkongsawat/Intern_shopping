@@ -11,4 +11,5 @@ func authRoute(e *echo.Echo) {
 
 	authRoute.POST("/signup", auth.Signup)
 	authRoute.POST("/login", auth.Login)
+
 }

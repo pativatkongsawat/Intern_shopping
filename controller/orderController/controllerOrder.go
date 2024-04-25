@@ -8,6 +8,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// TODO //Read //Create //Update //Delete func of order | order_has_products | product
+
 func GetOrderAll(ctx echo.Context) error {
 
 	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}

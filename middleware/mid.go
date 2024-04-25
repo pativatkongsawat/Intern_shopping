@@ -75,3 +75,5 @@ func extractClaims(c echo.Context) *auth.Claims {
 	}
 	return nil
 }
+
+// TODO - Middleware SuperAdmin
