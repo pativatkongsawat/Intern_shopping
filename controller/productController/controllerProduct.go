@@ -153,15 +153,17 @@ func ProductGetAll(ctx echo.Context) error {
 
 func UpdateProduct(ctx echo.Context) error {
 
-	productdata := []product.ProductUpdate{}
+	productdata := []*product.ProductUpdate{}
 
 	if err := ctx.Bind(&productdata); err != nil {
-		return ctx.JSON(400, map[string]interface{}{
-			"Message": "Bind Error updating product",
+		return ctx.JSON(400, utils.ResponseMessage{
+			Status:  400,
+			Message: "Error Bind Productdata",
+			Result:  err.Error(),
 		})
 	}
 	now := time.Now()
-	newproduct := []product.Product{}
+	newproduct := []*product.Product{}
 
 	for _, i := range productdata {
 
@@ -176,7 +178,7 @@ func UpdateProduct(ctx echo.Context) error {
 			Category_id: i.Category_id,
 		}
 
-		newproduct = append(newproduct, product.Product(newproductsdata))
+		newproduct = append(newproduct, &newproductsdata)
 	}
 
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
@@ -220,4 +222,8 @@ func DeleteProductSoft(ctx echo.Context) error {
 		"Message": "Soft deleted product successfully deleted",
 	})
 
+}
+
+func Delelelele(ctx echo.Context) error {
+	return nil
 }

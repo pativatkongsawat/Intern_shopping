@@ -3,12 +3,12 @@ package order
 import "time"
 
 type Order struct {
-	Id          string     `json:"id" gorm:"primaryKey;autoIncrement;not null"`
-	Create_at   *time.Time `json:"create_at" gorm:"create_at"`
-	Updated_at  *time.Time `json:"updated_at" gorm:"updated_at"`
-	Deleted_at  *time.Time `json:"deleted_at" gorm:"deleted_at"`
-	User_id     string     `json:"user_id" gorm:"user_id"`
-	Total_price float64    `json:"total_price" gorm:"total_price"`
+	Id         int        `json:"id" gorm:"primaryKey;autoIncrement;not null"`
+	CreateAt   *time.Time `json:"create_at" gorm:"create_at"`
+	UpdatedAt  *time.Time `json:"updated_at" gorm:"updated_at"`
+	DeletedAt  *time.Time `json:"deleted_at" gorm:"deleted_at"`
+	UserId     string     `json:"user_id" gorm:"user_id"`
+	TotalPrice float64    `json:"total_price" gorm:"total_price"`
 }
 
 func (Order) TableName() string {
@@ -17,12 +17,13 @@ func (Order) TableName() string {
 
 type Requestorder struct {
 	Id         string            `json:"id" gorm:"id"`
-	Created_at *time.Time        `json:"created_at"`
-	User_id    string            `json:"user_id"`
-	Product    []RequestProducts `json:"product"`
+	UserId     string            `json:"user_id"`
+	TotalPrice float64           `json:"total_price" gorm:"total_price"`
+	Products   []RequestProducts `json:"products"`
 }
 
 type RequestProducts struct {
-	Id       int `json:"id"`
-	Quantity int `json:"quantity"`
+	Id       int     `json:"id"`
+	Price    float64 `json:"price" gorm:"price"`
+	Quantity int     `json:"quantity" gorm:"quantity"`
 }

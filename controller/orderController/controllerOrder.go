@@ -1,54 +1,51 @@
-package ordercontroller
+package orderController
 
 import (
 	"Intern_shopping/database"
 	"Intern_shopping/models/order"
 	"Intern_shopping/models/utils"
+	"time"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
-// TODO //Read //Create //Update //Delete func of order | order_has_products | product
+func InsertOrder(ctx echo.Context) error {
 
-func GetOrderAll(ctx echo.Context) error {
-
-	// reqorder := new(order.Requestorder)
-	reqorder := []order.Requestorder{}
-
-	if err := ctx.Bind(&reqorder); err != nil {
+	now := time.Now()
+	reqOrder := order.Requestorder{}
+	if err := ctx.Bind(&reqOrder); err != nil {
 		return ctx.JSON(400, utils.ResponseMessage{
 			Status:  400,
-			Message: "Error Bind request order",
+			Message: "Error binding request order",
 			Result:  err.Error(),
 		})
 	}
 
-	neworder := []order.Order{}
+	newOrder := order.Order{
 
-	for _, i := range reqorder {
-
-		orderdata := order.Order{
-			Id:        i.Id,
-			Create_at: i.Created_at,
-			User_id:   i.User_id,
-		}
-
-		neworder = append(neworder, orderdata)
-
+		UserId:     reqOrder.UserId,
+		CreateAt:   &now,
+		TotalPrice: reqOrder.TotalPrice,
 	}
 
 	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}
-
-	order, err := orderModelHelper.Insertorder(neworder)
+	createdOrder, err := orderModelHelper.InsertOrder(&newOrder)
 
 	if err != nil {
 		return ctx.JSON(500, utils.ResponseMessage{
-			Status: 500,
+			Status:  500,
+			Message: "Error creating order",
+			Result:  err.Error(),
 		})
 	}
 
+	createdhasstock := orderModelHelper.InsertOrderHasProduct(createdOrder.Id, reqOrder.Products)
+
 	return ctx.JSON(200, map[string]interface{}{
-		"order":   order,
-		"Message": "Order Insert Success",
+
+		"Order Has Product": createdhasstock,
+		"Order":             createdOrder,
+		"Request Order":     reqOrder,
+		"Message":           "Success",
 	})
 }

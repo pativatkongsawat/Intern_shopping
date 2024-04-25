@@ -1,6 +1,8 @@
 package order
 
 import (
+	"errors"
+
 	"gorm.io/gorm"
 )
 
@@ -8,30 +10,40 @@ type OrderModelHelper struct {
 	DB *gorm.DB
 }
 
-func (u *OrderModelHelper) GetAllorder() ([]Order, error) {
-
-	order := []Order{}
-
-	if err := u.DB.Find(&order).Error; err != nil {
-		return nil, err
-	}
-	return order, nil
-
-}
-
-func (u *OrderModelHelper) Insertorder(order []Order) ([]Order, error) {
+func (u *OrderModelHelper) InsertOrder(orders *Order) (*Order, error) {
 
 	tx := u.DB.Begin()
-	if err := tx.Debug().Create(&order).Error; err != nil {
+
+	if err := tx.Debug().Table("order").Create(&orders).Error; err != nil {
 		tx.Rollback()
 		return nil, err
 	}
 
 	tx.Commit()
-	return order, nil
-
+	return orders, nil
 }
+func (u *OrderModelHelper) InsertOrderHasProduct(orderId int, products []RequestProducts) error {
 
-func (u *OrderModelHelper) DeleteOrderById(id int) ([]Order, error) {
-	return nil, nil
+	tx := u.DB.Begin()
+
+	for _, p := range products {
+
+		orderhas := OrderHasProduct{
+			ProductId:         p.Id,
+			OrderId:           orderId,
+			OrderProductTotal: p.Quantity,
+			OrderProductPrice: p.Price * float64(p.Quantity),
+		}
+
+		if err := tx.Debug().Create(&orderhas); err.RowsAffected == 0 {
+			tx.Rollback()
+			return errors.New("error create order has product")
+
+		}
+
+	}
+
+	tx.Commit()
+
+	return nil
 }
