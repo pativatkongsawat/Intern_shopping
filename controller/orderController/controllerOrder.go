@@ -39,11 +39,9 @@ func InsertOrder(ctx echo.Context) error {
 
 	order, err := orderModelHelper.Insertorder(neworder)
 
-
 	if err != nil {
-		return ctx.JSON(500 , utils.ResponseMessage{
+		return ctx.JSON(500, utils.ResponseMessage{
 			Status: 500,
-			
 		})
 	}
 
