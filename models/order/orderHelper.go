@@ -1,6 +1,8 @@
 package order
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type OrderModelHelper struct {
 	DB *gorm.DB
@@ -21,8 +23,15 @@ func (u *OrderModelHelper) Insertorder(order []Order) ([]Order, error) {
 
 	tx := u.DB.Begin()
 	if err := tx.Debug().Create(&order).Error; err != nil {
+		tx.Rollback()
 		return nil, err
 	}
+
+	tx.Commit()
 	return order, nil
 
+}
+
+func (u *OrderModelHelper) DeleteOrderById(id int) ([]Order, error) {
+	return nil, nil
 }
