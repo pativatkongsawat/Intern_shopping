@@ -9,11 +9,6 @@ import (
 func Init(e *echo.Echo) (string, error) {
 	e.GET("", guestcontroller.Index)
 
-	// SECTION - Only for testing purposes
-	// e.GET("test/users", guestcontroller.TestGetUsers)
-	// e.GET("test/create/users", guestcontroller.TestCreateUsers)
-	// !SECTION - Only for testing purposes
-
 	authRoute(e)
 	userRoute(e)
 	adminRoute(e)
@@ -25,4 +20,3 @@ func Init(e *echo.Echo) (string, error) {
 }
 
 // TODO - SuperAdmin for backOffice
-//! /api/v1/admin/login

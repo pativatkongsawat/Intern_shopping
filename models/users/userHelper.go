@@ -18,7 +18,14 @@ type DatabaseRequest struct {
 	DB *gorm.DB
 }
 
-var now = time.Now()
+func hashPassword(userReq *Users) (string, error) {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(userReq.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", errors.New("failed to hash password")
+	}
+	userReq.Password = string(hashedPassword)
+	return userReq.Password, nil
+}
 
 // REVIEW - Function เช็คว่าเป็น Error Duplicate รึป่าว
 func isDuplicateError(err error) bool {
@@ -119,8 +126,18 @@ func (d DatabaseRequest) SelectAll(p *helper.Pagination, f *helper.UserFilter) (
 // SECTION - Update
 
 // NOTE - แก้ไขข้อมูล User/ Update User
-func (d DatabaseRequest) UpdateUser(user_id string, userReq Users) error {
+func (d DatabaseRequest) UpdateUser(user_id, updaterId string, userReq *Users) error {
 	tx := d.DB.Begin()
+	if userReq.Password != "" {
+		password, err := hashPassword(userReq)
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+		userReq.Password = password
+	}
+	userReq.UpdatedBy = updaterId
+	log.Println("userReq updater id: ", userReq.UpdatedBy)
 	result := tx.Debug().Model(&Users{}).Where("id =?", user_id).Updates(userReq)
 	if result.Error != nil {
 		tx.Rollback()
@@ -134,6 +151,7 @@ func (d DatabaseRequest) UpdateUser(user_id string, userReq Users) error {
 func (d *DatabaseRequest) UpdateUserArray(fields []*Users) error {
 	// Start a new transaction
 	tx := d.DB.Begin()
+	var now = time.Now()
 
 	defer func() {
 		// If the function exits with an error, rollback the transaction
@@ -142,30 +160,46 @@ func (d *DatabaseRequest) UpdateUserArray(fields []*Users) error {
 			panic(r)
 		}
 	}()
-	log.Print("fields: ", fields)
 	for _, item := range fields {
-		var user Users
-		if result := tx.Debug().First(&user, "id = ?", item.ID).Error; result != nil {
-			if errors.Is(result, gorm.ErrRecordNotFound) {
-				tx.Rollback()
-				return fmt.Errorf("%s Article with ID %s not found", "Error 404", fmt.Sprint(item.ID))
-			}
-			tx.Rollback()
-			return fmt.Errorf("failed to update user %w", result)
+
+		log.Print("Item: ", item)
+		// if result := tx.Debug().First(&user, "id = ?", item.ID).Error; result != nil {
+		// 	if errors.Is(result, gorm.ErrRecordNotFound) {
+		// 		tx.Rollback()
+		// 		return fmt.Errorf("%s Article with ID %s not found", "Error 404", fmt.Sprint(item.ID))
+		// 	}
+		// 	tx.Rollback()
+		// 	return fmt.Errorf("failed to update user %w", result)
+		// }
+
+		user := &map[string]interface{}{
+			"firstname":  item.Firstname,
+			"lastname":   item.Lastname,
+			"email":      item.Email,
+			"address":    item.Address,
+			"updated_at": &now,
 		}
-		if hashedPassword, err := bcrypt.GenerateFromPassword([]byte(item.Password), bcrypt.DefaultCost); err != nil {
-			return fmt.Errorf("%s %d Failed to hash password", "Error", 500)
-		} else {
-			user.Password = string(hashedPassword)
-		}
-		user.Firstname = item.Firstname
-		user.Lastname = item.Lastname
-		user.Email = item.Email
-		user.Address = item.Address
-		user.PermissionID = item.PermissionID
-		if result := tx.Debug().Updates(&user).Error; result != nil {
+		var idCount int64
+		result := tx.Table("users").Where("id = ?", item.ID).Count(&idCount)
+		if result.Error != nil {
 			tx.Rollback()
-			return fmt.Errorf("%s Failed to update article with ID %s", "Error 500", fmt.Sprint(item.ID))
+			log.Println("Error: ", result.Error)
+			return errors.New("error find user query")
+		}
+		if idCount != 1 {
+			tx.Rollback()
+			log.Print("Row 0: ", result.Error)
+			return errors.New("user not found")
+		}
+		result.Debug().Where("id = ?", item.ID).Updates(user)
+		if result.Error != nil {
+			tx.Rollback()
+			log.Println("Error: ", result.Error)
+			return errors.New("error cannot update user")
+		}
+		if result.RowsAffected == 0 {
+			tx.Rollback()
+			return errors.New("no value is updated")
 		}
 	}
 
@@ -197,6 +231,7 @@ func (d DatabaseRequest) SoftDelete(id string) (string, time.Time, error) {
 
 // NOTE - Soft Delete แบบหลายคนพร้อมกัน
 func (d DatabaseRequest) SoftArrayDelete(ids []UserDelete) error {
+	var now = time.Now()
 	tx := d.DB.Begin()
 	listId := []string{}
 	for _, v := range ids {
