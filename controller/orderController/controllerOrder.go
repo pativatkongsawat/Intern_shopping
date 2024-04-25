@@ -3,67 +3,52 @@ package ordercontroller
 import (
 	"Intern_shopping/database"
 	"Intern_shopping/models/order"
-	"time"
+	"Intern_shopping/models/utils"
 
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo"
 )
 
-func GetOrderAll(ctx echo.Context) error {
+func InsertOrder(ctx echo.Context) error {
 
-	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}
+	// reqorder := new(order.Requestorder)
+	reqorder := []order.Requestorder{}
 
-	order, err := orderModelHelper.GetAllorder()
-
-	if err != nil {
-		return ctx.JSON(500, map[string]interface{}{
-			"Message": err.Error(),
-		})
-	}
-
-	return ctx.JSON(200, map[string]interface{}{
-		"Order":   order,
-		"Message": "Success ",
-	})
-
-}
-
-func InsertOrderAll(ctx echo.Context) error {
-
-	orderdata := []order.OrderInsert{}
-
-	now := time.Now()
-
-	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}
-
-	if err := ctx.Bind(&orderdata); err != nil {
-		return ctx.JSON(400, map[string]interface{}{
-			"Message": err.Error(),
+	if err := ctx.Bind(&reqorder); err != nil {
+		return ctx.JSON(400, utils.ResponseMessage{
+			Status:  400,
+			Message: "Error Bind request order",
+			Result:  err.Error(),
 		})
 	}
 
 	neworder := []order.Order{}
 
-	for _, i := range orderdata {
-		orderss := order.Order{
-			Create_at:  &now,
-			Updated_at: &now,
-			Deleted_at: nil,
-			User_id:    i.User_id,
+	for _, i := range reqorder {
+
+		orderdata := order.Order{
+			Id:        i.Id,
+			Create_at: i.Created_at,
+			User_id:   i.User_id,
 		}
 
-		neworder = append(neworder, order.Order(orderss))
+		neworder = append(neworder, orderdata)
+
 	}
+
+	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}
 
 	order, err := orderModelHelper.Insertorder(neworder)
 
+
 	if err != nil {
-		return err
+		return ctx.JSON(500 , utils.ResponseMessage{
+			Status: 500,
+			
+		})
 	}
 
 	return ctx.JSON(200, map[string]interface{}{
-		"Order":   order,
-		"Message": "Success",
+		"order":   order,
+		"Message": "Order Insert Success",
 	})
-
 }
-
