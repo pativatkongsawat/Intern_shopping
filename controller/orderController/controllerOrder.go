@@ -39,7 +39,15 @@ func InsertOrder(ctx echo.Context) error {
 		})
 	}
 
-	createdhasstock := orderModelHelper.InsertOrderHasProduct(createdOrder.Id, reqOrder.Products)
+	createdhasstock, err := orderModelHelper.InsertOrderHasProduct(createdOrder.Id, reqOrder.Products)
+
+	if err != nil {
+		return ctx.JSON(500, utils.ResponseMessage{
+			Status:  500,
+			Message: "Error inserting order",
+			Result:  err.Error(),
+		})
+	}
 
 	return ctx.JSON(200, map[string]interface{}{
 

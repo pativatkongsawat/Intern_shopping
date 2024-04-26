@@ -1,7 +1,8 @@
 package order
 
 import (
-	"errors"
+	"log"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -22,28 +23,41 @@ func (u *OrderModelHelper) InsertOrder(orders *Order) (*Order, error) {
 	tx.Commit()
 	return orders, nil
 }
-func (u *OrderModelHelper) InsertOrderHasProduct(orderId int, products []RequestProducts) error {
+func (u *OrderModelHelper) InsertOrderHasProduct(orderId int, products []RequestProducts) (*[]OrderHasProduct, error) {
+	now := time.Now()
 
 	tx := u.DB.Begin()
-
+	hasorder := []OrderHasProduct{}
 	for _, p := range products {
-
 		orderhas := OrderHasProduct{
 			ProductId:         p.Id,
 			OrderId:           orderId,
 			OrderProductTotal: p.Quantity,
 			OrderProductPrice: p.Price * float64(p.Quantity),
 		}
-
-		if err := tx.Debug().Create(&orderhas); err.RowsAffected == 0 {
+		if err := tx.Debug().Create(&orderhas).Error; err != nil {
 			tx.Rollback()
-			return errors.New("error create order has product")
-
+			log.Println("Error creating order has product:", err)
+			return nil, err
 		}
 
+		hasorder = append(hasorder, orderhas)
+
+		order := Order{
+			UpdatedAt:  &now,
+			TotalPrice: p.Price * float64(p.Quantity),
+		}
+
+		if err := tx.Debug().Model(&Order{}).Where("id = ?", orderId).Updates(order).Error; err != nil {
+			tx.Rollback()
+			log.Println("Error updating order TotalPrice:", err)
+			return nil, err
+		}
 	}
 
 	tx.Commit()
-
-	return nil
+	return &hasorder, nil
 }
+
+
+
