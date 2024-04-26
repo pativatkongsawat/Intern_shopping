@@ -14,8 +14,6 @@ func (u *ProductModelHelper) Getproduct(pname string, limit, page int) ([]Produc
 
 	product := []Product{}
 
-	// tx.Debug().Where("firstname LIKE ? AND lastname LIKE ?", "%"+fname+"%", "%"+lname+"%").Limit(limit).Offset(offset).Find(&user).Error
-
 	var count int64
 
 	offset := (page - 1) * limit

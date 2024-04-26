@@ -6,7 +6,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func CategoryRoutes(e *echo.Echo) {
+func categoryRoutes(e *echo.Echo) {
 	e.GET("/category", categoryController.GetAllCategory)
 	e.POST("/category/create", categoryController.InsertCategory)
 	e.PUT("/category/update/", categoryController.UpdateCategory)

@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func ProductRoutes(e *echo.Echo) {
+func productRoutes(e *echo.Echo) {
 	userProductGroup := e.Group("/user/product")
 
 	userProductGroup.Use(middleware.JWTAuthMiddleware, middleware.CustomerMiddleware)
