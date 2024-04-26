@@ -65,15 +65,16 @@ func (u *OrderModelHelper) DeleteOrder(orderId int64) (*Order, []OrderHasProduct
 	orderhas := []OrderHasProduct{}
 	tx := u.DB.Begin()
 
-	if err := tx.Debug().Where("order_id = ?", orderId).Delete(&orderhas).Error; err != nil {
+	if err := tx.Debug().Where("id = ?", orderId).Delete(&order).Error; err != nil {
 		tx.Rollback()
 		log.Println("Error deleting order has products:", err)
 		return nil, nil, err
 
 	}
 
-	if err := tx.Debug().Where("id = ?", orderId).Delete(&order).Error; err != nil {
+	if err := tx.Debug().Where("order_id = ?", orderId).Delete(&orderhas).Error; err != nil {
 		tx.Rollback()
+		log.Println("Error deleting order :", err)
 		return nil, nil, err
 	}
 
