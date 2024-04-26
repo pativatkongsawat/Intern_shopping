@@ -15,7 +15,7 @@ func (u *OrderModelHelper) InsertOrder(orders *Order) (*Order, error) {
 
 	tx := u.DB.Begin()
 
-	if err := tx.Debug().Table("order").Create(&orders).Error; err != nil {
+	if err := tx.Debug().Table("orders").Create(&orders).Error; err != nil {
 		tx.Rollback()
 		return nil, err
 	}

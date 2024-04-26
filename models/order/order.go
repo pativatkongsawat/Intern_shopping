@@ -12,7 +12,7 @@ type Order struct {
 }
 
 func (Order) TableName() string {
-	return "order"
+	return "orders"
 }
 
 type Requestorder struct {
