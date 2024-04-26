@@ -29,7 +29,7 @@ func JWTAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 		if err != nil {
 			// log.Println(err.Error())
-			return echo.NewHTTPError(500, "Error")
+			return echo.NewHTTPError(500, "Error:", err.Error())
 		}
 		c.Set("user", token)
 		return next(c)

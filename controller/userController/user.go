@@ -90,7 +90,11 @@ func GetUsers(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(500, map[string]interface{}{"Error": err.Error()})
 	}
-	return ctx.JSON(200, map[string]interface{}{"data": users, "pagination": pagination, "message": "success"})
+	return ctx.JSON(200, utils.ResponseMessage{
+		Status:  200,
+		Message: "success",
+		Result:  map[string]interface{}{"data": users, "pagination": pagination},
+	})
 }
 
 // NOTE - Get all deleted users
