@@ -12,9 +12,9 @@ func Init(e *echo.Echo) (string, error) {
 	authRoute(e)
 	userRoute(e)
 	adminRoute(e)
-	ProductRoutes(e)
-	CategoryRoutes(e)
-	OrderRoutes(e)
+	productRoutes(e)
+	categoryRoutes(e)
+	orderRoutes(e)
 
 	return "Route works as expected", nil
 }
