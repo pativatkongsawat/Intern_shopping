@@ -57,7 +57,9 @@ func CreateUsers(ctx echo.Context) error {
 // @Description Get User by Id
 // @Accept json
 // @Produce json
-// @Param id path int true "Id User"
+// @Param id path string true "Id User"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
 // @Router /users/:id [get]
 func GetUserSelf(ctx echo.Context) error {
@@ -137,6 +139,17 @@ func GetDeletedUsers(ctx echo.Context) error {
 
 // SECTION - Update
 
+// @Tags User
+// @Summary Update User
+// @Description Update User from the database
+// @Accept json
+// @Produce json
+// @Param id path string true "Id User"
+// @Param Request body users.UserUpdate true "Update User"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /users/:id [put]
 func UpdateById(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
@@ -210,6 +223,17 @@ func AdminUpdateUsers(ctx echo.Context) error {
 // !SECTION - Update
 
 // SECTION - Delete
+
+// @Tags User
+// @Summary Soft Delete User
+// @Description Soft Delete User from the database
+// @Accept json
+// @Produce json
+// @Param id path string true "Id User"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /users/:id [delete]
 func DeleteById(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 

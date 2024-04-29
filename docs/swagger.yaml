@@ -57,6 +57,32 @@ definitions:
       update_at:
         type: string
     type: object
+  users.CreateUser:
+    properties:
+      address:
+        type: string
+      email:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      password:
+        type: string
+    type: object
+  users.UserUpdate:
+    properties:
+      address:
+        type: string
+      email:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      password:
+        type: string
+    type: object
   users.Users:
     properties:
       address:
@@ -119,7 +145,31 @@ paths:
       - ApiKeyAuth: []
       summary: User Login
       tags:
-      - Aut
+      - Auth
+  /auth/signup:
+    post:
+      consumes:
+      - application/json
+      description: User Register
+      parameters:
+      - description: User login details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/users.CreateUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: User Register
+      tags:
+      - Auth
   /categorys:
     get:
       consumes:
@@ -354,6 +404,28 @@ paths:
       tags:
       - Product
   /users/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Soft Delete User from the database
+      parameters:
+      - description: Id User
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Soft Delete User
+      tags:
+      - User
     get:
       consumes:
       - application/json
@@ -363,7 +435,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -371,7 +443,37 @@ paths:
           description: Success response
           schema:
             $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get User by Id
+      tags:
+      - User
+    put:
+      consumes:
+      - application/json
+      description: Update User from the database
+      parameters:
+      - description: Id User
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update User
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/users.UserUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update User
       tags:
       - User
 schemes:
