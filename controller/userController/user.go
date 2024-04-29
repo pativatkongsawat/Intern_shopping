@@ -21,6 +21,17 @@ var now = time.Now()
 // NOTE - สร้าง User เดียว ย้ายไป auth เป็น Sign up แทน
 
 // NOTE * สร้างหลาย Users
+
+// @Tags User
+// @Summary Admin Create User
+// @Description Admin Create User
+// @Accept json
+// @Produce json
+// @Param Request body []users.Users true "Sturct User to insert"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /admin [post]
 func CreateUsers(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
@@ -195,6 +206,16 @@ func UpdateById(ctx echo.Context) error {
 	return ctx.JSON(200, map[string]interface{}{"message": "Update user successfully"})
 }
 
+// @Tags User
+// @Summary Admin Update User
+// @Description Admin Update User
+// @Accept json
+// @Produce json
+// @Param Request body []users.Users true "Sturct User to update"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /admin [put]
 func AdminUpdateUsers(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 

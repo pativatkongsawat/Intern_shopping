@@ -2,14 +2,27 @@ package orderController
 
 import (
 	"Intern_shopping/database"
+	"Intern_shopping/models/auth"
 	"Intern_shopping/models/order"
 	"Intern_shopping/models/utils"
 	"strconv"
 	"time"
 
+	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
 )
 
+// @Tags Order
+// @Summary Insert Order
+// @Description Insert Order from the database
+// @Accept json
+// @Produce json
+// @Param Request body []order.Requestorder true "Sturct Order to insert"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /orders [post]
 func InsertOrder(ctx echo.Context) error {
 
 	now := time.Now()
@@ -59,6 +72,16 @@ func InsertOrder(ctx echo.Context) error {
 	})
 }
 
+// @Tags Order
+// @Summary Delete Order
+// @Description Delete Order from the database
+// @Accept json
+// @Produce json
+// @Param id query int true "id"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /orders [delete]
 func OrderDelete(ctx echo.Context) error {
 
 	getid := ctx.QueryParam("id")
@@ -90,5 +113,52 @@ func OrderDelete(ctx echo.Context) error {
 		"Order":    order,
 		"Orderhas": orderhas,
 		"Message":  "Order deleted successfully",
+	})
+}
+
+func OrderDetailByUserID(e echo.Context) error {
+	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}
+	claim := e.Get("user").(*jwt.Token)
+	userClaim := claim.Claims.(*auth.Claims)
+	updaterId := userClaim.UserID
+
+	orders, err := orderModelHelper.GetOrderByUserID(updaterId)
+	if err != nil {
+		log.Error(err.Error())
+		return e.JSON(500, utils.ResponseMessage{
+			Status:  500,
+			Message: "Can not Get Orders",
+		})
+	}
+	return e.JSON(200, map[string]interface{}{
+		"Orders":  orders,
+		"Message": "Successfully orders",
+	})
+
+}
+
+// @Tags Order
+// @Summary Get all Order
+// @Description Get all Order from the database
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /orders [get]
+func OrdersDetail(e echo.Context) error {
+	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}
+
+	orders, err := orderModelHelper.GetOrdersDetail()
+	if err != nil {
+		log.Error(err.Error())
+		return e.JSON(500, utils.ResponseMessage{
+			Status:  500,
+			Message: "Can not Get Orders",
+		})
+	}
+	return e.JSON(200, map[string]interface{}{
+		"Orders":  orders,
+		"Message": "Successfully retrieved all orders",
 	})
 }

@@ -22,15 +22,15 @@ func adminRoute(e *echo.Echo) {
 	//SECTION - CREATE
 	// adminGroup.POST("/signup", adminController.CreateAdmin)
 	// NOTE - Create Multiple Users
-	adminGroup.POST("/users/create", userController.CreateUsers)
+	adminGroup.POST("", userController.CreateUsers)
 
 	// !SECTION - CREATE
 
 	//SECTION - UPDATE
 	// adminGroup.PUT("/:id", adminController.UpdateAdmin)
 
-	adminGroup.PUT("/user/edit/:id", userController.UpdateById)
-	adminGroup.PUT("/users/edit", userController.AdminUpdateUsers)
+	adminGroup.PUT("/:id", userController.UpdateById)
+	adminGroup.PUT("", userController.AdminUpdateUsers)
 
 	// !SECTION - UPDATE
 

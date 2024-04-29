@@ -23,6 +23,28 @@ definitions:
         example: OK
         type: string
     type: object
+  order.RequestProducts:
+    properties:
+      id:
+        type: integer
+      price:
+        type: number
+      quantity:
+        type: integer
+    type: object
+  order.Requestorder:
+    properties:
+      id:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/order.RequestProducts'
+        type: array
+      total_price:
+        type: number
+      user_id:
+        type: string
+    type: object
   product.ProductInsert:
     properties:
       category_id:
@@ -122,6 +144,57 @@ info:
   title: Intern_shopping
   version: "1.0"
 paths:
+  /admin:
+    post:
+      consumes:
+      - application/json
+      description: Admin Create User
+      parameters:
+      - description: Sturct User to insert
+        in: body
+        name: Request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/users.Users'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Admin Create User
+      tags:
+      - User
+    put:
+      consumes:
+      - application/json
+      description: Admin Update User
+      parameters:
+      - description: Sturct User to update
+        in: body
+        name: Request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/users.Users'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Admin Update User
+      tags:
+      - User
   /auth/login:
     post:
       consumes:
@@ -260,6 +333,70 @@ paths:
       summary: Delete category
       tags:
       - Category
+  /orders:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Order from the database
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Order
+      tags:
+      - Order
+    get:
+      consumes:
+      - application/json
+      description: Get all Order from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all Order
+      tags:
+      - Order
+    post:
+      consumes:
+      - application/json
+      description: Insert Order from the database
+      parameters:
+      - description: Sturct Order to insert
+        in: body
+        name: Request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/order.Requestorder'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Insert Order
+      tags:
+      - Order
   /products:
     get:
       consumes:

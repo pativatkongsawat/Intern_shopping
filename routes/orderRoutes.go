@@ -1,7 +1,6 @@
 package routes
 
 import (
-	guestcontroller "Intern_shopping/controller/guestController"
 	"Intern_shopping/controller/orderController"
 	"Intern_shopping/middleware"
 
@@ -14,12 +13,12 @@ func orderRoutes(e *echo.Echo) {
 
 	userOrderGroup.Use(middleware.JWTAuthMiddleware, middleware.CustomerMiddleware)
 
-	userOrderGroup.POST("/create", orderController.InsertOrder)
+	userOrderGroup.POST("", orderController.InsertOrder)
 
-	userOrderGroup.DELETE("/remove", orderController.OrderDelete)
+	userOrderGroup.DELETE("", orderController.OrderDelete)
 
-	userOrderGroup.GET("/order", guestcontroller.OrderDetailByUserID)
+	userOrderGroup.GET("/order", orderController.OrderDetailByUserID)
 
-	userOrderGroup.GET("/orders/detail", guestcontroller.OrdersDetail)
+	userOrderGroup.GET("", orderController.OrdersDetail)
 
 }
