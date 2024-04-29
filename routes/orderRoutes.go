@@ -16,7 +16,6 @@ func orderRoutes(e *echo.Echo) {
 	userOrderGroup.POST("", orderController.UserCreateOrder)
 
 	userOrderGroup.DELETE("", orderController.OrderDelete)
-
 	userOrderGroup.GET("", orderController.SelfOrderDetail)
 
 }
