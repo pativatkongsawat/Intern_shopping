@@ -78,7 +78,7 @@ func GetProductBy(ctx echo.Context) error {
 // @response 200 {object} helper.SuccessResponse "Success response"
 // @Router /products [post]
 func InsertproductBy(ctx echo.Context) error {
-	productdata := []product.ProductInsert{}
+	productdata := []*product.ProductInsert{}
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
 	now := time.Now()
 
@@ -90,7 +90,7 @@ func InsertproductBy(ctx echo.Context) error {
 		})
 	}
 
-	products := []product.Product{}
+	products := []*product.Product{}
 
 	for _, p := range productdata {
 		product := product.Product{
@@ -104,7 +104,7 @@ func InsertproductBy(ctx echo.Context) error {
 			Deleted_at:  nil,
 			Category_id: p.Category_id,
 		}
-		products = append(products, product)
+		products = append(products, &product)
 	}
 
 	err := productModelHelper.Insertproduct(products)
@@ -205,7 +205,7 @@ func UpdateProduct(ctx echo.Context) error {
 		})
 	}
 	now := time.Now()
-	newproduct := []product.Product{}
+	newproduct := []*product.Product{}
 
 	for _, i := range productdata {
 
@@ -220,7 +220,7 @@ func UpdateProduct(ctx echo.Context) error {
 			Category_id: i.Category_id,
 		}
 
-		newproduct = append(newproduct, newproductsdata)
+		newproduct = append(newproduct, &newproductsdata)
 	}
 
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
@@ -265,7 +265,15 @@ func DeleteProductSoft(ctx echo.Context) error {
 		})
 	}
 
-	product := productModelHelper.SoftDelete(id)
+	product, err := productModelHelper.SoftDelete(id)
+
+	if err != nil {
+		return ctx.JSON(500, utils.ResponseMessage{
+			Status:  500,
+			Message: "Error Soft Delete Product",
+			Result:  err.Error(),
+		})
+	}
 
 	return ctx.JSON(200, map[string]interface{}{
 		"product": product,

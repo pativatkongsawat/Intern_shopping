@@ -10,9 +10,9 @@ type ProductModelHelper struct {
 	DB *gorm.DB
 }
 
-func (u *ProductModelHelper) Getproduct(pname string, limit, page int) ([]Product, int64, error) {
+func (u *ProductModelHelper) Getproduct(pname string, limit, page int) ([]*Product, int64, error) {
 
-	product := []Product{}
+	product := []*Product{}
 
 	var count int64
 
@@ -32,9 +32,9 @@ func (u *ProductModelHelper) Getproduct(pname string, limit, page int) ([]Produc
 
 }
 
-func (u *ProductModelHelper) GetproductAll() ([]Product, error) {
+func (u *ProductModelHelper) GetproductAll() ([]*Product, error) {
 
-	product := []Product{}
+	product := []*Product{}
 
 	if err := u.DB.Find(&product).Error; err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func (u *ProductModelHelper) GetproductAll() ([]Product, error) {
 	return product, nil
 }
 
-func (u *ProductModelHelper) Insertproduct(products []Product) error {
+func (u *ProductModelHelper) Insertproduct(products []*Product) error {
 	tx := u.DB.Begin()
 
 	if err := tx.Debug().Create(&products).Error; err != nil {
@@ -55,8 +55,8 @@ func (u *ProductModelHelper) Insertproduct(products []Product) error {
 	return nil
 }
 
-func (u *ProductModelHelper) DeleteProduct(id int) ([]Product, error) {
-	product := []Product{}
+func (u *ProductModelHelper) DeleteProduct(id int) ([]*Product, error) {
+	product := []*Product{}
 	tx := u.DB.Begin()
 
 	if err := tx.Debug().Where("id = ?", id).First(&product).Error; err != nil {
@@ -72,11 +72,11 @@ func (u *ProductModelHelper) DeleteProduct(id int) ([]Product, error) {
 	return product, nil
 }
 
-func (u *ProductModelHelper) UpdateProduct(Productdata []Product) ([]Product, error) {
+func (u *ProductModelHelper) UpdateProduct(Productdata []*Product) ([]*Product, error) {
 
 	tx := u.DB.Begin()
 
-	newProductdata := []Product{}
+	newProductdata := []*Product{}
 
 	for _, product := range Productdata {
 		newProduct := map[string]interface{}{
@@ -101,18 +101,20 @@ func (u *ProductModelHelper) UpdateProduct(Productdata []Product) ([]Product, er
 	return newProductdata, nil
 }
 
-func (u *ProductModelHelper) SoftDelete(id int) error {
+func (u *ProductModelHelper) SoftDelete(id int) ([]*Product, error) {
 	tx := u.DB.Begin()
+
+	product := []*Product{}
 
 	now := time.Now()
 	if err := tx.Debug().Model(&Product{}).Where("id = ?", id).Update("deleted_at", &now).Error; err != nil {
 		tx.Rollback()
-		return err
+		return nil, err
 	}
 
 	if err := tx.Commit().Error; err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return product, nil
 }
