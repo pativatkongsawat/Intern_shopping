@@ -145,6 +145,55 @@ info:
   version: "1.0"
 paths:
   /admin:
+    get:
+      consumes:
+      - application/json
+      description: Admin Get User
+      parameters:
+      - description: row
+        in: query
+        name: row
+        type: integer
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: sort
+        in: query
+        name: sort
+        type: string
+      - description: firstname
+        in: query
+        name: firstname
+        type: string
+      - description: lastname
+        in: query
+        name: lastname
+        type: string
+      - description: email
+        in: query
+        name: email
+        type: string
+      - description: add
+        in: query
+        name: add
+        type: string
+      - description: permission_id
+        in: query
+        name: permission_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Admin Get User
+      tags:
+      - User
     post:
       consumes:
       - application/json
@@ -193,6 +242,56 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Admin Update User
+      tags:
+      - User
+  /admin/deleted:
+    get:
+      consumes:
+      - application/json
+      description: Admin Get User Delete
+      parameters:
+      - description: row
+        in: query
+        name: row
+        type: integer
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: sort
+        in: query
+        name: sort
+        type: string
+      - description: firstname
+        in: query
+        name: firstname
+        type: string
+      - description: lastname
+        in: query
+        name: lastname
+        type: string
+      - description: email
+        in: query
+        name: email
+        type: string
+      - description: add
+        in: query
+        name: add
+        type: string
+      - description: permission_id
+        in: query
+        name: permission_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Admin Get User Delete
       tags:
       - User
   /auth/login:

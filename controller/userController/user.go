@@ -86,6 +86,24 @@ func GetUserSelf(ctx echo.Context) error {
 }
 
 // NOTE - Get all users
+
+// @Tags User
+// @Summary Admin Get User
+// @Description Admin Get User
+// @Accept json
+// @Produce json
+// @Param row query int false "row"
+// @Param page query int false "page"
+// @Param sort query string false "sort"
+// @Param firstname query string false "firstname"
+// @Param lastname query string false "lastname"
+// @Param email query string false "email"
+// @Param add query string false "add"
+// @Param permission_id query string false "permission_id"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /admin [get]
 func GetUsers(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
@@ -119,6 +137,24 @@ func GetUsers(ctx echo.Context) error {
 }
 
 // NOTE - Get all deleted users
+
+// @Tags User
+// @Summary Admin Get User Delete
+// @Description Admin Get User Delete
+// @Accept json
+// @Produce json
+// @Param row query int false "row"
+// @Param page query int false "page"
+// @Param sort query string false "sort"
+// @Param firstname query string false "firstname"
+// @Param lastname query string false "lastname"
+// @Param email query string false "email"
+// @Param add query string false "add"
+// @Param permission_id query string false "permission_id"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /admin/deleted [get]
 func GetDeletedUsers(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 

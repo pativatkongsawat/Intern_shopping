@@ -13,9 +13,9 @@ func adminRoute(e *echo.Echo) {
 
 	// SECTION - READ
 	// NOTE - Get all users
-	adminGroup.GET("/users", userController.GetUsers)
+	adminGroup.GET("", userController.GetUsers)
 	// NOTE - GET all deleted users
-	adminGroup.GET("/deleted-users", userController.GetDeletedUsers)
+	adminGroup.GET("/deleted", userController.GetDeletedUsers)
 
 	// !SECTION - READ
 

@@ -22,6 +22,82 @@
     "basePath": "/",
     "paths": {
         "/admin": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin Get User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Admin Get User",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "row",
+                        "name": "row",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "sort",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "firstname",
+                        "name": "firstname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "lastname",
+                        "name": "lastname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "email",
+                        "name": "email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "add",
+                        "name": "add",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "permission_id",
+                        "name": "permission_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            },
             "put": {
                 "security": [
                     {
@@ -91,6 +167,84 @@
                                 "$ref": "#/definitions/users.Users"
                             }
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/deleted": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin Get User Delete",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Admin Get User Delete",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "row",
+                        "name": "row",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "sort",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "firstname",
+                        "name": "firstname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "lastname",
+                        "name": "lastname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "email",
+                        "name": "email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "add",
+                        "name": "add",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "permission_id",
+                        "name": "permission_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
