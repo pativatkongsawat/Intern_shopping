@@ -20,6 +20,16 @@ type Fil struct {
 	Totalprevpage int
 }
 
+// @Tags Product
+// @Summary Get Product Filter Name data
+// @Description Get Product from the database Filter
+// @Accept json
+// @Produce json
+// @Param pname query string false "pname"
+// @Param page query int false "page"
+// @Param limit query int false "limit"
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /user/product/get/by [get]
 func GetProductBy(ctx echo.Context) error {
 
 	pname := ctx.QueryParam("pname")
@@ -59,6 +69,14 @@ func GetProductBy(ctx echo.Context) error {
 
 }
 
+// @Tags Product
+// @Summary Insert a new product
+// @Description Insert a new product
+// @Accept json
+// @Produce json
+// @Param Request body []product.ProductInsert true "Array Product to insert"
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /user/product/create [post]
 func InsertproductBy(ctx echo.Context) error {
 	productdata := []product.ProductInsert{}
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
@@ -105,6 +123,14 @@ func InsertproductBy(ctx echo.Context) error {
 	})
 }
 
+// @Tags Product
+// @Summary Delete product
+// @Description Delete product
+// @Accept json
+// @Produce json
+// @Param id path int true "Id Product"
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /user/product/delete/:id [delete]
 func DeleteProductBy(ctx echo.Context) error {
 	idStr := ctx.Param("id")
 	id, err := strconv.Atoi(idStr)

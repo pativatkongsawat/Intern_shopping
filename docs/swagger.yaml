@@ -1,0 +1,116 @@
+basePath: /
+definitions:
+  helper.SuccessResponse:
+    properties:
+      code:
+        example: 2000
+        type: integer
+      message:
+        example: OK
+        type: string
+    type: object
+  product.ProductInsert:
+    properties:
+      category_id:
+        type: integer
+      description:
+        type: string
+      image:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      quantity:
+        type: integer
+    type: object
+host: localhost:1323
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Intern_shopping
+  version: "1.0"
+paths:
+  /user/product/create:
+    post:
+      consumes:
+      - application/json
+      description: Insert a new product
+      parameters:
+      - description: Array Product to insert
+        in: body
+        name: Request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/product.ProductInsert'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      summary: Insert a new product
+      tags:
+      - Product
+  /user/product/delete/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Delete product
+      parameters:
+      - description: Id Product
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      summary: Delete product
+      tags:
+      - Product
+  /user/product/get/by:
+    get:
+      consumes:
+      - application/json
+      description: Get Product from the database Filter
+      parameters:
+      - description: pname
+        in: query
+        name: pname
+        type: string
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      summary: Get Product Filter Name data
+      tags:
+      - Product
+schemes:
+- http
+swagger: "2.0"
