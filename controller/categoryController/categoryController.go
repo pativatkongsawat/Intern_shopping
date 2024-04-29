@@ -9,6 +9,14 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// @Tags Category
+// @Summary Insert a new Category
+// @Description Insert a new Category
+// @Accept json
+// @Produce json
+// @Param Request body []category.Category true "Array Category to Inset"
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /categorys [post]
 func InsertCategory(ctx echo.Context) error {
 	categorydata := []category.Category{}
 
@@ -42,6 +50,13 @@ func InsertCategory(ctx echo.Context) error {
 	})
 }
 
+// @Tags Category
+// @Summary Get all Category
+// @Description Get all Category from the database
+// @Accept json
+// @Produce json
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /categorys [get]
 func GetAllCategory(ctx echo.Context) error {
 
 	// category := []categoryRequest.Category{}
@@ -60,6 +75,14 @@ func GetAllCategory(ctx echo.Context) error {
 
 }
 
+// @Tags Category
+// @Summary Delete category
+// @Description Delete category
+// @Accept json
+// @Produce json
+// @Param id path int true "Id Category"
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /categorys/:id [delete]
 func DeleteCategory(ctx echo.Context) error {
 
 	getid := ctx.Param("id")
@@ -87,6 +110,14 @@ func DeleteCategory(ctx echo.Context) error {
 	})
 }
 
+// @Tags Category
+// @Summary Update Category
+// @Description Update Category from the database
+// @Accept json
+// @Produce json
+// @Param Request body []category.CategoryUpdate true "Update Category"
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /categorys [put]
 func UpdateCategory(ctx echo.Context) error {
 
 	categorydata := []category.CategoryUpdate{}

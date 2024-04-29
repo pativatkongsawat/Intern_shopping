@@ -2,14 +2,20 @@ package routes
 
 import (
 	"Intern_shopping/controller/categoryController"
+	"Intern_shopping/middleware"
 
 	"github.com/labstack/echo/v4"
 )
 
 func categoryRoutes(e *echo.Echo) {
-	e.GET("/category", categoryController.GetAllCategory)
-	e.POST("/category/create", categoryController.InsertCategory)
-	e.PUT("/category/update/", categoryController.UpdateCategory)
-	e.DELETE("/category/del/:id", categoryController.DeleteCategory)
+
+	userProductGroup := e.Group("/categorys")
+
+	userProductGroup.Use(middleware.JWTAuthMiddleware, middleware.CustomerMiddleware)
+
+	userProductGroup.GET("", categoryController.GetAllCategory)
+	userProductGroup.POST("", categoryController.InsertCategory)
+	userProductGroup.PUT("", categoryController.UpdateCategory)
+	userProductGroup.DELETE("/:id", categoryController.DeleteCategory)
 
 }

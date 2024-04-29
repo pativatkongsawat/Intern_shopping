@@ -1,5 +1,19 @@
 basePath: /
 definitions:
+  category.Category:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  category.CategoryUpdate:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
   helper.SuccessResponse:
     properties:
       code:
@@ -57,6 +71,88 @@ info:
   title: Intern_shopping
   version: "1.0"
 paths:
+  /categorys:
+    get:
+      consumes:
+      - application/json
+      description: Get all Category from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      summary: Get all Category
+      tags:
+      - Category
+    post:
+      consumes:
+      - application/json
+      description: Insert a new Category
+      parameters:
+      - description: Array Category to Inset
+        in: body
+        name: Request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/category.Category'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      summary: Insert a new Category
+      tags:
+      - Category
+    put:
+      consumes:
+      - application/json
+      description: Update Category from the database
+      parameters:
+      - description: Update Category
+        in: body
+        name: Request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/category.CategoryUpdate'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      summary: Update Category
+      tags:
+      - Category
+  /categorys/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Delete category
+      parameters:
+      - description: Id Category
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      summary: Delete category
+      tags:
+      - Category
   /products:
     get:
       consumes:

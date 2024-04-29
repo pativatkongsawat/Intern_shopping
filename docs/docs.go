@@ -24,6 +24,131 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/categorys": {
+            "get": {
+                "description": "Get all Category from the database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Get all Category",
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update Category from the database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Update Category",
+                "parameters": [
+                    {
+                        "description": "Update Category",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/category.CategoryUpdate"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Insert a new Category",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Insert a new Category",
+                "parameters": [
+                    {
+                        "description": "Array Category to Inset",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/category.Category"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/categorys/:id": {
+            "delete": {
+                "description": "Delete category",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Delete category",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Id Category",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/products": {
             "get": {
                 "description": "Get all Product from the database",
@@ -226,6 +351,28 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "category.Category": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "category.CategoryUpdate": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "helper.SuccessResponse": {
             "type": "object",
             "properties": {
