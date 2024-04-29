@@ -6,6 +6,7 @@ import (
 	"Intern_shopping/models/auth"
 	"Intern_shopping/models/users"
 	"Intern_shopping/models/utils"
+	"log"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -95,6 +96,7 @@ func loginHandler(userReq users.Users) (user users.Users, err error) {
 	}
 	// Compare hashed password
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(userReq.Password)); err != nil {
+		log.Println("Password mismatch: ", err.Error(), userReq.Password)
 		return user, echo.NewHTTPError(401, "Invalid email or password")
 	}
 	return user, nil
