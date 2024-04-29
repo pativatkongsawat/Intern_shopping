@@ -153,6 +153,7 @@ func DeleteProductBy(ctx echo.Context) error {
 	}
 
 	return ctx.JSON(200, map[string]interface{}{
+
 		"product": deletedProduct,
 		"message": "Product deleted successfully",
 	})
