@@ -68,6 +68,16 @@ func UserCreateOrder(ctx echo.Context) error {
 	}, "Success")
 }
 
+// @Tags Order
+// @Summary Delete Order
+// @Description Delete Order from the database
+// @Accept json
+// @Produce json
+// @Param id query int true "id"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /orders [delete]
 func OrderDelete(ctx echo.Context) error {
 
 	getid := ctx.QueryParam("id")

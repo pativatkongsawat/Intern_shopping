@@ -30,6 +30,16 @@ func GenerateToken(userID *string, PermissionID *int) (string, error) {
 	return token.SignedString(jwtSecret)
 }
 
+// @Tags Auth
+// @Summary User Login
+// @Description User Login
+// @Accept json
+// @Produce json
+// @Param user body users.Users true "User login details"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /auth/login [post]
 func Login(ctx echo.Context) error {
 	// Bind data from request body
 	var loginUser users.Users
@@ -102,6 +112,16 @@ func loginHandler(userReq users.Users) (user users.Users, err error) {
 	return user, nil
 }
 
+// @Tags Auth
+// @Summary User Register
+// @Description User Register
+// @Accept json
+// @Produce json
+// @Param user body users.CreateUser true "User login details"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /auth/signup [post]
 func Signup(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 	now := time.Now()

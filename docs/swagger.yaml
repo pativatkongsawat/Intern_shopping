@@ -1,0 +1,722 @@
+basePath: /
+definitions:
+  category.Category:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  category.CategoryUpdate:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  helper.SuccessResponse:
+    properties:
+      code:
+        example: 2000
+        type: integer
+      message:
+        example: OK
+        type: string
+    type: object
+  order.RequestProducts:
+    properties:
+      id:
+        type: integer
+      price:
+        type: number
+      quantity:
+        type: integer
+    type: object
+  order.Requestorder:
+    properties:
+      id:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/order.RequestProducts'
+        type: array
+      total_price:
+        type: number
+      user_id:
+        type: string
+    type: object
+  product.ProductInsert:
+    properties:
+      category_id:
+        type: integer
+      description:
+        type: string
+      image:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      quantity:
+        type: integer
+    type: object
+  product.ProductUpdate:
+    properties:
+      category_id:
+        type: integer
+      description:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      quantity:
+        type: integer
+      update_at:
+        type: string
+    type: object
+  users.CreateUser:
+    properties:
+      address:
+        type: string
+      email:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      password:
+        type: string
+    type: object
+  users.UserUpdate:
+    properties:
+      address:
+        type: string
+      email:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      password:
+        type: string
+    type: object
+  users.Users:
+    properties:
+      address:
+        type: string
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      email:
+        type: string
+      firstname:
+        type: string
+      id:
+        type: string
+      lastname:
+        type: string
+      password:
+        type: string
+      permission_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+host: localhost:1323
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Intern_shopping
+  version: "1.0"
+paths:
+  /admin:
+    get:
+      consumes:
+      - application/json
+      description: Admin Get User
+      parameters:
+      - description: row
+        in: query
+        name: row
+        type: integer
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: sort
+        in: query
+        name: sort
+        type: string
+      - description: firstname
+        in: query
+        name: firstname
+        type: string
+      - description: lastname
+        in: query
+        name: lastname
+        type: string
+      - description: email
+        in: query
+        name: email
+        type: string
+      - description: add
+        in: query
+        name: add
+        type: string
+      - description: permission_id
+        in: query
+        name: permission_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Admin Get User
+      tags:
+      - User
+    post:
+      consumes:
+      - application/json
+      description: Admin Create User
+      parameters:
+      - description: Sturct User to insert
+        in: body
+        name: Request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/users.Users'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Admin Create User
+      tags:
+      - User
+    put:
+      consumes:
+      - application/json
+      description: Admin Update User
+      parameters:
+      - description: Sturct User to update
+        in: body
+        name: Request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/users.Users'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Admin Update User
+      tags:
+      - User
+  /admin/deleted:
+    get:
+      consumes:
+      - application/json
+      description: Admin Get User Delete
+      parameters:
+      - description: row
+        in: query
+        name: row
+        type: integer
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: sort
+        in: query
+        name: sort
+        type: string
+      - description: firstname
+        in: query
+        name: firstname
+        type: string
+      - description: lastname
+        in: query
+        name: lastname
+        type: string
+      - description: email
+        in: query
+        name: email
+        type: string
+      - description: add
+        in: query
+        name: add
+        type: string
+      - description: permission_id
+        in: query
+        name: permission_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Admin Get User Delete
+      tags:
+      - User
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: User Login
+      parameters:
+      - description: User login details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/users.Users'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: User Login
+      tags:
+      - Auth
+  /auth/signup:
+    post:
+      consumes:
+      - application/json
+      description: User Register
+      parameters:
+      - description: User login details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/users.CreateUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: User Register
+      tags:
+      - Auth
+  /categorys:
+    get:
+      consumes:
+      - application/json
+      description: Get all Category from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all Category
+      tags:
+      - Category
+    post:
+      consumes:
+      - application/json
+      description: Insert a new Category
+      parameters:
+      - description: Array Category to Inset
+        in: body
+        name: Request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/category.Category'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Insert a new Category
+      tags:
+      - Category
+    put:
+      consumes:
+      - application/json
+      description: Update Category from the database
+      parameters:
+      - description: Update Category
+        in: body
+        name: Request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/category.CategoryUpdate'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Category
+      tags:
+      - Category
+  /categorys/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Delete category
+      parameters:
+      - description: Id Category
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete category
+      tags:
+      - Category
+  /orders:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Order from the database
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Order
+      tags:
+      - Order
+    get:
+      consumes:
+      - application/json
+      description: Get all Order from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all Order
+      tags:
+      - Order
+    post:
+      consumes:
+      - application/json
+      description: Insert Order from the database
+      parameters:
+      - description: Sturct Order to insert
+        in: body
+        name: Request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/order.Requestorder'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Insert Order
+      tags:
+      - Order
+  /products:
+    get:
+      consumes:
+      - application/json
+      description: Get all Product from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all Product
+      tags:
+      - Product
+    post:
+      consumes:
+      - application/json
+      description: Insert a new product
+      parameters:
+      - description: Array Product to insert
+        in: body
+        name: Request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/product.ProductInsert'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Insert a new product
+      tags:
+      - Product
+    put:
+      consumes:
+      - application/json
+      description: Update Product from the database
+      parameters:
+      - description: Update Product
+        in: body
+        name: Request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/product.ProductUpdate'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Product
+      tags:
+      - Product
+  /products/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Delete product
+      parameters:
+      - description: Id Product
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete product
+      tags:
+      - Product
+  /products/hide/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Spft Delete product
+      parameters:
+      - description: Id Product
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Soft Delete product
+      tags:
+      - Product
+  /products/name:
+    get:
+      consumes:
+      - application/json
+      description: Get Product from the database Filter
+      parameters:
+      - description: pname
+        in: query
+        name: pname
+        type: string
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Product Filter Name data
+      tags:
+      - Product
+  /users/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Soft Delete User from the database
+      parameters:
+      - description: Id User
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Soft Delete User
+      tags:
+      - User
+    get:
+      consumes:
+      - application/json
+      description: Get User by Id
+      parameters:
+      - description: Id User
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get User by Id
+      tags:
+      - User
+    put:
+      consumes:
+      - application/json
+      description: Update User from the database
+      parameters:
+      - description: Id User
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update User
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/users.UserUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update User
+      tags:
+      - User
+schemes:
+- http
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

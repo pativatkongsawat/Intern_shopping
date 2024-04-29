@@ -20,6 +20,18 @@ type Fil struct {
 	Totalprevpage int
 }
 
+// @Tags Product
+// @Summary Get Product Filter Name data
+// @Description Get Product from the database Filter
+// @Accept json
+// @Produce json
+// @Param pname query string false "pname"
+// @Param page query int false "page"
+// @Param limit query int false "limit"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /products/name [get]
 func GetProductBy(ctx echo.Context) error {
 
 	pname := ctx.QueryParam("pname")
@@ -59,8 +71,18 @@ func GetProductBy(ctx echo.Context) error {
 
 }
 
+// @Tags Product
+// @Summary Insert a new product
+// @Description Insert a new product
+// @Accept json
+// @Produce json
+// @Param Request body []product.ProductInsert true "Array Product to insert"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /products [post]
 func InsertproductBy(ctx echo.Context) error {
-	productdata := []product.ProductInsert{}
+	productdata := []*product.ProductInsert{}
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
 	now := time.Now()
 
@@ -72,7 +94,7 @@ func InsertproductBy(ctx echo.Context) error {
 		})
 	}
 
-	products := []product.Product{}
+	products := []*product.Product{}
 
 	for _, p := range productdata {
 		product := product.Product{
@@ -86,7 +108,7 @@ func InsertproductBy(ctx echo.Context) error {
 			Deleted_at:  nil,
 			Category_id: p.Category_id,
 		}
-		products = append(products, product)
+		products = append(products, &product)
 	}
 
 	err := productModelHelper.Insertproduct(products)
@@ -105,6 +127,16 @@ func InsertproductBy(ctx echo.Context) error {
 	})
 }
 
+// @Tags Product
+// @Summary Delete product
+// @Description Delete product
+// @Accept json
+// @Produce json
+// @Param id path int true "Id Product"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /products/:id [delete]
 func DeleteProductBy(ctx echo.Context) error {
 	idStr := ctx.Param("id")
 	id, err := strconv.Atoi(idStr)
@@ -127,11 +159,21 @@ func DeleteProductBy(ctx echo.Context) error {
 	}
 
 	return ctx.JSON(200, map[string]interface{}{
+
 		"product": deletedProduct,
 		"message": "Product deleted successfully",
 	})
 }
 
+// @Tags Product
+// @Summary Get all Product
+// @Description Get all Product from the database
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /products [get]
 func ProductGetAll(ctx echo.Context) error {
 
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
@@ -151,6 +193,16 @@ func ProductGetAll(ctx echo.Context) error {
 	})
 }
 
+// @Tags Product
+// @Summary Update Product
+// @Description Update Product from the database
+// @Accept json
+// @Produce json
+// @Param Request body []product.ProductUpdate true "Update Product"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /products [put]
 func UpdateProduct(ctx echo.Context) error {
 
 	productdata := []*product.ProductUpdate{}
@@ -199,6 +251,16 @@ func UpdateProduct(ctx echo.Context) error {
 	})
 }
 
+// @Tags Product
+// @Summary Soft Delete product
+// @Description Spft Delete product
+// @Accept json
+// @Produce json
+// @Param id path string true "Id Product"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /products/hide/:id [delete]
 func DeleteProductSoft(ctx echo.Context) error {
 
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
@@ -215,15 +277,19 @@ func DeleteProductSoft(ctx echo.Context) error {
 		})
 	}
 
-	product := productModelHelper.SoftDelete(id)
+	product, err := productModelHelper.SoftDelete(id)
+
+	if err != nil {
+		return ctx.JSON(500, utils.ResponseMessage{
+			Status:  500,
+			Message: "Error Soft Delete Product",
+			Result:  err.Error(),
+		})
+	}
 
 	return ctx.JSON(200, map[string]interface{}{
 		"product": product,
 		"Message": "Soft deleted product successfully deleted",
 	})
 
-}
-
-func Delelelele(ctx echo.Context) error {
-	return nil
 }

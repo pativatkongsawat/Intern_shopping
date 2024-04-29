@@ -8,13 +8,13 @@ import (
 )
 
 func userRoute(e *echo.Echo) {
-	userGroup := e.Group("/user")
+	userGroup := e.Group("/users")
 
 	userGroup.Use(middleware.JWTAuthMiddleware, middleware.CustomerMiddleware)
 
 	//SECTION - READ
 
-	userGroup.GET("/profile/:id", userController.GetUserSelf)
+	userGroup.GET("/:id", userController.GetUserSelf)
 
 	// !SECTION - READ
 
@@ -25,7 +25,7 @@ func userRoute(e *echo.Echo) {
 	//SECTION - UPDATE
 
 	//NOTE - Update
-	userGroup.PUT("edit/:id", userController.UpdateById)
+	userGroup.PUT("/:id", userController.UpdateById)
 
 	//!SECTION - UPDATE
 

@@ -9,11 +9,14 @@ import (
 
 func orderRoutes(e *echo.Echo) {
 
-	userOrderGroup := e.Group("/user/order")
+	userOrderGroup := e.Group("/orders")
+
 	userOrderGroup.Use(middleware.JWTAuthMiddleware, middleware.CustomerMiddleware)
 
-	userOrderGroup.POST("/create", orderController.UserCreateOrder)
+	userOrderGroup.POST("", orderController.UserCreateOrder)
 
-	userOrderGroup.DELETE("/remove", orderController.OrderDelete)
+	userOrderGroup.DELETE("", orderController.OrderDelete)
+
+	userOrderGroup.GET("/order", orderController.SelfOrderDetail)
 
 }
