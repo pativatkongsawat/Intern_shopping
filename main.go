@@ -25,6 +25,9 @@ import (
 // @host			localhost:1323
 // @BasePath		/
 // @schemes		http
+// @securityDefinitions.apikey  ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 
 	e := echo.New()

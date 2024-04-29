@@ -57,6 +57,31 @@ definitions:
       update_at:
         type: string
     type: object
+  users.Users:
+    properties:
+      address:
+        type: string
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      email:
+        type: string
+      firstname:
+        type: string
+      id:
+        type: string
+      lastname:
+        type: string
+      password:
+        type: string
+      permission_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
 host: localhost:1323
 info:
   contact:
@@ -71,6 +96,30 @@ info:
   title: Intern_shopping
   version: "1.0"
 paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: User Login
+      parameters:
+      - description: User login details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/users.Users'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: User Login
+      tags:
+      - Aut
   /categorys:
     get:
       consumes:
@@ -83,6 +132,8 @@ paths:
           description: Success response
           schema:
             $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get all Category
       tags:
       - Category
@@ -106,6 +157,8 @@ paths:
           description: Success response
           schema:
             $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Insert a new Category
       tags:
       - Category
@@ -129,6 +182,8 @@ paths:
           description: Success response
           schema:
             $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Update Category
       tags:
       - Category
@@ -150,6 +205,8 @@ paths:
           description: Success response
           schema:
             $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Delete category
       tags:
       - Category
@@ -165,6 +222,8 @@ paths:
           description: Success response
           schema:
             $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get all Product
       tags:
       - Product
@@ -188,6 +247,8 @@ paths:
           description: Success response
           schema:
             $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Insert a new product
       tags:
       - Product
@@ -211,6 +272,8 @@ paths:
           description: Success response
           schema:
             $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Update Product
       tags:
       - Product
@@ -232,6 +295,8 @@ paths:
           description: Success response
           schema:
             $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Delete product
       tags:
       - Product
@@ -253,6 +318,8 @@ paths:
           description: Success response
           schema:
             $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Soft Delete product
       tags:
       - Product
@@ -281,6 +348,8 @@ paths:
           description: Success response
           schema:
             $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get Product Filter Name data
       tags:
       - Product
@@ -307,4 +376,9 @@ paths:
       - User
 schemes:
 - http
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

@@ -15,6 +15,8 @@ import (
 // @Accept json
 // @Produce json
 // @Param Request body []category.Category true "Array Category to Inset"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
 // @Router /categorys [post]
 func InsertCategory(ctx echo.Context) error {
@@ -55,6 +57,8 @@ func InsertCategory(ctx echo.Context) error {
 // @Description Get all Category from the database
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
 // @Router /categorys [get]
 func GetAllCategory(ctx echo.Context) error {
@@ -81,6 +85,8 @@ func GetAllCategory(ctx echo.Context) error {
 // @Accept json
 // @Produce json
 // @Param id path int true "Id Category"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
 // @Router /categorys/:id [delete]
 func DeleteCategory(ctx echo.Context) error {
@@ -116,6 +122,8 @@ func DeleteCategory(ctx echo.Context) error {
 // @Accept json
 // @Produce json
 // @Param Request body []category.CategoryUpdate true "Update Category"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
 // @Router /categorys [put]
 func UpdateCategory(ctx echo.Context) error {

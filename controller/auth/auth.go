@@ -29,6 +29,16 @@ func GenerateToken(userID *string, PermissionID *int) (string, error) {
 	return token.SignedString(jwtSecret)
 }
 
+// @Tags Aut
+// @Summary User Login
+// @Description User Login
+// @Accept json
+// @Produce json
+// @Param user body users.Users true "User login details"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /auth/login [post]
 func Login(ctx echo.Context) error {
 	// Bind data from request body
 	var loginUser users.Users

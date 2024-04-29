@@ -28,6 +28,8 @@ type Fil struct {
 // @Param pname query string false "pname"
 // @Param page query int false "page"
 // @Param limit query int false "limit"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
 // @Router /products/name [get]
 func GetProductBy(ctx echo.Context) error {
@@ -75,6 +77,8 @@ func GetProductBy(ctx echo.Context) error {
 // @Accept json
 // @Produce json
 // @Param Request body []product.ProductInsert true "Array Product to insert"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
 // @Router /products [post]
 func InsertproductBy(ctx echo.Context) error {
@@ -129,6 +133,8 @@ func InsertproductBy(ctx echo.Context) error {
 // @Accept json
 // @Produce json
 // @Param id path int true "Id Product"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
 // @Router /products/:id [delete]
 func DeleteProductBy(ctx echo.Context) error {
@@ -164,6 +170,8 @@ func DeleteProductBy(ctx echo.Context) error {
 // @Description Get all Product from the database
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
 // @Router /products [get]
 func ProductGetAll(ctx echo.Context) error {
@@ -191,6 +199,8 @@ func ProductGetAll(ctx echo.Context) error {
 // @Accept json
 // @Produce json
 // @Param Request body []product.ProductUpdate true "Update Product"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
 // @Router /products [put]
 func UpdateProduct(ctx echo.Context) error {
@@ -247,6 +257,8 @@ func UpdateProduct(ctx echo.Context) error {
 // @Accept json
 // @Produce json
 // @Param id path int true "Id Product"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
 // @Router /products/hide/:id [delete]
 func DeleteProductSoft(ctx echo.Context) error {
