@@ -24,6 +24,25 @@ definitions:
       quantity:
         type: integer
     type: object
+  product.ProductUpdate:
+    properties:
+      category_id:
+        type: integer
+      description:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      quantity:
+        type: integer
+      update_at:
+        type: string
+    type: object
 host: localhost:1323
 info:
   contact:
@@ -38,7 +57,21 @@ info:
   title: Intern_shopping
   version: "1.0"
 paths:
-  /user/product/create:
+  /products:
+    get:
+      consumes:
+      - application/json
+      description: Get all Product from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      summary: Get all Product
+      tags:
+      - Product
     post:
       consumes:
       - application/json
@@ -62,7 +95,30 @@ paths:
       summary: Insert a new product
       tags:
       - Product
-  /user/product/delete/:id:
+    put:
+      consumes:
+      - application/json
+      description: Update Product from the database
+      parameters:
+      - description: Update Product
+        in: body
+        name: Request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/product.ProductUpdate'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      summary: Update Product
+      tags:
+      - Product
+  /products/:id:
     delete:
       consumes:
       - application/json
@@ -83,7 +139,28 @@ paths:
       summary: Delete product
       tags:
       - Product
-  /user/product/get/by:
+  /products/hide/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Spft Delete product
+      parameters:
+      - description: Id Product
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      summary: Soft Delete product
+      tags:
+      - Product
+  /products/name:
     get:
       consumes:
       - application/json

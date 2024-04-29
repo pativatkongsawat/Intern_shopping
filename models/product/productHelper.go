@@ -72,11 +72,11 @@ func (u *ProductModelHelper) DeleteProduct(id int) ([]Product, error) {
 	return product, nil
 }
 
-func (u *ProductModelHelper) UpdateProduct(Productdata []*Product) ([]*Product, error) {
+func (u *ProductModelHelper) UpdateProduct(Productdata []Product) ([]Product, error) {
 
 	tx := u.DB.Begin()
 
-	newProductdata := []*Product{}
+	newProductdata := []Product{}
 
 	for _, product := range Productdata {
 		newProduct := map[string]interface{}{
@@ -89,7 +89,7 @@ func (u *ProductModelHelper) UpdateProduct(Productdata []*Product) ([]*Product, 
 			"Category_id": product.Category_id,
 		}
 
-		if err := tx.Debug().Model(&Product{}).Where("id = ?", product.Id).Updates(newProduct).Error; err != nil {
+		if err := tx.Debug().Model(&Product{}).Where("id = ?", product.Id).Updates(&newProduct).Error; err != nil {
 			tx.Rollback()
 			return nil, err
 		}

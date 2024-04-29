@@ -29,7 +29,7 @@ type Fil struct {
 // @Param page query int false "page"
 // @Param limit query int false "limit"
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /user/product/get/by [get]
+// @Router /products/name [get]
 func GetProductBy(ctx echo.Context) error {
 
 	pname := ctx.QueryParam("pname")
@@ -76,7 +76,7 @@ func GetProductBy(ctx echo.Context) error {
 // @Produce json
 // @Param Request body []product.ProductInsert true "Array Product to insert"
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /user/product/create [post]
+// @Router /products [post]
 func InsertproductBy(ctx echo.Context) error {
 	productdata := []product.ProductInsert{}
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
@@ -130,7 +130,7 @@ func InsertproductBy(ctx echo.Context) error {
 // @Produce json
 // @Param id path int true "Id Product"
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /user/product/delete/:id [delete]
+// @Router /products/:id [delete]
 func DeleteProductBy(ctx echo.Context) error {
 	idStr := ctx.Param("id")
 	id, err := strconv.Atoi(idStr)
@@ -158,6 +158,13 @@ func DeleteProductBy(ctx echo.Context) error {
 	})
 }
 
+// @Tags Product
+// @Summary Get all Product
+// @Description Get all Product from the database
+// @Accept json
+// @Produce json
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /products [get]
 func ProductGetAll(ctx echo.Context) error {
 
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
@@ -177,6 +184,14 @@ func ProductGetAll(ctx echo.Context) error {
 	})
 }
 
+// @Tags Product
+// @Summary Update Product
+// @Description Update Product from the database
+// @Accept json
+// @Produce json
+// @Param Request body []product.ProductUpdate true "Update Product"
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /products [put]
 func UpdateProduct(ctx echo.Context) error {
 
 	productdata := []*product.ProductUpdate{}
@@ -189,7 +204,7 @@ func UpdateProduct(ctx echo.Context) error {
 		})
 	}
 	now := time.Now()
-	newproduct := []*product.Product{}
+	newproduct := []product.Product{}
 
 	for _, i := range productdata {
 
@@ -204,7 +219,7 @@ func UpdateProduct(ctx echo.Context) error {
 			Category_id: i.Category_id,
 		}
 
-		newproduct = append(newproduct, &newproductsdata)
+		newproduct = append(newproduct, newproductsdata)
 	}
 
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
@@ -225,6 +240,14 @@ func UpdateProduct(ctx echo.Context) error {
 	})
 }
 
+// @Tags Product
+// @Summary Soft Delete product
+// @Description Spft Delete product
+// @Accept json
+// @Produce json
+// @Param id path int true "Id Product"
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /products/hide/:id [delete]
 func DeleteProductSoft(ctx echo.Context) error {
 
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
@@ -248,8 +271,4 @@ func DeleteProductSoft(ctx echo.Context) error {
 		"Message": "Soft deleted product successfully deleted",
 	})
 
-}
-
-func Delelelele(ctx echo.Context) error {
-	return nil
 }
