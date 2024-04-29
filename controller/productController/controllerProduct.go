@@ -256,7 +256,7 @@ func UpdateProduct(ctx echo.Context) error {
 // @Description Spft Delete product
 // @Accept json
 // @Produce json
-// @Param id path int true "Id Product"
+// @Param id path string true "Id Product"
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"

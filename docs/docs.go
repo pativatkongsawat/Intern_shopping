@@ -751,7 +751,7 @@ const docTemplate = `{
                 "summary": "Soft Delete product",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "Id Product",
                         "name": "id",
                         "in": "path",
