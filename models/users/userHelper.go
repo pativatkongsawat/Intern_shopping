@@ -18,13 +18,13 @@ type DatabaseRequest struct {
 	DB *gorm.DB
 }
 
-func hashPassword(userReq *Users) (string, error) {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(userReq.Password), bcrypt.DefaultCost)
+func hashPassword(password string) (string, error) {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return "", errors.New("failed to hash password")
 	}
-	userReq.Password = string(hashedPassword)
-	return userReq.Password, nil
+	password = string(hashedPassword)
+	return password, nil
 }
 
 // REVIEW - Function เช็คว่าเป็น Error Duplicate รึป่าว
@@ -129,7 +129,7 @@ func (d DatabaseRequest) SelectAll(p *helper.Pagination, f *helper.UserFilter) (
 func (d DatabaseRequest) UpdateUser(user_id, updaterId string, userReq *Users) error {
 	tx := d.DB.Begin()
 	if userReq.Password != "" {
-		password, err := hashPassword(userReq)
+		password, err := hashPassword(userReq.Password)
 		if err != nil {
 			tx.Rollback()
 			return err
@@ -148,10 +148,10 @@ func (d DatabaseRequest) UpdateUser(user_id, updaterId string, userReq *Users) e
 }
 
 // NOTE - แก้ไขข้อมูล Users/ Update Users หลายตัวพร้อมกัน
-func (d *DatabaseRequest) UpdateUserArray(fields []*Users) error {
+func (d *DatabaseRequest) UpdateUserArray(fields []*AdminUserMultiUpdate) error {
 	// Start a new transaction
 	tx := d.DB.Begin()
-	var now = time.Now()
+	// var now = time.Now()
 
 	defer func() {
 		// If the function exits with an error, rollback the transaction
@@ -161,8 +161,6 @@ func (d *DatabaseRequest) UpdateUserArray(fields []*Users) error {
 		}
 	}()
 	for _, item := range fields {
-
-		log.Print("Item: ", item)
 		// if result := tx.Debug().First(&user, "id = ?", item.ID).Error; result != nil {
 		// 	if errors.Is(result, gorm.ErrRecordNotFound) {
 		// 		tx.Rollback()
@@ -171,13 +169,13 @@ func (d *DatabaseRequest) UpdateUserArray(fields []*Users) error {
 		// 	tx.Rollback()
 		// 	return fmt.Errorf("failed to update user %w", result)
 		// }
-
-		user := &map[string]interface{}{
-			"firstname":  item.Firstname,
-			"lastname":   item.Lastname,
-			"email":      item.Email,
-			"address":    item.Address,
-			"updated_at": &now,
+		if item.Password != "" {
+			password, err := hashPassword(item.Password)
+			if err != nil {
+				tx.Rollback()
+				return err
+			}
+			item.Password = password
 		}
 		var idCount int64
 		result := tx.Table("users").Where("id = ?", item.ID).Count(&idCount)
@@ -191,7 +189,7 @@ func (d *DatabaseRequest) UpdateUserArray(fields []*Users) error {
 			log.Print("Row 0: ", result.Error)
 			return errors.New("user not found")
 		}
-		result.Debug().Where("id = ?", item.ID).Updates(user)
+		result.Debug().Updates(item)
 		if result.Error != nil {
 			tx.Rollback()
 			log.Println("Error: ", result.Error)

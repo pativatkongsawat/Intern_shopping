@@ -1,7 +1,6 @@
 package users
 
 import (
-	"Intern_shopping/models/permission"
 	"time"
 )
 
@@ -36,13 +35,13 @@ type UserUpdate struct {
 }
 
 type AdminUserMultiUpdate struct {
-	Firstname    string                `json:"firstname"`
-	Lastname     string                `json:"lastname"`
-	Address      string                `json:"address"`
-	Email        string                `gorm:"unique" json:"email"`
-	Password     string                `json:"password"`
-	PermissionID int                   `json:"permission_id"`
-	Permission   permission.Permission `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	ID           string `json:"id"`
+	Firstname    string `json:"firstname,omitempty"`
+	Lastname     string `json:"lastname,omitempty"`
+	Address      string `json:"address,omitempty"`
+	Email        string `gorm:"unique" json:"email,omitempty"`
+	Password     string `json:"password,omitempty"`
+	PermissionID int    `json:"permission_id,omitempty"`
 }
 
 type UserAuth struct {

@@ -255,7 +255,7 @@ func UpdateById(ctx echo.Context) error {
 func AdminUpdateUsers(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
-	data := []*users.Users{}
+	data := []*users.AdminUserMultiUpdate{}
 	err := ctx.Bind(&data)
 	if err != nil {
 		return ctx.JSON(500, map[string]interface{}{"massage": "Invalid request body"})

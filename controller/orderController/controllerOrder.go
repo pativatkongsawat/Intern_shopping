@@ -8,25 +8,14 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/golang-jwt/jwt"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
 )
 
-// @Tags Order
-// @Summary Insert Order
-// @Description Insert Order from the database
-// @Accept json
-// @Produce json
-// @Param Request body []order.Requestorder true "Sturct Order to insert"
-// @Security ApiKeyAuth
-// @SecurityDefinitions ApiKeyAuth
-// @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /orders [post]
-func InsertOrder(ctx echo.Context) error {
-
+func UserCreateOrder(ctx echo.Context) error {
 	now := time.Now()
-	reqOrder := order.Requestorder{}
+	reqOrder := order.OrderCreateRequest{}
 	if err := ctx.Bind(&reqOrder); err != nil {
 		return ctx.JSON(400, utils.ResponseMessage{
 			Status:  400,
@@ -34,16 +23,27 @@ func InsertOrder(ctx echo.Context) error {
 			Result:  err.Error(),
 		})
 	}
+	claim := ctx.Get("user").(*jwt.Token)
+	userClaim := claim.Claims.(*auth.Claims)
+	creator := userClaim.UserID
 
+	// NOTE - Calculate
+	var totalPrice float64
+	for _, v := range reqOrder.Products {
+		totalPrice += v.Price * float64(v.Quantity)
+	}
+
+	log.Print(totalPrice)
 	newOrder := order.Order{
-
-		UserId:     reqOrder.UserId,
+		UserId:     userClaim.UserID,
 		CreateAt:   &now,
-		TotalPrice: reqOrder.TotalPrice,
+		TotalPrice: float64(totalPrice),
+		CreatedBy:  creator,
 	}
 
 	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}
-	createdOrder, err := orderModelHelper.InsertOrder(&newOrder)
+
+	result, err := orderModelHelper.InsertOrder(&newOrder)
 
 	if err != nil {
 		return ctx.JSON(500, utils.ResponseMessage{
@@ -53,7 +53,7 @@ func InsertOrder(ctx echo.Context) error {
 		})
 	}
 
-	createdhasstock, err := orderModelHelper.InsertOrderHasProduct(createdOrder.Id, reqOrder.Products)
+	createdhasstock, err := orderModelHelper.InsertOrderHasProduct(result.Id, &reqOrder.Products)
 
 	if err != nil {
 		return ctx.JSON(500, utils.ResponseMessage{
@@ -63,13 +63,9 @@ func InsertOrder(ctx echo.Context) error {
 		})
 	}
 
-	return ctx.JSON(200, map[string]interface{}{
-
-		"Order Has Product": createdhasstock,
-		"Order":             createdOrder,
-		"Request Order":     reqOrder,
-		"Message":           "Success",
-	})
+	return utils.ResponseData(ctx, 200, map[string]interface{}{
+		"Order": createdhasstock,
+	}, "Success")
 }
 
 // @Tags Order
@@ -116,7 +112,7 @@ func OrderDelete(ctx echo.Context) error {
 	})
 }
 
-func OrderDetailByUserID(e echo.Context) error {
+func SelfOrderDetail(e echo.Context) error {
 	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}
 	claim := e.Get("user").(*jwt.Token)
 	userClaim := claim.Claims.(*auth.Claims)
@@ -136,17 +132,26 @@ func OrderDetailByUserID(e echo.Context) error {
 	})
 
 }
+func SuperAdminOrderDetailByUserID(e echo.Context) error {
+	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}
+	id := e.QueryParam("id")
 
-// @Tags Order
-// @Summary Get all Order
-// @Description Get all Order from the database
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @SecurityDefinitions ApiKeyAuth
-// @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /orders [get]
-func OrdersDetail(e echo.Context) error {
+	orders, err := orderModelHelper.GetOrderByUserID(id)
+	if err != nil {
+		log.Error(err.Error())
+		return e.JSON(500, utils.ResponseMessage{
+			Status:  500,
+			Message: "Can not Get Orders",
+		})
+	}
+	return e.JSON(200, map[string]interface{}{
+		"Orders":  orders,
+		"Message": "Successfully orders",
+	})
+
+}
+
+func SuperAdminAllOrdersDetail(e echo.Context) error {
 	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}
 
 	orders, err := orderModelHelper.GetOrdersDetail()

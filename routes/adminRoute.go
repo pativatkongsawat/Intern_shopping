@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"Intern_shopping/controller/orderController"
 	"Intern_shopping/controller/userController"
 	"Intern_shopping/middleware"
 
@@ -17,24 +18,18 @@ func adminRoute(e *echo.Echo) {
 	// NOTE - GET all deleted users
 	adminGroup.GET("/deleted", userController.GetDeletedUsers)
 
-	// !SECTION - READ
-
-	//SECTION - CREATE
+	// NOTE - CREATE
 	// adminGroup.POST("/signup", adminController.CreateAdmin)
 	// NOTE - Create Multiple Users
 	adminGroup.POST("", userController.CreateUsers)
 
-	// !SECTION - CREATE
-
-	//SECTION - UPDATE
+	// NOTE - UPDATE
 	// adminGroup.PUT("/:id", adminController.UpdateAdmin)
 
 	adminGroup.PUT("/:id", userController.UpdateById)
 	adminGroup.PUT("", userController.AdminUpdateUsers)
 
-	// !SECTION - UPDATE
-
-	//SECTION - DELETE
+	// NOTE - DELETE
 	// adminGroup.DELETE("/:id", adminController.DeleteAdmin)
 	adminGroup.DELETE("/user/delete/:id", userController.DeleteById)
 	// adminGroup.DELETE("/users/delete", userController.DeleteUsers)
@@ -43,5 +38,29 @@ func adminRoute(e *echo.Echo) {
 	// adminGroup.DELETE("/user/remove/:id", userController.RemoveUser)
 	// adminGroup.DELETE("/users/remove", userController.RemoveUsers)
 
-	// !SECTION - DELETE
+	// !SECTION - USER
+
+	// SECTION - ORDER
+
+	// !SECTION - ORDER
+}
+
+func superAdminRoute(e *echo.Echo) {
+	superAdmin := e.Group("/back-office/admin")
+	superAdmin.Use(middleware.JWTAuthMiddleware, middleware.SuperAdminMiddleware)
+
+	//SECTION - ORDER
+
+	// NOTE - Get order detail information
+	// superAdmin.GET("/order/detail", orderController.OrderDetailByUserID)
+
+	// !SECTION - ORDER
+
+	// SECTION - ORDER HAS PRODUCTS
+
+	//Get order-products detail
+	superAdmin.GET("/order/detail/", orderController.SuperAdminOrderDetailByUserID)
+	superAdmin.GET("/orders/detail", orderController.SuperAdminAllOrdersDetail)
+
+	//!SECTION - ORDER HAS PRODUCTS
 }
