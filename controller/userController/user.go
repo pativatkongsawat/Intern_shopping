@@ -49,9 +49,17 @@ func CreateUsers(ctx echo.Context) error {
 }
 
 // !SECTION - Create
-
 // SECTION - Read
 // NOTE - Get user by Id
+
+// @Tags User
+// @Summary Get User by Id
+// @Description Get User by Id
+// @Accept json
+// @Produce json
+// @Param id path int true "Id User"
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /users/:id [get]
 func GetUserSelf(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 

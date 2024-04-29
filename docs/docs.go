@@ -348,6 +348,38 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/users/:id": {
+            "get": {
+                "description": "Get User by Id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get User by Id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Id User",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {

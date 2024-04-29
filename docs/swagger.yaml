@@ -284,6 +284,27 @@ paths:
       summary: Get Product Filter Name data
       tags:
       - Product
+  /users/:id:
+    get:
+      consumes:
+      - application/json
+      description: Get User by Id
+      parameters:
+      - description: Id User
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      summary: Get User by Id
+      tags:
+      - User
 schemes:
 - http
 swagger: "2.0"
