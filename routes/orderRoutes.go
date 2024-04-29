@@ -17,6 +17,6 @@ func orderRoutes(e *echo.Echo) {
 
 	userOrderGroup.DELETE("", orderController.OrderDelete)
 
-	userOrderGroup.GET("/order", orderController.SelfOrderDetail)
+	userOrderGroup.GET("", orderController.SelfOrderDetail)
 
 }
