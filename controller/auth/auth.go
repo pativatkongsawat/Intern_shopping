@@ -42,7 +42,7 @@ func GenerateToken(userID *string, PermissionID *int) (string, error) {
 // @Router /auth/login [post]
 func Login(ctx echo.Context) error {
 	// Bind data from request body
-	var loginUser users.Users
+	var loginUser users.Login
 	if err := ctx.Bind(&loginUser); err != nil {
 		return echo.NewHTTPError(400, "Invalid request body")
 	}
@@ -65,7 +65,7 @@ func Login(ctx echo.Context) error {
 func BackOfficeLogin(ctx echo.Context) error {
 
 	// Bind data from request body
-	var loginUser users.Users
+	var loginUser users.Login
 	if err := ctx.Bind(&loginUser); err != nil {
 		return ctx.JSON(400, utils.ResponseMessage{
 			Status:  400,
@@ -100,7 +100,7 @@ func BackOfficeLogin(ctx echo.Context) error {
 	}
 }
 
-func loginHandler(userReq users.Users) (user users.Users, err error) {
+func loginHandler(userReq users.Login) (user users.Users, err error) {
 	if err := database.DBMYSQL.Debug().Where("email = ?", userReq.Email).First(&user).Error; err != nil {
 		return user, echo.NewHTTPError(401, "Invalid email or unknown password")
 	}
