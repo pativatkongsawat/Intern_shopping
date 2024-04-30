@@ -62,6 +62,17 @@ func Login(ctx echo.Context) error {
 		})
 	}
 }
+
+// @Tags SuperAdmin
+// @Summary SuperAdmin Login
+// @Description SuperAdmin Login
+// @Accept json
+// @Produce json
+// @Param user body users.Users true "SuperAdmin login details"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /api/intern-shop/admin/login [post]
 func BackOfficeLogin(ctx echo.Context) error {
 
 	// Bind data from request body

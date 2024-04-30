@@ -13,6 +13,16 @@ import (
 	"github.com/labstack/gommon/log"
 )
 
+// @Tags Order
+// @Summary Delete Order
+// @Description Delete Order from the database
+// @Accept json
+// @Produce json
+// @Param Request body order.OrderCreateRequest true "Update Product"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /orders [post]
 func UserCreateOrder(ctx echo.Context) error {
 	now := time.Now()
 	reqOrder := order.OrderCreateRequest{}
@@ -112,6 +122,16 @@ func OrderDelete(ctx echo.Context) error {
 	})
 }
 
+// @Tags Order
+// @Summary SelfOrderDetail
+// @Description SelfOrderDetail
+// @Accept json
+// @Produce json
+// @Param id query int true "id"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /orders [get]
 func SelfOrderDetail(e echo.Context) error {
 	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}
 	claim := e.Get("user").(*jwt.Token)

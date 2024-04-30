@@ -23,6 +23,22 @@ definitions:
         example: OK
         type: string
     type: object
+  order.OrderCreateRequest:
+    properties:
+      products:
+        items:
+          $ref: '#/definitions/order.RequestProducts'
+        type: array
+    type: object
+  order.RequestProducts:
+    properties:
+      id:
+        type: integer
+      price:
+        type: number
+      quantity:
+        type: integer
+    type: object
   product.ProductInsert:
     properties:
       category_id:
@@ -272,6 +288,30 @@ paths:
       summary: Admin Get User Delete
       tags:
       - Admin
+  /api/intern-shop/admin/login:
+    post:
+      consumes:
+      - application/json
+      description: SuperAdmin Login
+      parameters:
+      - description: SuperAdmin login details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/users.Users'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: SuperAdmin Login
+      tags:
+      - SuperAdmin
   /auth/login:
     post:
       consumes:
@@ -421,6 +461,51 @@ paths:
         name: id
         required: true
         type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Order
+      tags:
+      - Order
+    get:
+      consumes:
+      - application/json
+      description: SelfOrderDetail
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: SelfOrderDetail
+      tags:
+      - Order
+    post:
+      consumes:
+      - application/json
+      description: Delete Order from the database
+      parameters:
+      - description: Update Product
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/order.OrderCreateRequest'
       produces:
       - application/json
       responses:
