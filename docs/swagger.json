@@ -282,7 +282,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/users.Users"
+                            "$ref": "#/definitions/users.Login"
                         }
                     }
                 ],
@@ -321,7 +321,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/users.Users"
+                            "$ref": "#/definitions/users.Login"
                         }
                     }
                 ],
@@ -539,7 +539,7 @@
                 "summary": "SelfOrderDetail",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "id",
                         "name": "id",
                         "in": "query",
@@ -1129,6 +1129,17 @@
                     "type": "string"
                 },
                 "lastname": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "users.Login": {
+            "type": "object",
+            "properties": {
+                "email": {
                     "type": "string"
                 },
                 "password": {

@@ -86,6 +86,13 @@ definitions:
       password:
         type: string
     type: object
+  users.Login:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
   users.UserUpdate:
     properties:
       address:
@@ -299,7 +306,7 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/users.Users'
+          $ref: '#/definitions/users.Login'
       produces:
       - application/json
       responses:
@@ -323,7 +330,7 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/users.Users'
+          $ref: '#/definitions/users.Login'
       produces:
       - application/json
       responses:
@@ -482,7 +489,7 @@ paths:
         in: query
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:

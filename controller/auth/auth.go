@@ -35,7 +35,7 @@ func GenerateToken(userID *string, PermissionID *int) (string, error) {
 // @Description User Login
 // @Accept json
 // @Produce json
-// @Param user body users.Users true "User login details"
+// @Param user body users.Login true "User login details"
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
@@ -68,7 +68,7 @@ func Login(ctx echo.Context) error {
 // @Description SuperAdmin Login
 // @Accept json
 // @Produce json
-// @Param user body users.Users true "SuperAdmin login details"
+// @Param user body users.Login true "SuperAdmin login details"
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"

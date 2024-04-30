@@ -285,7 +285,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/users.Users"
+                            "$ref": "#/definitions/users.Login"
                         }
                     }
                 ],
@@ -324,7 +324,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/users.Users"
+                            "$ref": "#/definitions/users.Login"
                         }
                     }
                 ],
@@ -542,7 +542,7 @@ const docTemplate = `{
                 "summary": "SelfOrderDetail",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "id",
                         "name": "id",
                         "in": "query",
@@ -1132,6 +1132,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "lastname": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "users.Login": {
+            "type": "object",
+            "properties": {
+                "email": {
                     "type": "string"
                 },
                 "password": {
