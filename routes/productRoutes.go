@@ -12,8 +12,9 @@ func productRoutes(e *echo.Echo) {
 
 	userProductGroup.Use(middleware.JWTAuthMiddleware, middleware.CustomerMiddleware)
 
-	userProductGroup.GET("/name", productController.GetProductBy)
+	userProductGroup.GET("/by", productController.GetProductBy)
 	userProductGroup.GET("", productController.ProductGetAll)
+	userProductGroup.GET("/category", productController.ProductGetCategory)
 	userProductGroup.POST("", productController.InsertproductBy)
 	userProductGroup.PUT("", productController.UpdateProduct)
 	userProductGroup.DELETE("/hide/:id", productController.DeleteProductSoft)

@@ -22,7 +22,7 @@ var now = time.Now()
 
 // NOTE * สร้างหลาย Users
 
-// @Tags User
+// @Tags Admin
 // @Summary Admin Create User
 // @Description Admin Create User
 // @Accept json
@@ -87,7 +87,7 @@ func GetUserSelf(ctx echo.Context) error {
 
 // NOTE - Get all users
 
-// @Tags User
+// @Tags Admin
 // @Summary Admin Get User
 // @Description Admin Get User
 // @Accept json
@@ -138,7 +138,7 @@ func GetUsers(ctx echo.Context) error {
 
 // NOTE - Get all deleted users
 
-// @Tags User
+// @Tags Admin
 // @Summary Admin Get User Delete
 // @Description Admin Get User Delete
 // @Accept json
@@ -242,7 +242,7 @@ func UpdateById(ctx echo.Context) error {
 	return ctx.JSON(200, map[string]interface{}{"message": "Update user successfully"})
 }
 
-// @Tags User
+// @Tags Admin
 // @Summary Admin Update User
 // @Description Admin Update User
 // @Accept json

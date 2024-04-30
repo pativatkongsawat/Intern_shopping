@@ -293,3 +293,32 @@ func DeleteProductSoft(ctx echo.Context) error {
 	})
 
 }
+
+// @Tags Product
+// @Summary Soft Delete product
+// @Description Spft Delete product
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /products/category [get]
+func ProductGetCategory(ctx echo.Context) error {
+
+	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
+
+	product, err := productModelHelper.ProductGet()
+
+	if err != nil {
+		return ctx.JSON(500, utils.ResponseMessage{
+			Status:  500,
+			Message: "ERROR Get: Product And Category name ",
+			Result:  err.Error(),
+		})
+	}
+
+	return ctx.JSON(200, map[string]interface{}{
+		"product": product,
+		"Message": "Success",
+	})
+}

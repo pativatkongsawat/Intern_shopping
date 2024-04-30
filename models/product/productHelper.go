@@ -118,3 +118,15 @@ func (u *ProductModelHelper) SoftDelete(id int) ([]*Product, error) {
 
 	return product, nil
 }
+
+func (u *ProductModelHelper) ProductGet() ([]ProductCategory, error) {
+
+	product := []ProductCategory{}
+
+	result := "SELECT products.name , products.price  , category.name AS category_name FROM products LEFT JOIN category ON products.category_id = category.id;"
+
+	if err := u.DB.Debug().Raw(result).Find(&product).Error; err != nil {
+		return nil, err
+	}
+	return product, nil
+}

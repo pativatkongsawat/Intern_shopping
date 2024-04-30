@@ -42,3 +42,9 @@ type ProductUpdate struct {
 type ProductDeleteSoft struct {
 	Deleted_at *time.Time `json:"deleted_at" gorm:"deleted_at"`
 }
+
+type ProductCategory struct {
+	Name         string  `json:"name" gorm:"name"`
+	Price        float64 `json:"price" gorm:"price"`
+	CategoryName string  `json:"category" gorm:"category_name"`
+}

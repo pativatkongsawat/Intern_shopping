@@ -17,12 +17,6 @@ func orderRoutes(e *echo.Echo) {
 
 	userOrderGroup.DELETE("", orderController.OrderDelete)
 
-<<<<<<< HEAD
-	userOrderGroup.GET("", orderController.OrderDetailByUserID)
-
-	userOrderGroup.GET("", orderController.OrdersDetail)
-=======
-	userOrderGroup.GET("/order", orderController.SelfOrderDetail)
->>>>>>> 2a5617e68f843c10ad2848e130f5ac5357576912
+	userOrderGroup.GET("", orderController.SelfOrderDetail)
 
 }

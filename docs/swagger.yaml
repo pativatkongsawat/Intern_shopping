@@ -23,28 +23,6 @@ definitions:
         example: OK
         type: string
     type: object
-  order.RequestProducts:
-    properties:
-      id:
-        type: integer
-      price:
-        type: number
-      quantity:
-        type: integer
-    type: object
-  order.Requestorder:
-    properties:
-      id:
-        type: string
-      products:
-        items:
-          $ref: '#/definitions/order.RequestProducts'
-        type: array
-      total_price:
-        type: number
-      user_id:
-        type: string
-    type: object
   product.ProductInsert:
     properties:
       category_id:
@@ -193,7 +171,7 @@ paths:
       - ApiKeyAuth: []
       summary: Admin Get User
       tags:
-      - User
+      - Admin
     post:
       consumes:
       - application/json
@@ -218,7 +196,7 @@ paths:
       - ApiKeyAuth: []
       summary: Admin Create User
       tags:
-      - User
+      - Admin
     put:
       consumes:
       - application/json
@@ -243,7 +221,7 @@ paths:
       - ApiKeyAuth: []
       summary: Admin Update User
       tags:
-      - User
+      - Admin
   /admin/deleted:
     get:
       consumes:
@@ -293,7 +271,7 @@ paths:
       - ApiKeyAuth: []
       summary: Admin Get User Delete
       tags:
-      - User
+      - Admin
   /auth/login:
     post:
       consumes:
@@ -455,47 +433,6 @@ paths:
       summary: Delete Order
       tags:
       - Order
-    get:
-      consumes:
-      - application/json
-      description: Get all Order from the database
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Success response
-          schema:
-            $ref: '#/definitions/helper.SuccessResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Get all Order
-      tags:
-      - Order
-    post:
-      consumes:
-      - application/json
-      description: Insert Order from the database
-      parameters:
-      - description: Sturct Order to insert
-        in: body
-        name: Request
-        required: true
-        schema:
-          items:
-            $ref: '#/definitions/order.Requestorder'
-          type: array
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Success response
-          schema:
-            $ref: '#/definitions/helper.SuccessResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Insert Order
-      tags:
-      - Order
   /products:
     get:
       consumes:
@@ -584,6 +521,23 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Delete product
+      tags:
+      - Product
+  /products/category:
+    get:
+      consumes:
+      - application/json
+      description: Spft Delete product
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Soft Delete product
       tags:
       - Product
   /products/hide/:id:
