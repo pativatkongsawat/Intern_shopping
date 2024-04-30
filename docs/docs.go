@@ -543,8 +543,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "id",
-                        "name": "id",
+                        "description": "user_id",
+                        "name": "user_id",
                         "in": "query",
                         "required": true
                     }
@@ -783,7 +783,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Spft Delete product",
+                "description": "Get Product and Category name",
                 "consumes": [
                     "application/json"
                 ],
@@ -793,7 +793,7 @@ const docTemplate = `{
                 "tags": [
                     "Product"
                 ],
-                "summary": "Soft Delete product",
+                "summary": "Get Product and Category name",
                 "responses": {
                     "200": {
                         "description": "Success response",

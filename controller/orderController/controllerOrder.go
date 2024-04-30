@@ -127,7 +127,7 @@ func OrderDelete(ctx echo.Context) error {
 // @Description SelfOrderDetail
 // @Accept json
 // @Produce json
-// @Param id query string true "id"
+// @Param user_id query string true "user_id"
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"

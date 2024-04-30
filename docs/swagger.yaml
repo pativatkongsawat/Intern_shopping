@@ -485,9 +485,9 @@ paths:
       - application/json
       description: SelfOrderDetail
       parameters:
-      - description: id
+      - description: user_id
         in: query
-        name: id
+        name: user_id
         required: true
         type: string
       produces:
@@ -619,7 +619,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Spft Delete product
+      description: Get Product and Category name
       produces:
       - application/json
       responses:
@@ -629,7 +629,7 @@ paths:
             $ref: '#/definitions/helper.SuccessResponse'
       security:
       - ApiKeyAuth: []
-      summary: Soft Delete product
+      summary: Get Product and Category name
       tags:
       - Product
   /products/hide/:id:

@@ -295,8 +295,8 @@ func DeleteProductSoft(ctx echo.Context) error {
 }
 
 // @Tags Product
-// @Summary Soft Delete product
-// @Description Spft Delete product
+// @Summary  Get Product and Category name
+// @Description  Get Product and Category name
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
