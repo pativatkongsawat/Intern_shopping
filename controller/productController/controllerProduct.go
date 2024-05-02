@@ -13,8 +13,8 @@ import (
 )
 
 // @Tags Product
-// @Summary Get Product Filter Name data
-// @Description Get Product from the database Filter
+// @Summary User Get Product Filter Name data
+// @Description User Get Product from the database Filter
 // @Accept json
 // @Produce json
 // @Param pname query string false "pname"
@@ -23,7 +23,7 @@ import (
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /products/name [get]
+// @Router /user/product/by [get]
 func GetProductBy(ctx echo.Context) error {
 
 	pname := ctx.QueryParam("pname")
@@ -64,15 +64,15 @@ func GetProductBy(ctx echo.Context) error {
 }
 
 // @Tags Product
-// @Summary Insert a new product
-// @Description Insert a new product
+// @Summary Admin Insert a new product
+// @Description Admin Insert a new product
 // @Accept json
 // @Produce json
 // @Param Request body []product.ProductInsert true "Array Product to insert"
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /products [post]
+// @Router /admin/product [post]
 func InsertproductBy(ctx echo.Context) error {
 	productdata := []*product.ProductInsert{}
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
@@ -120,15 +120,15 @@ func InsertproductBy(ctx echo.Context) error {
 }
 
 // @Tags Product
-// @Summary Delete product
-// @Description Delete product
+// @Summary Admin Delete product
+// @Description Admin Delete product
 // @Accept json
 // @Produce json
 // @Param id path int true "Id Product"
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /products/:id [delete]
+// @Router /admin/product/{id} [delete]
 func DeleteProductBy(ctx echo.Context) error {
 	idStr := ctx.Param("id")
 	id, err := strconv.Atoi(idStr)
@@ -158,14 +158,14 @@ func DeleteProductBy(ctx echo.Context) error {
 }
 
 // @Tags Product
-// @Summary Get all Product
-// @Description Get all Product from the database
+// @Summary User Get all Product
+// @Description User Get all Product from the database
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /products [get]
+// @Router /user/product [get]
 func ProductGetAll(ctx echo.Context) error {
 
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
@@ -186,15 +186,15 @@ func ProductGetAll(ctx echo.Context) error {
 }
 
 // @Tags Product
-// @Summary Update Product
-// @Description Update Product from the database
+// @Summary Admin Update Product
+// @Description Admin Update Product from the database
 // @Accept json
 // @Produce json
 // @Param Request body []product.ProductUpdate true "Update Product"
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /products [put]
+// @Router /admin/product [put]
 func UpdateProduct(ctx echo.Context) error {
 
 	productdata := []*product.ProductUpdate{}
@@ -244,15 +244,15 @@ func UpdateProduct(ctx echo.Context) error {
 }
 
 // @Tags Product
-// @Summary Soft Delete product
-// @Description Spft Delete product
+// @Summary Admin Soft Delete product
+// @Description Admin Spft Delete product
 // @Accept json
 // @Produce json
 // @Param id path string true "Id Product"
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /products/hide/:id [delete]
+// @Router /admin/product/hide/{id} [delete]
 func DeleteProductSoft(ctx echo.Context) error {
 
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
@@ -287,14 +287,14 @@ func DeleteProductSoft(ctx echo.Context) error {
 }
 
 // @Tags Product
-// @Summary  Get Product and Category name
-// @Description  Get Product and Category name
+// @Summary Admin Get Product and Category name
+// @Description Admin Get Product and Category name
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /products/category [get]
+// @Router /admin/product/category [get]
 func ProductGetCategory(ctx echo.Context) error {
 
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}

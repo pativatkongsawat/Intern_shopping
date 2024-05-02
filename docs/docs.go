@@ -24,7 +24,445 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/admin": {
+        "/admin/category": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin Get all Category",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Admin Get all Category",
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin Update Category from the database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Admin Update Category",
+                "parameters": [
+                    {
+                        "description": "Update Category",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/category.CategoryUpdate"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin Insert a new Category",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Admin Insert a new Category",
+                "parameters": [
+                    {
+                        "description": "Array Category to Inset",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/category.Category"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/category/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin Delete category",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Admin Delete category",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Id Category",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/order": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin SelfOrderDetail",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Admin SelfOrderDetail",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user_id",
+                        "name": "UserID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin Delete Order",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Admin Delete Order",
+                "parameters": [
+                    {
+                        "description": "Update Product",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/order.OrderCreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin Delete Order",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Admin Delete Order",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/product": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin Update Product from the database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Admin Update Product",
+                "parameters": [
+                    {
+                        "description": "Update Product",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/product.ProductUpdate"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin Insert a new product",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Admin Insert a new product",
+                "parameters": [
+                    {
+                        "description": "Array Product to insert",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/product.ProductInsert"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/product/category": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin Get Product and Category name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Admin Get Product and Category name",
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/product/hide/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin Spft Delete product",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Admin Soft Delete product",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Id Product",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/product/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin Delete product",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Admin Delete product",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Id Product",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/user": {
             "get": {
                 "security": [
                     {
@@ -39,7 +477,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Admin"
+                    "User"
                 ],
                 "summary": "Admin Get User",
                 "parameters": [
@@ -115,7 +553,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Admin"
+                    "User"
                 ],
                 "summary": "Admin Update User",
                 "parameters": [
@@ -127,7 +565,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/users.Users"
+                                "$ref": "#/definitions/users.AdminUserMultiUpdate"
                             }
                         }
                     }
@@ -147,7 +585,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Admin Create User",
+                "description": "Super Admin Create User",
                 "consumes": [
                     "application/json"
                 ],
@@ -155,9 +593,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Admin"
+                    "User"
                 ],
-                "summary": "Admin Create User",
+                "summary": "Super Admin Create User",
                 "parameters": [
                     {
                         "description": "Sturct User to insert",
@@ -182,7 +620,44 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/deleted": {
+        "/admin/user/delete/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin Soft Delete User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Admin Soft Delete User",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Id User",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/user/deleted": {
             "get": {
                 "security": [
                     {
@@ -197,7 +672,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Admin"
+                    "User"
                 ],
                 "summary": "Admin Get User Delete",
                 "parameters": [
@@ -248,6 +723,51 @@ const docTemplate = `{
                         "description": "permission_id",
                         "name": "permission_id",
                         "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/user/id": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin Update User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Admin Update User",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Id User",
+                        "name": "UserID",
+                        "in": "query"
+                    },
+                    {
+                        "description": "Update User",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/users.UserUpdate"
+                        }
                     }
                 ],
                 "responses": {
@@ -377,7 +897,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/back-office/admin/orders/detail": {
+        "/back-office/order/all": {
             "get": {
                 "security": [
                     {
@@ -395,149 +915,66 @@ const docTemplate = `{
                     "Order"
                 ],
                 "summary": "SuperAdmin Get Order",
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "schema": {
-                            "$ref": "#/definitions/helper.SuccessResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/categorys": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Get all Category from the database",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Category"
-                ],
-                "summary": "Get all Category",
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "schema": {
-                            "$ref": "#/definitions/helper.SuccessResponse"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Update Category from the database",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Category"
-                ],
-                "summary": "Update Category",
-                "parameters": [
-                    {
-                        "description": "Update Category",
-                        "name": "Request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/category.CategoryUpdate"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "schema": {
-                            "$ref": "#/definitions/helper.SuccessResponse"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Insert a new Category",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Category"
-                ],
-                "summary": "Insert a new Category",
-                "parameters": [
-                    {
-                        "description": "Array Category to Inset",
-                        "name": "Request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/category.Category"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "schema": {
-                            "$ref": "#/definitions/helper.SuccessResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/categorys/:id": {
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Delete category",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Category"
-                ],
-                "summary": "Delete category",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Id Category",
+                        "description": "Number of rows per page (default 5)",
+                        "name": "row",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number (default 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sorting order (asc or desc)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Order ID",
                         "name": "id",
-                        "in": "path",
-                        "required": true
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user",
+                        "in": "query"
+                    },
+                    {
+                        "type": "number",
+                        "description": "Total price",
+                        "name": "price",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Price operator (eq, gt, lt)",
+                        "name": "operator",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Created at date (format: yyyy-mm-dd)",
+                        "name": "create",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Updated at date (format: yyyy-mm-dd)",
+                        "name": "update",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order status",
+                        "name": "status",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -550,14 +987,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/orders": {
+        "/back-office/order/detail": {
             "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "SelfOrderDetail",
+                "description": "Super Admin Get SelfOrderDetail",
                 "consumes": [
                     "application/json"
                 ],
@@ -567,79 +1004,7 @@ const docTemplate = `{
                 "tags": [
                     "Order"
                 ],
-                "summary": "SelfOrderDetail",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "user_id",
-                        "name": "user_id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "schema": {
-                            "$ref": "#/definitions/helper.SuccessResponse"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Delete Order from the database",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Order"
-                ],
-                "summary": "Delete Order",
-                "parameters": [
-                    {
-                        "description": "Update Product",
-                        "name": "Request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/order.OrderCreateRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "schema": {
-                            "$ref": "#/definitions/helper.SuccessResponse"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Delete Order from the database",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Order"
-                ],
-                "summary": "Delete Order",
+                "summary": "Super Admin Get SelfOrderDetail",
                 "parameters": [
                     {
                         "type": "integer",
@@ -659,14 +1024,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/products": {
+        "/user/product": {
             "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get all Product from the database",
+                "description": "User Get all Product from the database",
                 "consumes": [
                     "application/json"
                 ],
@@ -676,87 +1041,7 @@ const docTemplate = `{
                 "tags": [
                     "Product"
                 ],
-                "summary": "Get all Product",
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "schema": {
-                            "$ref": "#/definitions/helper.SuccessResponse"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Update Product from the database",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Product"
-                ],
-                "summary": "Update Product",
-                "parameters": [
-                    {
-                        "description": "Update Product",
-                        "name": "Request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/product.ProductUpdate"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "schema": {
-                            "$ref": "#/definitions/helper.SuccessResponse"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Insert a new product",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Product"
-                ],
-                "summary": "Insert a new product",
-                "parameters": [
-                    {
-                        "description": "Array Product to insert",
-                        "name": "Request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/product.ProductInsert"
-                            }
-                        }
-                    }
-                ],
+                "summary": "User Get all Product",
                 "responses": {
                     "200": {
                         "description": "Success response",
@@ -767,51 +1052,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/products/:id": {
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Delete product",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Product"
-                ],
-                "summary": "Delete product",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Id Product",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "schema": {
-                            "$ref": "#/definitions/helper.SuccessResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/products/category": {
+        "/user/product/by": {
             "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get Product and Category name",
+                "description": "User Get Product from the database Filter",
                 "consumes": [
                     "application/json"
                 ],
@@ -821,72 +1069,7 @@ const docTemplate = `{
                 "tags": [
                     "Product"
                 ],
-                "summary": "Get Product and Category name",
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "schema": {
-                            "$ref": "#/definitions/helper.SuccessResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/products/hide/:id": {
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Spft Delete product",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Product"
-                ],
-                "summary": "Soft Delete product",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Id Product",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "schema": {
-                            "$ref": "#/definitions/helper.SuccessResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/products/name": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Get Product from the database Filter",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Product"
-                ],
-                "summary": "Get Product Filter Name data",
+                "summary": "User Get Product Filter Name data",
                 "parameters": [
                     {
                         "type": "string",
@@ -917,14 +1100,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/:id": {
+        "/user/profile": {
             "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get User by Id",
+                "description": "User Get User by Id",
                 "consumes": [
                     "application/json"
                 ],
@@ -934,12 +1117,13 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "Get User by Id",
+                "summary": "User Get User by Id",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "Id User",
                         "name": "id",
+<<<<<<< HEAD
                         "in": "path",
                         "required": true
                     }
@@ -1020,6 +1204,9 @@ const docTemplate = `{
                         "description": "Id User",
                         "name": "id",
                         "in": "path",
+=======
+                        "in": "query",
+>>>>>>> origin/golf
                         "required": true
                     }
                 ],
@@ -1144,6 +1331,32 @@ const docTemplate = `{
                 },
                 "update_at": {
                     "type": "string"
+                }
+            }
+        },
+        "users.AdminUserMultiUpdate": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "firstname": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "lastname": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "permission_id": {
+                    "type": "integer"
                 }
             }
         },

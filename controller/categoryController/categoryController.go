@@ -10,15 +10,15 @@ import (
 )
 
 // @Tags Category
-// @Summary Insert a new Category
-// @Description Insert a new Category
+// @Summary Admin Insert a new Category
+// @Description Admin Insert a new Category
 // @Accept json
 // @Produce json
 // @Param Request body []category.Category true "Array Category to Inset"
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /categorys [post]
+// @Router /admin/category [post]
 func InsertCategory(ctx echo.Context) error {
 	categorydata := []category.Category{}
 
@@ -53,14 +53,14 @@ func InsertCategory(ctx echo.Context) error {
 }
 
 // @Tags Category
-// @Summary Get all Category
-// @Description Get all Category from the database
+// @Summary Admin Get all Category
+// @Description Admin Get all Category
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /categorys [get]
+// @Router /admin/category [get]
 func GetAllCategory(ctx echo.Context) error {
 
 	// category := []categoryRequest.Category{}
@@ -80,15 +80,15 @@ func GetAllCategory(ctx echo.Context) error {
 }
 
 // @Tags Category
-// @Summary Delete category
-// @Description Delete category
+// @Summary Admin Delete category
+// @Description Admin Delete category
 // @Accept json
 // @Produce json
 // @Param id path int true "Id Category"
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /categorys/:id [delete]
+// @Router /admin/category/{id} [delete]
 func DeleteCategory(ctx echo.Context) error {
 
 	getid := ctx.Param("id")
@@ -117,15 +117,15 @@ func DeleteCategory(ctx echo.Context) error {
 }
 
 // @Tags Category
-// @Summary Update Category
-// @Description Update Category from the database
+// @Summary Admin Update Category
+// @Description Admin Update Category from the database
 // @Accept json
 // @Produce json
 // @Param Request body []category.CategoryUpdate true "Update Category"
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /categorys [put]
+// @Router /admin/category [put]
 func UpdateCategory(ctx echo.Context) error {
 
 	categorydata := []category.CategoryUpdate{}

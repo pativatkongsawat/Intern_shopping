@@ -15,15 +15,15 @@ import (
 )
 
 // @Tags Order
-// @Summary Delete Order
-// @Description Delete Order from the database
+// @Summary Admin Delete Order
+// @Description Admin Delete Order
 // @Accept json
 // @Produce json
 // @Param Request body order.OrderCreateRequest true "Update Product"
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /orders [post]
+// @Router /admin/order [post]
 func UserCreateOrder(ctx echo.Context) error {
 	now := time.Now()
 	reqOrder := order.OrderCreateRequest{}
@@ -80,15 +80,15 @@ func UserCreateOrder(ctx echo.Context) error {
 }
 
 // @Tags Order
-// @Summary Delete Order
-// @Description Delete Order from the database
+// @Summary  Admin Delete Order
+// @Description Admin Delete Order
 // @Accept json
 // @Produce json
 // @Param id query int true "id"
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /orders [delete]
+// @Router /admin/order [delete]
 func OrderDelete(ctx echo.Context) error {
 
 	getid := ctx.QueryParam("id")
@@ -124,15 +124,15 @@ func OrderDelete(ctx echo.Context) error {
 }
 
 // @Tags Order
-// @Summary SelfOrderDetail
-// @Description SelfOrderDetail
+// @Summary Admin SelfOrderDetail
+// @Description Admin SelfOrderDetail
 // @Accept json
 // @Produce json
-// @Param user_id query string true "user_id"
+// @Param UserID query string true "user_id"
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /orders [get]
+// @Router /admin/order [get]
 func SelfOrderDetail(e echo.Context) error {
 	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}
 	claim := e.Get("user").(*jwt.Token)
@@ -153,6 +153,17 @@ func SelfOrderDetail(e echo.Context) error {
 	})
 
 }
+
+// @Tags Order
+// @Summary Super Admin Get SelfOrderDetail
+// @Description Super Admin Get SelfOrderDetail
+// @Accept json
+// @Produce json
+// @Param id query int true "id"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /back-office/order/detail [get]
 func SuperAdminOrderDetailByUserID(e echo.Context) error {
 	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}
 	id := e.QueryParam("id")
@@ -196,7 +207,7 @@ func SuperAdminOrderDetailByUserID(e echo.Context) error {
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /back-office/admin/orders/detail [get]
+// @Router /back-office/order/all [get]
 func SuperAdminAllOrdersDetail(e echo.Context) error {
 	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}
 	var createAt time.Time
