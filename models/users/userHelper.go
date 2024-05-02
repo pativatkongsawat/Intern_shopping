@@ -148,7 +148,7 @@ func (d DatabaseRequest) UpdateUser(user_id, updaterId string, userReq *Users) e
 }
 
 // NOTE - แก้ไขข้อมูล Users/ Update Users หลายตัวพร้อมกัน
-func (d *DatabaseRequest) UpdateUserArray(fields []*AdminUserMultiUpdate) error {
+func (d *DatabaseRequest) UpdateUserArray(fields []*AdminUserMultiUpdate, updater_id string) error {
 	// Start a new transaction
 	tx := d.DB.Begin()
 	// var now = time.Now()
@@ -189,6 +189,7 @@ func (d *DatabaseRequest) UpdateUserArray(fields []*AdminUserMultiUpdate) error 
 			log.Print("Row 0: ", result.Error)
 			return errors.New("user not found")
 		}
+		item.UpdatedBy = updater_id
 		result.Debug().Updates(item)
 		if result.Error != nil {
 			tx.Rollback()

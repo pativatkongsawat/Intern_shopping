@@ -31,17 +31,13 @@ func adminRoute(e *echo.Echo) {
 	// NOTE - UPDATE
 	// userGroup.PUT("/:id", adminController.UpdateAdmin)
 
+<<<<<<< HEAD
 	userGroup.PUT("/id", userController.UpdateById)
+=======
+	userGroup.PUT("/:id", userController.AdminUpdateById)
+>>>>>>> 1f87c4339796d44b94f2cf8a2b4bbc38c23e14bf
 	userGroup.PUT("", userController.AdminUpdateUsers)
 
-	// NOTE - DELETE
-	// userGroup.DELETE("/:id", adminController.DeleteAdmin)
-	userGroup.DELETE("/delete/:id", userController.DeleteById)
-	// userGroup.DELETE("/delete", userController.DeleteUsers)
-
-	// TODO - For only Request Needed
-	// userGroup.DELETE("/remove/:id", userController.RemoveUser)
-	// userGroup.DELETE("/removes", userController.RemoveUsers)
 	// !SECTION - USER
 
 	// SECTION - ORDER
@@ -49,7 +45,6 @@ func adminRoute(e *echo.Echo) {
 
 	orderGroup.POST("", orderController.UserCreateOrder)
 
-	orderGroup.DELETE("", orderController.OrderDelete)
 	// !SECTION - ORDER
 
 	// SECTION - PRODUCT
@@ -61,23 +56,15 @@ func adminRoute(e *echo.Echo) {
 
 	productGroup.GET("/category", productController.ProductGetCategory)
 
-	productGroup.POST("", productController.InsertproductBy)
-
 	productGroup.PUT("", productController.UpdateProduct)
 
-	productGroup.DELETE("/hide/:id", productController.DeleteProductSoft)
-
-	productGroup.DELETE("/:id", productController.DeleteProductBy)
 	// !SECTION - Products
 
 	//SECTION - CATEGORY - PRODUCT
 	categoryGroup.GET("", categoryController.GetAllCategory)
 
-	categoryGroup.POST("", categoryController.InsertCategory)
-
 	categoryGroup.PUT("", categoryController.UpdateCategory)
 
-	categoryGroup.DELETE("/:id", categoryController.DeleteCategory)
 	//!SECTION - CATEGORY - PRODUCT
 }
 
@@ -101,7 +88,7 @@ func superAdminRoute(e *echo.Echo) {
 	// NOTE - UPDATE
 	// userGroup.PUT("/:id", adminController.UpdateAdmin)
 
-	userGroup.PUT("/:id", userController.UpdateById)
+	userGroup.PUT("/:id", userController.AdminUpdateById)
 	userGroup.PUT("", userController.AdminUpdateUsers)
 
 	// NOTE - DELETE

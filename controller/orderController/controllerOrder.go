@@ -228,6 +228,8 @@ func SuperAdminAllOrdersDetail(e echo.Context) error {
 		Time("create", &createAt, "2006-01-02").
 		Time("update", &updateAt, "2006-01-02").
 		String("status", &filter.Status).
+		Int("min", &filter.MinPrice).
+		Int("max", &filter.MaxPrice).
 		BindError(); err != nil {
 		return e.JSON(400, utils.ResponseMessage{
 			Status:  400,

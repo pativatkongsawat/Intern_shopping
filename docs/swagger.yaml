@@ -393,6 +393,7 @@ paths:
       - ApiKeyAuth: []
       summary: Admin Delete product
       tags:
+<<<<<<< HEAD
       - Product
   /admin/product/category:
     get:
@@ -435,6 +436,10 @@ paths:
       tags:
       - Product
   /admin/user:
+=======
+      - Order
+  /categorys:
+>>>>>>> 1f87c4339796d44b94f2cf8a2b4bbc38c23e14bf
     get:
       consumes:
       - application/json
@@ -855,7 +860,11 @@ paths:
             $ref: '#/definitions/helper.SuccessResponse'
       security:
       - ApiKeyAuth: []
+<<<<<<< HEAD
       summary: User Get User by Id
+=======
+      summary: Admin Update User
+>>>>>>> 1f87c4339796d44b94f2cf8a2b4bbc38c23e14bf
       tags:
       - User
 schemes:

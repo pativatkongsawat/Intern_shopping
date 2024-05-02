@@ -388,6 +388,7 @@ const docTemplate = `{
                 }
             }
         },
+<<<<<<< HEAD
         "/admin/product/hide/{id}": {
             "delete": {
                 "security": [
@@ -427,6 +428,10 @@ const docTemplate = `{
         },
         "/admin/product/{id}": {
             "delete": {
+=======
+        "/categorys": {
+            "get": {
+>>>>>>> 1f87c4339796d44b94f2cf8a2b4bbc38c23e14bf
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -1107,7 +1112,90 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
+<<<<<<< HEAD
                 "description": "User Get User by Id",
+=======
+                "description": "Get User by Id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get User by Id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Id User",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update User from the database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Admin Update User",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Id User",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update User",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/users.UserUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Soft Delete User from the database",
+>>>>>>> 1f87c4339796d44b94f2cf8a2b4bbc38c23e14bf
                 "consumes": [
                     "application/json"
                 ],
