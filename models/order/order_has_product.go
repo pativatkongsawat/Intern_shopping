@@ -21,6 +21,7 @@ type ResponseOrderHasProduct struct {
 	UpdatedAt         *time.Time              `json:"updated_at" gorm:"updated_at"`
 	CreatedBy         string                  `json:"created_by" gorm:"created_by"`
 	UpdatedBy         string                  `json:"updated_by,omitempty" gorm:"updated_by"`
+	Status            string                  `json:"status" gorm:"status"`
 }
 
 type ResponseProductsOrder struct {

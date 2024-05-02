@@ -44,7 +44,7 @@ type AdminUserMultiUpdate struct {
 	Firstname    string `json:"firstname,omitempty"`
 	Lastname     string `json:"lastname,omitempty"`
 	Address      string `json:"address,omitempty"`
-	Email        string `gorm:"unique" json:"email,omitempty"`
+	Email        string `gorm:"unique" json:"email"`
 	Password     string `json:"password,omitempty"`
 	PermissionID int    `json:"permission_id,omitempty"`
 }
@@ -67,7 +67,8 @@ type GetUsersResponse struct {
 	Email        string     `gorm:"unique" json:"email"`
 	CreatedAt    *time.Time `json:"created_at"`
 	UpdatedAt    time.Time  `json:"updated_at"`
-	PermissionID int        `json:"permission_id" default:"0"`
+	PermissionID int        `json:"permission_id"`
+	UpdatedBy    string     `json:"updated_by,omitempty"`
 }
 
 func (Users) TableName() string {

@@ -71,9 +71,9 @@ func (d DatabaseRequest) InsertArray(users []*Users) error {
 
 // SECTION - Read
 // NOTE Select
-func (d DatabaseRequest) SelectById(id string) (*Users, error) {
-	user := &Users{}
-	result := d.DB.First(&user, "id =?", id)
+func (d DatabaseRequest) SelectById(id string) (*GetUsersResponse, error) {
+	user := &GetUsersResponse{}
+	result := d.DB.Where("deleted_at IS NULL").First(&user, "id =?", id)
 	if result.Error != nil {
 		return nil, result.Error
 	}

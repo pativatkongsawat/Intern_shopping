@@ -20,4 +20,5 @@ func productRoutes(e *echo.Echo) {
 	userProductGroup.DELETE("/hide/:id", productController.DeleteProductSoft)
 	userProductGroup.DELETE("/:id", productController.DeleteProductBy)
 
+
 }

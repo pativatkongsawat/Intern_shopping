@@ -6,7 +6,6 @@ import (
 	"Intern_shopping/models/auth"
 	"Intern_shopping/models/users"
 	"Intern_shopping/models/utils"
-	"log"
 	"reflect"
 	"time"
 
@@ -76,12 +75,14 @@ func CreateUsers(ctx echo.Context) error {
 func GetUserSelf(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
-	id := ctx.Param("id")
-	user, err := userModelHelper.SelectById(id)
-	log.Print(id)
+	claim := ctx.Get("user").(*jwt.Token)
+	userClaim := claim.Claims.(*auth.Claims)
+
+	user, err := userModelHelper.SelectById(userClaim.UserID)
 	if err != nil {
 		return ctx.JSON(500, map[string]interface{}{"message": "Select Error"})
 	}
+	ctx.SetParamValues(user.Firstname)
 	return ctx.JSON(200, user)
 }
 
@@ -200,10 +201,9 @@ func GetDeletedUsers(ctx echo.Context) error {
 func UpdateById(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
-	id := ctx.Param("id")
 	claim := ctx.Get("user").(*jwt.Token)
 	userClaim := claim.Claims.(*auth.Claims)
-	updaterId := userClaim.UserID
+	id := userClaim.UserID
 
 	userReq := users.UserUpdate{}
 	if err := ctx.Bind(&userReq); err != nil {
@@ -235,7 +235,7 @@ func UpdateById(ctx echo.Context) error {
 		UpdatedAt: now,
 	}
 
-	if result := userModelHelper.UpdateUser(id, updaterId, &user); result != nil {
+	if result := userModelHelper.UpdateUser(id, id, &user); result != nil {
 		return ctx.JSON(500, map[string]interface{}{"message": "Update user error"})
 	}
 
