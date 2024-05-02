@@ -106,7 +106,7 @@ func superAdminRoute(e *echo.Echo) {
 	// SECTION - ORDER HAS PRODUCTS
 
 	//Get order-products detail
-	orderGroup.GET("/detail/", orderController.SuperAdminOrderDetailByUserID)
+	orderGroup.GET("/detail", orderController.SuperAdminOrderDetailByUserID)
 	orderGroup.GET("/all", orderController.SuperAdminAllOrdersDetail)
 
 	//!SECTION - ORDER HAS PRODUCTS
