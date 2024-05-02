@@ -32,4 +32,6 @@ type OrderFilter struct {
 	TotalPrice float64    `json:"total_price" gorm:"total_price"`
 	Operator   string     `json:"operator" gorm:"operator"`
 	Status     string     `json:"status" gorm:"status"`
+	MinPrice   int        `json:"min_price"`
+	MaxPrice   int        `json:"max_price"`
 }

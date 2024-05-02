@@ -47,6 +47,7 @@ type AdminUserMultiUpdate struct {
 	Email        string `gorm:"unique" json:"email"`
 	Password     string `json:"password,omitempty"`
 	PermissionID int    `json:"permission_id,omitempty"`
+	UpdatedBy    string `json:"updated_by"`
 }
 
 type UserAuth struct {

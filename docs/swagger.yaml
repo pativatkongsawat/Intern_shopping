@@ -384,34 +384,6 @@ paths:
       summary: SuperAdmin Get Order
       tags:
       - Order
-  /back-office/admin/orders/fil:
-    get:
-      consumes:
-      - application/json
-      description: SuperAdmin Get Order Filter
-      parameters:
-      - description: limit
-        in: query
-        name: limit
-        required: true
-        type: string
-      - description: page
-        in: query
-        name: page
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Success response
-          schema:
-            $ref: '#/definitions/helper.SuccessResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: SuperAdmin Get Order Filter
-      tags:
-      - Order
   /categorys:
     get:
       consumes:
@@ -800,7 +772,7 @@ paths:
             $ref: '#/definitions/helper.SuccessResponse'
       security:
       - ApiKeyAuth: []
-      summary: Update User
+      summary: Admin Update User
       tags:
       - User
 schemes:

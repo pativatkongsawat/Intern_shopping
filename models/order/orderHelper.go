@@ -92,18 +92,27 @@ func (u *OrderModelHelper) GetOrdersDetail(p *helper.Pagination, f *helper.Order
 	if f.Status != "" {
 		query = query.Where("orders.status = ?", f.Status).Count(&p.TotalRows)
 	}
-	switch f.Operator {
-	case ">":
-		query = query.Where("orders.total_price > ?", f.TotalPrice).Count(&p.TotalRows)
-	case "<":
-		query = query.Where("orders.total_price < ?", f.TotalPrice).Count(&p.TotalRows)
-	case "<=":
-		query = query.Where("orders.total_price <= ?", f.TotalPrice).Count(&p.TotalRows)
-	case "=":
-		query = query.Where("orders.total_price = ?", f.TotalPrice).Count(&p.TotalRows)
-	default:
-		query = query.Where("orders.total_price >= ?", f.TotalPrice).Count(&p.TotalRows)
+	if f.MinPrice > 0 && f.MaxPrice > f.MinPrice {
+		query = query.Where("orders.total_price >= ?", f.MinPrice).Count(&p.TotalRows)
 	}
+	if f.MaxPrice > 0 && f.MaxPrice > f.MinPrice {
+		query = query.Where("orders.total_price <= ?", f.MaxPrice).Count(&p.TotalRows)
+	}
+	if f.MinPrice > 0 && f.MaxPrice > 0 {
+		query = query.Where("orders.total_price >= ? AND orders.total_price <= ?", f.MinPrice, f.MaxPrice).Count(&p.TotalRows)
+	}
+	// switch f.Operator {
+	// case "more":
+	// 	query = query.Where("orders.total_price > ?", f.TotalPrice).Count(&p.TotalRows)
+	// case "less":
+	// 	query = query.Where("orders.total_price < ?", f.TotalPrice).Count(&p.TotalRows)
+	// case "equal":
+	// 	query = query.Where("orders.total_price <= ?", f.TotalPrice).Count(&p.TotalRows)
+	// case "=":
+	// 	query = query.Where("orders.total_price = ?", f.TotalPrice).Count(&p.TotalRows)
+	// default:
+	// 	query = query.Where("orders.total_price >= ?", f.TotalPrice).Count(&p.TotalRows)
+	// }
 	if f.CreateAt != nil {
 		query = query.Where("DATE(orders.create_at) = ?", f.CreateAt.Format("2006-01-02")).Count(&p.TotalRows)
 	}
