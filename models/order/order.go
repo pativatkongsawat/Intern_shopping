@@ -10,6 +10,7 @@ type Order struct {
 	UserId     string     `json:"user_id" gorm:"user_id"`
 	TotalPrice float64    `json:"total_price" gorm:"total_price"`
 	CreatedBy  string     `json:"created_by,omitempty" gorm:"created_by"`
+	Status     string     `json:"status" gorm:"status" default:"unpaid"`
 }
 
 func (Order) TableName() string {
@@ -30,4 +31,5 @@ type Requestorder struct {
 	UserId     string            `json:"user_id"`
 	TotalPrice float64           `json:"total_price" gorm:"total_price"`
 	Products   []RequestProducts `json:"products"`
+	Status     string            `json:"status" gorm:"status"`
 }

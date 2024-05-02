@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"Intern_shopping/controller/productController"
 	"Intern_shopping/controller/userController"
 	"Intern_shopping/middleware"
 
@@ -8,30 +9,33 @@ import (
 )
 
 func userRoute(e *echo.Echo) {
-	userGroup := e.Group("/users")
+	userGroup := e.Group("/user")
 
 	userGroup.Use(middleware.JWTAuthMiddleware, middleware.CustomerMiddleware)
 
-	//SECTION - READ
+	//SECTION - Model User
 
-	userGroup.GET("/:id", userController.GetUserSelf)
-
-	// !SECTION - READ
-
-	//SECTION - CREATE
-
-	// !SECTION - CREATE
-
-	//SECTION - UPDATE
+	// NOTE Get
+	userGroup.GET("/profile", userController.GetUserSelf)
 
 	//NOTE - Update
-	userGroup.PUT("/:id", userController.UpdateById)
+	userGroup.PUT("/profile", userController.UpdateById)
 
-	//!SECTION - UPDATE
+	// NOTE - Delete
+	userGroup.DELETE("/profile/", userController.DeleteById)
 
-	// SECTION - DELETE
-	userGroup.DELETE("/:id", userController.DeleteById)
+	// !SECTION - Model User
 
-	// !SECTION - DELETE
+	//SECTION - Model Order
+
+	// !SECTION - Model Order
+
+	//SECTION - Model Product
+
+	// NOTE - Get product by product name
+	userGroup.GET("/by", productController.GetProductBy)
+	userGroup.GET("", productController.ProductGetAll)
+
+	//!SECTION - Model Product
 
 }

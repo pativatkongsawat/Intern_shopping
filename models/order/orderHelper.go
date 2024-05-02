@@ -1,9 +1,12 @@
 package order
 
 import (
+	"Intern_shopping/helper"
 	"database/sql"
 	"encoding/json"
 	"log"
+	"math"
+	"strconv"
 
 	"gorm.io/gorm"
 )
@@ -19,7 +22,7 @@ func rowUnmarshal(rows *sql.Rows, orders []ResponseOrderHasProduct) (*[]Response
 	for rows.Next() {
 		var order ResponseOrderHasProduct
 		var productsJSON string
-		err := rows.Scan(&order.OrderId, &order.UserId, &order.CreateAt, &order.UpdatedAt, &order.CreatedBy, &productsJSON, &order.OrderProductTotal, &order.TotalPrice)
+		err := rows.Scan(&order.OrderId, &order.UserId, &order.CreateAt, &order.UpdatedAt, &order.CreatedBy, &productsJSON, &order.OrderProductTotal, &order.TotalPrice, &order.Status)
 		if err != nil {
 			return nil, err
 		}
@@ -43,7 +46,7 @@ func (u *OrderModelHelper) GetOrderByUserID(user_id string) (*[]ResponseOrderHas
 	db := u.DB
 
 	rows, err := db.Table("orders").
-		Select("orders.id AS order_id, orders.user_id AS user_id, orders.create_at, orders.updated_at, orders.created_by, JSON_ARRAYAGG(JSON_OBJECT('id', products.id, 'name', products.name, 'description', products.description, 'quantity', order_has_products.order_product_total, 'price', products.price, 'image', products.image, 'total_products_price', order_has_products.order_product_total * products.price, 'category_id', products.category_id)) AS products, SUM(order_has_products.order_product_total) AS total_products, SUM(order_has_products.order_product_total * products.price) AS total_price").
+		Select("orders.id AS order_id, orders.user_id AS user_id, orders.create_at, orders.updated_at, orders.created_by, JSON_ARRAYAGG(JSON_OBJECT('id', products.id, 'name', products.name, 'description', products.description, 'quantity', order_has_products.order_product_total, 'price', products.price, 'image', products.image, 'total_products_price', order_has_products.order_product_total * products.price, 'category_id', products.category_id)) AS products, SUM(order_has_products.order_product_total) AS total_products, orders.total_price, orders.status").
 		Joins("JOIN order_has_products ON orders.id = order_has_products.order_id").
 		Joins("JOIN products ON order_has_products.product_id = products.id").
 		Group("orders.id, orders.user_id").Where("orders.deleted_at IS NULL and orders.user_id =?", user_id).
@@ -55,29 +58,83 @@ func (u *OrderModelHelper) GetOrderByUserID(user_id string) (*[]ResponseOrderHas
 	if err != nil {
 		return nil, err
 	}
+	if orders == nil || len(*orders) == 0 {
+		return nil, nil
+	}
 	return orders, nil
 }
 
 // NOTE - Get order details
 // ! Super Admin Only
-func (u *OrderModelHelper) GetOrdersDetail() (*[]ResponseOrderHasProduct, error) {
+func (u *OrderModelHelper) GetOrdersDetail(p *helper.Pagination, f *helper.OrderFilter) (*[]ResponseOrderHasProduct, error) {
 	var data []ResponseOrderHasProduct
 	db := u.DB
 
-	rows, err := db.Table("orders").
-		Select("orders.id AS order_id, orders.user_id AS user_id, orders.create_at, orders.updated_at, orders.created_by, JSON_ARRAYAGG(JSON_OBJECT('id', products.id, 'name', products.name,'description', products.description, 'quantity', order_has_products.order_product_total, 'price', products.price, 'image', products.image, 'total_products_price', order_has_products.order_product_total * products.price, 'category_id', products.category_id)) AS products, SUM(order_has_products.order_product_total) AS total_products, orders.total_price").
+	// Building the query
+	query := db.Debug().Table("orders").
+		Select("orders.id AS order_id, orders.user_id AS user_id, orders.create_at, orders.updated_at, orders.created_by, " +
+			"JSON_ARRAYAGG(JSON_OBJECT('id', products.id, 'name', products.name, 'description', products.description, " +
+			"'quantity', order_has_products.order_product_total, 'price', products.price, 'image', products.image, " +
+			"'total_products_price', order_has_products.order_product_total * products.price, 'category_id', products.category_id)) AS products, " +
+			"SUM(order_has_products.order_product_total) AS total_products, orders.total_price, orders.status").
 		Joins("JOIN order_has_products ON orders.id = order_has_products.order_id").
 		Joins("JOIN products ON order_has_products.product_id = products.id").
 		Group("orders.id, orders.user_id").
-		Rows()
+		Order(p.Sort).Count(&p.TotalRows)
+
+	// Adding WHERE conditions
+	if f.Id != 0 {
+		query = query.Where("orders.id LIKE ?", "%"+strconv.Itoa(f.Id)+"%").Count(&p.TotalRows)
+	}
+	if f.UserId != "" {
+		query = query.Where("orders.user_id LIKE ?", "%"+f.UserId+"%").Count(&p.TotalRows)
+	}
+	if f.Status != "" {
+		query = query.Where("orders.status = ?", f.Status).Count(&p.TotalRows)
+	}
+	switch f.Operator {
+	case ">":
+		query = query.Where("orders.total_price > ?", f.TotalPrice).Count(&p.TotalRows)
+	case "<":
+		query = query.Where("orders.total_price < ?", f.TotalPrice).Count(&p.TotalRows)
+	case "<=":
+		query = query.Where("orders.total_price <= ?", f.TotalPrice).Count(&p.TotalRows)
+	case "=":
+		query = query.Where("orders.total_price = ?", f.TotalPrice).Count(&p.TotalRows)
+	default:
+		query = query.Where("orders.total_price >= ?", f.TotalPrice).Count(&p.TotalRows)
+	}
+	if f.CreateAt != nil {
+		query = query.Where("DATE(orders.create_at) = ?", f.CreateAt.Format("2006-01-02")).Count(&p.TotalRows)
+	}
+	if f.UpdatedAt != nil {
+		query = query.Where("DATE(orders.updated_at) = ?", f.UpdatedAt.Format("2006-01-02")).Count(&p.TotalRows)
+	}
+
+	query.Limit(p.Row).Offset((p.Page - 1) * p.Row)
+
+	// Execute the query
+	rows, err := query.Rows()
 	if err != nil {
 		return nil, err
 	}
+
+	// Calculate total pages
+	p.TotalPages = math.Ceil(float64(p.TotalRows) / float64(p.Row))
+
+	// Unmarshal rows into data slice
 	orders, err := rowUnmarshal(rows, data)
 	if err != nil {
 		return nil, err
 	}
 
+<<<<<<< HEAD
+=======
+	if orders == nil || len(*orders) == 0 {
+		return nil, nil
+	}
+
+>>>>>>> 80f7caf032fe931d0e2acf71a39bb5fbb31bcc3a
 	return orders, nil
 }
 

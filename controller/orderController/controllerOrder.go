@@ -2,6 +2,7 @@ package orderController
 
 import (
 	"Intern_shopping/database"
+	"Intern_shopping/helper"
 	"Intern_shopping/models/auth"
 	"Intern_shopping/models/order"
 	"Intern_shopping/models/utils"
@@ -164,6 +165,12 @@ func SuperAdminOrderDetailByUserID(e echo.Context) error {
 			Message: "Can not Get Orders",
 		})
 	}
+	if orders == nil {
+		return e.JSON(404, utils.ResponseMessage{
+			Status:  404,
+			Message: "Order not found",
+		})
+	}
 	return e.JSON(200, map[string]interface{}{
 		"Orders":  orders,
 		"Message": "Successfully orders",
@@ -182,8 +189,38 @@ func SuperAdminOrderDetailByUserID(e echo.Context) error {
 // @Router /back-office/admin/orders/detail [get]
 func SuperAdminAllOrdersDetail(e echo.Context) error {
 	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}
-
-	orders, err := orderModelHelper.GetOrdersDetail()
+	var createAt time.Time
+	var updateAt time.Time
+	pagination := &helper.Pagination{Row: 5,
+		Page: 1}
+	filter := &helper.OrderFilter{
+		TotalPrice: 0,
+	}
+	if err := echo.QueryParamsBinder(e).
+		Int("row", &pagination.Row).
+		Int("page", &pagination.Page).
+		String("sort", &pagination.Sort).
+		Int("id", &filter.Id).
+		String("user", &filter.UserId).
+		Float64("price", &filter.TotalPrice).
+		String("operator", &filter.Operator).
+		Time("create", &createAt, "2006-01-02").
+		Time("update", &updateAt, "2006-01-02").
+		String("status", &filter.Status).
+		BindError(); err != nil {
+		return e.JSON(400, utils.ResponseMessage{
+			Status:  400,
+			Message: "Error query param",
+		})
+	}
+	log.Print("create", &createAt, "update", &updateAt)
+	if createAt.Format("2006-01-02") != "0001-01-01" {
+		filter.CreateAt = &createAt
+	}
+	if updateAt.Format("2006-01-02") != "0001-01-01" {
+		filter.UpdatedAt = &updateAt
+	}
+	orders, err := orderModelHelper.GetOrdersDetail(pagination, filter)
 	if err != nil {
 		log.Error(err.Error())
 		return e.JSON(500, utils.ResponseMessage{
@@ -191,8 +228,15 @@ func SuperAdminAllOrdersDetail(e echo.Context) error {
 			Message: "Can not Get Orders",
 		})
 	}
+	if orders == nil {
+		return e.JSON(404, utils.ResponseMessage{
+			Status:  404,
+			Message: "Order not found",
+		})
+	}
 	return e.JSON(200, map[string]interface{}{
 		"Orders":  orders,
+		"Page":    pagination,
 		"Message": "Successfully retrieved all orders",
 	})
 }
