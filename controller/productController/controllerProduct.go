@@ -2,6 +2,7 @@ package productController
 
 import (
 	"Intern_shopping/database"
+	"Intern_shopping/helper"
 	"Intern_shopping/models/product"
 	"Intern_shopping/models/utils"
 	"log"
@@ -10,15 +11,6 @@ import (
 
 	"github.com/labstack/echo/v4"
 )
-
-type Fil struct {
-	Totalpage     int
-	Prevpage      int
-	Nextpage      int
-	Totalrows     int
-	TotalNextpage int
-	Totalprevpage int
-}
 
 // @Tags Product
 // @Summary Get Product Filter Name data
@@ -58,7 +50,7 @@ func GetProductBy(ctx echo.Context) error {
 	totalpage := count / int64(limit)
 
 	return ctx.JSON(200, map[string]interface{}{
-		"Meta": Fil{
+		"Meta": helper.Fil{
 			Totalpage:     int(totalpage),
 			Totalrows:     int(count),
 			TotalNextpage: int(totalpage) - page,

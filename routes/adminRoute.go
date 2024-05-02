@@ -61,6 +61,7 @@ func superAdminRoute(e *echo.Echo) {
 	//Get order-products detail
 	superAdmin.GET("/order/detail/", orderController.SuperAdminOrderDetailByUserID)
 	superAdmin.GET("/orders/detail", orderController.SuperAdminAllOrdersDetail)
+	superAdmin.GET("/orders/fil", orderController.SuperAdminAllOrdersFil)
 
 	//!SECTION - ORDER HAS PRODUCTS
 }

@@ -77,6 +77,7 @@ func (u *OrderModelHelper) GetOrdersDetail() (*[]ResponseOrderHasProduct, error)
 	if err != nil {
 		return nil, err
 	}
+
 	return orders, nil
 }
 

@@ -7,3 +7,12 @@ type Pagination struct {
 	TotalRows  int64   `json:"total_rows"`
 	TotalPages float64 `json:"total_page"`
 }
+
+type Fil struct {
+	Totalpage     int
+	Prevpage      int
+	Nextpage      int
+	Totalrows     int
+	TotalNextpage int
+	Totalprevpage int
+}

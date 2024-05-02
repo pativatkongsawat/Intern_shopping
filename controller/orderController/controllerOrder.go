@@ -171,6 +171,15 @@ func SuperAdminOrderDetailByUserID(e echo.Context) error {
 
 }
 
+// @Tags Order
+// @Summary SuperAdmin Get Order
+// @Description SuperAdmin Get Order
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /back-office/admin/orders/detail [get]
 func SuperAdminAllOrdersDetail(e echo.Context) error {
 	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}
 
