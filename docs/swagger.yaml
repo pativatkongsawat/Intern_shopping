@@ -145,156 +145,6 @@ info:
   title: Intern_shopping
   version: "1.0"
 paths:
-  /admin:
-    get:
-      consumes:
-      - application/json
-      description: Admin Get User
-      parameters:
-      - description: row
-        in: query
-        name: row
-        type: integer
-      - description: page
-        in: query
-        name: page
-        type: integer
-      - description: sort
-        in: query
-        name: sort
-        type: string
-      - description: firstname
-        in: query
-        name: firstname
-        type: string
-      - description: lastname
-        in: query
-        name: lastname
-        type: string
-      - description: email
-        in: query
-        name: email
-        type: string
-      - description: add
-        in: query
-        name: add
-        type: string
-      - description: permission_id
-        in: query
-        name: permission_id
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Success response
-          schema:
-            $ref: '#/definitions/helper.SuccessResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Admin Get User
-      tags:
-      - Admin
-    post:
-      consumes:
-      - application/json
-      description: Admin Create User
-      parameters:
-      - description: Sturct User to insert
-        in: body
-        name: Request
-        required: true
-        schema:
-          items:
-            $ref: '#/definitions/users.Users'
-          type: array
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Success response
-          schema:
-            $ref: '#/definitions/helper.SuccessResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Admin Create User
-      tags:
-      - Admin
-    put:
-      consumes:
-      - application/json
-      description: Admin Update User
-      parameters:
-      - description: Sturct User to update
-        in: body
-        name: Request
-        required: true
-        schema:
-          items:
-            $ref: '#/definitions/users.Users'
-          type: array
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Success response
-          schema:
-            $ref: '#/definitions/helper.SuccessResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Admin Update User
-      tags:
-      - Admin
-  /admin/deleted:
-    get:
-      consumes:
-      - application/json
-      description: Admin Get User Delete
-      parameters:
-      - description: row
-        in: query
-        name: row
-        type: integer
-      - description: page
-        in: query
-        name: page
-        type: integer
-      - description: sort
-        in: query
-        name: sort
-        type: string
-      - description: firstname
-        in: query
-        name: firstname
-        type: string
-      - description: lastname
-        in: query
-        name: lastname
-        type: string
-      - description: email
-        in: query
-        name: email
-        type: string
-      - description: add
-        in: query
-        name: add
-        type: string
-      - description: permission_id
-        in: query
-        name: permission_id
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Success response
-          schema:
-            $ref: '#/definitions/helper.SuccessResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Admin Get User Delete
-      tags:
-      - Admin
   /api/intern-shop/admin/login:
     post:
       consumes:
@@ -367,11 +217,52 @@ paths:
       summary: User Register
       tags:
       - Auth
-  /back-office/admin/orders/detail:
+  /back-office//order/all:
     get:
       consumes:
       - application/json
       description: SuperAdmin Get Order
+      parameters:
+      - description: Number of rows per page (default 5)
+        in: query
+        name: row
+        type: integer
+      - description: Page number (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Sorting order (asc or desc)
+        in: query
+        name: sort
+        type: string
+      - description: Order ID
+        in: query
+        name: id
+        type: integer
+      - description: User ID
+        in: query
+        name: user
+        type: string
+      - description: Total price
+        in: query
+        name: price
+        type: number
+      - description: Price operator (eq, gt, lt)
+        in: query
+        name: operator
+        type: string
+      - description: 'Created at date (format: yyyy-mm-dd)'
+        in: query
+        name: create
+        type: string
+      - description: 'Updated at date (format: yyyy-mm-dd)'
+        in: query
+        name: update
+        type: string
+      - description: Order status
+        in: query
+        name: status
+        type: string
       produces:
       - application/json
       responses:
@@ -384,20 +275,213 @@ paths:
       summary: SuperAdmin Get Order
       tags:
       - Order
-  /back-office/admin/orders/fil:
+  /back-office/order:
+    delete:
+      consumes:
+      - application/json
+      description: Super Admin Delete Order
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Super Admin Delete Order
+      tags:
+      - Order
+    post:
+      consumes:
+      - application/json
+      description: Super Admin Delete Order
+      parameters:
+      - description: Update Product
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/order.OrderCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Super Admin Delete Order
+      tags:
+      - Order
+  /back-office/order/detail:
     get:
       consumes:
       - application/json
-      description: SuperAdmin Get Order Filter
+      description: Super Admin Get SelfOrderDetail
       parameters:
-      - description: limit
+      - description: id
         in: query
-        name: limit
+        name: id
         required: true
-        type: string
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Super Admin Get SelfOrderDetail
+      tags:
+      - Order
+  /back-office/user:
+    get:
+      consumes:
+      - application/json
+      description: Super Admin Get User
+      parameters:
+      - description: row
+        in: query
+        name: row
+        type: integer
       - description: page
         in: query
         name: page
+        type: integer
+      - description: sort
+        in: query
+        name: sort
+        type: string
+      - description: firstname
+        in: query
+        name: firstname
+        type: string
+      - description: lastname
+        in: query
+        name: lastname
+        type: string
+      - description: email
+        in: query
+        name: email
+        type: string
+      - description: add
+        in: query
+        name: add
+        type: string
+      - description: permission_id
+        in: query
+        name: permission_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Super Admin Get User
+      tags:
+      - User
+    post:
+      consumes:
+      - application/json
+      description: Super Admin Create User
+      parameters:
+      - description: Sturct User to insert
+        in: body
+        name: Request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/users.Users'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Super Admin Create User
+      tags:
+      - User
+    put:
+      consumes:
+      - application/json
+      description: Super Admin Update User
+      parameters:
+      - description: Sturct User to update
+        in: body
+        name: Request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/users.Users'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Super Admin Update User
+      tags:
+      - User
+  /back-office/user/:id:
+    put:
+      consumes:
+      - application/json
+      description: Super Admin Update User
+      parameters:
+      - description: Id User
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update User
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/users.UserUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Super Admin Update User
+      tags:
+      - User
+  /back-office/user/delete/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Super Admin Soft Delete User
+      parameters:
+      - description: Id User
+        in: path
+        name: id
         required: true
         type: string
       produces:
@@ -409,9 +493,59 @@ paths:
             $ref: '#/definitions/helper.SuccessResponse'
       security:
       - ApiKeyAuth: []
-      summary: SuperAdmin Get Order Filter
+      summary: Super Admin Soft Delete User
       tags:
-      - Order
+      - User
+  /back-office/user/deleted:
+    get:
+      consumes:
+      - application/json
+      description: Super Admin Get User Delete
+      parameters:
+      - description: row
+        in: query
+        name: row
+        type: integer
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: sort
+        in: query
+        name: sort
+        type: string
+      - description: firstname
+        in: query
+        name: firstname
+        type: string
+      - description: lastname
+        in: query
+        name: lastname
+        type: string
+      - description: email
+        in: query
+        name: email
+        type: string
+      - description: add
+        in: query
+        name: add
+        type: string
+      - description: permission_id
+        in: query
+        name: permission_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Super Admin Get User Delete
+      tags:
+      - User
   /categorys:
     get:
       consumes:
@@ -503,28 +637,6 @@ paths:
       tags:
       - Category
   /orders:
-    delete:
-      consumes:
-      - application/json
-      description: Delete Order from the database
-      parameters:
-      - description: id
-        in: query
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Success response
-          schema:
-            $ref: '#/definitions/helper.SuccessResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Delete Order
-      tags:
-      - Order
     get:
       consumes:
       - application/json
@@ -545,29 +657,6 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: SelfOrderDetail
-      tags:
-      - Order
-    post:
-      consumes:
-      - application/json
-      description: Delete Order from the database
-      parameters:
-      - description: Update Product
-        in: body
-        name: Request
-        required: true
-        schema:
-          $ref: '#/definitions/order.OrderCreateRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Success response
-          schema:
-            $ref: '#/definitions/helper.SuccessResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Delete Order
       tags:
       - Order
   /products:
@@ -730,29 +819,7 @@ paths:
       summary: Get Product Filter Name data
       tags:
       - Product
-  /users/:id:
-    delete:
-      consumes:
-      - application/json
-      description: Soft Delete User from the database
-      parameters:
-      - description: Id User
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Success response
-          schema:
-            $ref: '#/definitions/helper.SuccessResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Soft Delete User
-      tags:
-      - User
+  /user:id:
     get:
       consumes:
       - application/json
@@ -773,34 +840,6 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Get User by Id
-      tags:
-      - User
-    put:
-      consumes:
-      - application/json
-      description: Update User from the database
-      parameters:
-      - description: Id User
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Update User
-        in: body
-        name: Request
-        required: true
-        schema:
-          $ref: '#/definitions/users.UserUpdate'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Success response
-          schema:
-            $ref: '#/definitions/helper.SuccessResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Update User
       tags:
       - User
 schemes:

@@ -21,16 +21,16 @@ var now = time.Now()
 
 // NOTE * สร้างหลาย Users
 
-// @Tags Admin
-// @Summary Admin Create User
-// @Description Admin Create User
+// @Tags User
+// @Summary Super Admin Create User
+// @Description Super Admin Create User
 // @Accept json
 // @Produce json
 // @Param Request body []users.Users true "Sturct User to insert"
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /admin [post]
+// @Router /back-office/user [post]
 func CreateUsers(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
@@ -71,7 +71,7 @@ func CreateUsers(ctx echo.Context) error {
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /users/:id [get]
+// @Router /user:id [get]
 func GetUserSelf(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
@@ -88,9 +88,9 @@ func GetUserSelf(ctx echo.Context) error {
 
 // NOTE - Get all users
 
-// @Tags Admin
-// @Summary Admin Get User
-// @Description Admin Get User
+// @Tags User
+// @Summary Super Admin Get User
+// @Description Super Admin Get User
 // @Accept json
 // @Produce json
 // @Param row query int false "row"
@@ -104,7 +104,7 @@ func GetUserSelf(ctx echo.Context) error {
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /admin [get]
+// @Router /back-office/user [get]
 func GetUsers(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
@@ -139,9 +139,9 @@ func GetUsers(ctx echo.Context) error {
 
 // NOTE - Get all deleted users
 
-// @Tags Admin
-// @Summary Admin Get User Delete
-// @Description Admin Get User Delete
+// @Tags  User
+// @Summary Super Admin Get User Delete
+// @Description Super Admin Get User Delete
 // @Accept json
 // @Produce json
 // @Param row query int false "row"
@@ -155,7 +155,7 @@ func GetUsers(ctx echo.Context) error {
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /admin/deleted [get]
+// @Router /back-office/user/deleted [get]
 func GetDeletedUsers(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
@@ -188,8 +188,8 @@ func GetDeletedUsers(ctx echo.Context) error {
 // SECTION - Update
 
 // @Tags User
-// @Summary Update User
-// @Description Update User from the database
+// @Summary Super Admin Update User
+// @Description Super Admin Update User
 // @Accept json
 // @Produce json
 // @Param id path string true "Id User"
@@ -197,7 +197,7 @@ func GetDeletedUsers(ctx echo.Context) error {
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /users/:id [put]
+// @Router /back-office/user/:id [put]
 func UpdateById(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
@@ -242,16 +242,16 @@ func UpdateById(ctx echo.Context) error {
 	return ctx.JSON(200, map[string]interface{}{"message": "Update user successfully"})
 }
 
-// @Tags Admin
-// @Summary Admin Update User
-// @Description Admin Update User
+// @Tags  User
+// @Summary Super Admin Update User
+// @Description Super Admin Update User
 // @Accept json
 // @Produce json
 // @Param Request body []users.Users true "Sturct User to update"
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /admin [put]
+// @Router /back-office/user [put]
 func AdminUpdateUsers(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
@@ -282,15 +282,15 @@ func AdminUpdateUsers(ctx echo.Context) error {
 // SECTION - Delete
 
 // @Tags User
-// @Summary Soft Delete User
-// @Description Soft Delete User from the database
+// @Summary Super Admin Soft Delete User
+// @Description Super Admin Soft Delete User
 // @Accept json
 // @Produce json
 // @Param id path string true "Id User"
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /users/:id [delete]
+// @Router /back-office/user/delete/:id [delete]
 func DeleteById(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 

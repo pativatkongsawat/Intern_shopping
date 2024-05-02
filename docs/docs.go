@@ -24,242 +24,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/admin": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Admin Get User",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Admin"
-                ],
-                "summary": "Admin Get User",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "row",
-                        "name": "row",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "page",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "sort",
-                        "name": "sort",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "firstname",
-                        "name": "firstname",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "lastname",
-                        "name": "lastname",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "email",
-                        "name": "email",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "add",
-                        "name": "add",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "permission_id",
-                        "name": "permission_id",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "schema": {
-                            "$ref": "#/definitions/helper.SuccessResponse"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Admin Update User",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Admin"
-                ],
-                "summary": "Admin Update User",
-                "parameters": [
-                    {
-                        "description": "Sturct User to update",
-                        "name": "Request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/users.Users"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "schema": {
-                            "$ref": "#/definitions/helper.SuccessResponse"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Admin Create User",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Admin"
-                ],
-                "summary": "Admin Create User",
-                "parameters": [
-                    {
-                        "description": "Sturct User to insert",
-                        "name": "Request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/users.Users"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "schema": {
-                            "$ref": "#/definitions/helper.SuccessResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/admin/deleted": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Admin Get User Delete",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Admin"
-                ],
-                "summary": "Admin Get User Delete",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "row",
-                        "name": "row",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "page",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "sort",
-                        "name": "sort",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "firstname",
-                        "name": "firstname",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "lastname",
-                        "name": "lastname",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "email",
-                        "name": "email",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "add",
-                        "name": "add",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "permission_id",
-                        "name": "permission_id",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "schema": {
-                            "$ref": "#/definitions/helper.SuccessResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/api/intern-shop/admin/login": {
             "post": {
                 "security": [
@@ -377,7 +141,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/back-office/admin/orders/detail": {
+        "/back-office//order/all": {
             "get": {
                 "security": [
                     {
@@ -395,6 +159,68 @@ const docTemplate = `{
                     "Order"
                 ],
                 "summary": "SuperAdmin Get Order",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Number of rows per page (default 5)",
+                        "name": "row",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number (default 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sorting order (asc or desc)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Order ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user",
+                        "in": "query"
+                    },
+                    {
+                        "type": "number",
+                        "description": "Total price",
+                        "name": "price",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Price operator (eq, gt, lt)",
+                        "name": "operator",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Created at date (format: yyyy-mm-dd)",
+                        "name": "create",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Updated at date (format: yyyy-mm-dd)",
+                        "name": "update",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order status",
+                        "name": "status",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Success response",
@@ -405,14 +231,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/back-office/admin/orders/fil": {
-            "get": {
+        "/back-office/order": {
+            "post": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "SuperAdmin Get Order Filter",
+                "description": "Super Admin Delete Order",
                 "consumes": [
                     "application/json"
                 ],
@@ -422,21 +248,407 @@ const docTemplate = `{
                 "tags": [
                     "Order"
                 ],
-                "summary": "SuperAdmin Get Order Filter",
+                "summary": "Super Admin Delete Order",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "limit",
-                        "name": "limit",
+                        "description": "Update Product",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/order.OrderCreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Super Admin Delete Order",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Super Admin Delete Order",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
                         "in": "query",
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/back-office/order/detail": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Super Admin Get SelfOrderDetail",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Super Admin Get SelfOrderDetail",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/back-office/user": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Super Admin Get User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Super Admin Get User",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "row",
+                        "name": "row",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
                     },
                     {
                         "type": "string",
+                        "description": "sort",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "firstname",
+                        "name": "firstname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "lastname",
+                        "name": "lastname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "email",
+                        "name": "email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "add",
+                        "name": "add",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "permission_id",
+                        "name": "permission_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Super Admin Update User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Super Admin Update User",
+                "parameters": [
+                    {
+                        "description": "Sturct User to update",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/users.Users"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Super Admin Create User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Super Admin Create User",
+                "parameters": [
+                    {
+                        "description": "Sturct User to insert",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/users.Users"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/back-office/user/:id": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Super Admin Update User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Super Admin Update User",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Id User",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update User",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/users.UserUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/back-office/user/delete/:id": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Super Admin Soft Delete User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Super Admin Soft Delete User",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Id User",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/back-office/user/deleted": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Super Admin Get User Delete",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Super Admin Get User Delete",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "row",
+                        "name": "row",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
                         "description": "page",
                         "name": "page",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "sort",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "firstname",
+                        "name": "firstname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "lastname",
+                        "name": "lastname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "email",
+                        "name": "email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "add",
+                        "name": "add",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "permission_id",
+                        "name": "permission_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -617,78 +829,6 @@ const docTemplate = `{
                         "type": "string",
                         "description": "user_id",
                         "name": "user_id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "schema": {
-                            "$ref": "#/definitions/helper.SuccessResponse"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Delete Order from the database",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Order"
-                ],
-                "summary": "Delete Order",
-                "parameters": [
-                    {
-                        "description": "Update Product",
-                        "name": "Request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/order.OrderCreateRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "schema": {
-                            "$ref": "#/definitions/helper.SuccessResponse"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Delete Order from the database",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Order"
-                ],
-                "summary": "Delete Order",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "id",
-                        "name": "id",
                         "in": "query",
                         "required": true
                     }
@@ -961,7 +1101,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/:id": {
+        "/user:id": {
             "get": {
                 "security": [
                     {
@@ -979,85 +1119,6 @@ const docTemplate = `{
                     "User"
                 ],
                 "summary": "Get User by Id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Id User",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "schema": {
-                            "$ref": "#/definitions/helper.SuccessResponse"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Update User from the database",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Update User",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Id User",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Update User",
-                        "name": "Request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/users.UserUpdate"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "schema": {
-                            "$ref": "#/definitions/helper.SuccessResponse"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Soft Delete User from the database",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Soft Delete User",
                 "parameters": [
                     {
                         "type": "string",
