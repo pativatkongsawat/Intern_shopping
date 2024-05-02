@@ -241,6 +241,62 @@ func UpdateById(ctx echo.Context) error {
 	return ctx.JSON(200, map[string]interface{}{"message": "Update user successfully"})
 }
 
+// @Tags User
+// @Summary Admin Update User
+// @Description Admin Update User
+// @Accept json
+// @Produce json
+// @Param id path string true "user id"
+// @Param Request body users.UserUpdate true "Update User"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /admin/user/id [put]
+func AdminUpdateById(ctx echo.Context) error {
+	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
+
+	user_id := ctx.Param("id")
+	claim := ctx.Get("user").(*jwt.Token)
+	userClaim := claim.Claims.(*auth.Claims)
+	id := userClaim.UserID
+
+	userReq := users.UserUpdate{}
+	if err := ctx.Bind(&userReq); err != nil {
+		return ctx.JSON(500, utils.ResponseMessage{
+			Status:  500,
+			Message: "Invalid request body",
+			Result:  err.Error(),
+		})
+	}
+	if reflect.ValueOf(userReq).IsZero() {
+		return ctx.JSON(500, utils.ResponseMessage{
+			Status:  500,
+			Message: "Invalid request body",
+			Result:  "No value from request body",
+		})
+	}
+
+	// err = ctx.Validate(&userReq)
+	// if err != nil {
+	// 	return ctx.JSON(400, map[string]interface{}{"message": "Invalid Validate User Request " + err.Error()})
+	// }
+
+	user := users.Users{
+		Firstname: userReq.Firstname,
+		Lastname:  userReq.Lastname,
+		Email:     userReq.Email,
+		Password:  userReq.Password,
+		Address:   userReq.Address,
+		UpdatedAt: now,
+	}
+
+	if result := userModelHelper.UpdateUser(user_id, id, &user); result != nil {
+		return ctx.JSON(500, map[string]interface{}{"message": "Update user error"})
+	}
+
+	return ctx.JSON(200, map[string]interface{}{"message": "Update user successfully"})
+}
+
 // @Tags  User
 // @Summary Admin Update User
 // @Description Admin Update User

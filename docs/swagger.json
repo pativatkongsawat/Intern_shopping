@@ -385,50 +385,8 @@
                 }
             }
         },
-<<<<<<< HEAD
-        "/admin/product/hide/{id}": {
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Admin Spft Delete product",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Product"
-                ],
-                "summary": "Admin Soft Delete product",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Id Product",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "schema": {
-                            "$ref": "#/definitions/helper.SuccessResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/admin/product/{id}": {
-            "delete": {
-=======
         "/categorys": {
             "get": {
->>>>>>> 1f87c4339796d44b94f2cf8a2b4bbc38c23e14bf
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -1109,9 +1067,6 @@
                         "ApiKeyAuth": []
                     }
                 ],
-<<<<<<< HEAD
-                "description": "User Get User by Id",
-=======
                 "description": "Get User by Id",
                 "consumes": [
                     "application/json"
@@ -1192,7 +1147,6 @@
                     }
                 ],
                 "description": "Soft Delete User from the database",
->>>>>>> 1f87c4339796d44b94f2cf8a2b4bbc38c23e14bf
                 "consumes": [
                     "application/json"
                 ],

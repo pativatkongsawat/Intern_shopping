@@ -393,53 +393,8 @@ paths:
       - ApiKeyAuth: []
       summary: Admin Delete product
       tags:
-<<<<<<< HEAD
-      - Product
-  /admin/product/category:
-    get:
-      consumes:
-      - application/json
-      description: Admin Get Product and Category name
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Success response
-          schema:
-            $ref: '#/definitions/helper.SuccessResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Admin Get Product and Category name
-      tags:
-      - Product
-  /admin/product/hide/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Admin Spft Delete product
-      parameters:
-      - description: Id Product
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Success response
-          schema:
-            $ref: '#/definitions/helper.SuccessResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Admin Soft Delete product
-      tags:
-      - Product
-  /admin/user:
-=======
       - Order
   /categorys:
->>>>>>> 1f87c4339796d44b94f2cf8a2b4bbc38c23e14bf
     get:
       consumes:
       - application/json
@@ -863,8 +818,12 @@ paths:
 <<<<<<< HEAD
       summary: User Get User by Id
 =======
+<<<<<<< HEAD
+      summary: User Get User by Id
+=======
       summary: Admin Update User
 >>>>>>> 1f87c4339796d44b94f2cf8a2b4bbc38c23e14bf
+>>>>>>> dcb52f535c3f3674dfa6653ed5064f09ad88007d
       tags:
       - User
 schemes:

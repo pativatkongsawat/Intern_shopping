@@ -31,7 +31,11 @@ func adminRoute(e *echo.Echo) {
 	// NOTE - UPDATE
 	// userGroup.PUT("/:id", adminController.UpdateAdmin)
 
+<<<<<<< HEAD
 	userGroup.PUT("/id", userController.UpdateById)
+=======
+	userGroup.PUT("/:id", userController.AdminUpdateById)
+>>>>>>> origin/dev
 	userGroup.PUT("", userController.AdminUpdateUsers)
 
 	// !SECTION - USER
