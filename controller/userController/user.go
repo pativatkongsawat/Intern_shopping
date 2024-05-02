@@ -243,19 +243,19 @@ func UpdateById(ctx echo.Context) error {
 
 // @Tags User
 // @Summary Admin Update User
-// @Description Update User from the database
+// @Description Admin Update User
 // @Accept json
 // @Produce json
-// @Param id path string true "Id User"
+// @Param id path string true "user id"
 // @Param Request body users.UserUpdate true "Update User"
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /users/:id [put]
+// @Router /admin/user/id [put]
 func AdminUpdateById(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
-	user_id := ctx.QueryParam("id")
+	user_id := ctx.Param("id")
 	claim := ctx.Get("user").(*jwt.Token)
 	userClaim := claim.Claims.(*auth.Claims)
 	id := userClaim.UserID
@@ -297,7 +297,7 @@ func AdminUpdateById(ctx echo.Context) error {
 	return ctx.JSON(200, map[string]interface{}{"message": "Update user successfully"})
 }
 
-// @Tags Admin
+// @Tags  User
 // @Summary Admin Update User
 // @Description Admin Update User
 // @Accept json

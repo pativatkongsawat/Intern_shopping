@@ -388,45 +388,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/product/hide/{id}": {
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Admin Spft Delete product",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Product"
-                ],
-                "summary": "Admin Soft Delete product",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Id Product",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "schema": {
-                            "$ref": "#/definitions/helper.SuccessResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/admin/product/{id}": {
-            "delete": {
+        "/categorys": {
+            "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -1107,7 +1070,10 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
+<<<<<<< HEAD
                 "description": "User Get User by Id",
+=======
+                "description": "Get User by Id",
                 "consumes": [
                     "application/json"
                 ],
@@ -1117,13 +1083,16 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "User Get User by Id",
+                "summary": "Get User by Id",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "Id User",
                         "name": "id",
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> dcb52f535c3f3674dfa6653ed5064f09ad88007d
                         "in": "path",
                         "required": true
                     }
@@ -1188,6 +1157,7 @@ const docTemplate = `{
                     }
                 ],
                 "description": "Soft Delete User from the database",
+>>>>>>> 1f87c4339796d44b94f2cf8a2b4bbc38c23e14bf
                 "consumes": [
                     "application/json"
                 ],
@@ -1197,16 +1167,20 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "Soft Delete User",
+                "summary": "User Get User by Id",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "Id User",
                         "name": "id",
+<<<<<<< HEAD
                         "in": "path",
 =======
                         "in": "query",
 >>>>>>> origin/golf
+=======
+                        "in": "query",
+>>>>>>> dcb52f535c3f3674dfa6653ed5064f09ad88007d
                         "required": true
                     }
                 ],
