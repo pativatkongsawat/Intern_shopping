@@ -24,7 +24,7 @@ func userRoute(e *echo.Echo) {
 	userGroup.PUT("/profile", userController.UpdateById)
 
 	// NOTE - Delete
-	userGroup.DELETE("/profile/", userController.DeleteById)
+	userGroup.DELETE("/profile/:id", userController.DeleteById)
 
 	// !SECTION - Model User
 
