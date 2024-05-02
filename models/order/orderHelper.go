@@ -128,6 +128,10 @@ func (u *OrderModelHelper) GetOrdersDetail(p *helper.Pagination, f *helper.Order
 		return nil, err
 	}
 
+	if orders == nil || len(*orders) == 0 {
+		return nil, nil
+	}
+
 	return orders, nil
 }
 
