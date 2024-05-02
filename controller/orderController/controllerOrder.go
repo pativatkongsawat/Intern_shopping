@@ -183,6 +183,16 @@ func SuperAdminOrderDetailByUserID(e echo.Context) error {
 // @Description SuperAdmin Get Order
 // @Accept json
 // @Produce json
+// @Param row query integer false "Number of rows per page (default 5)"
+// @Param page query integer false "Page number (default 1)"
+// @Param sort query string false "Sorting order (asc or desc)"
+// @Param id query integer false "Order ID"
+// @Param user query string false "User ID"
+// @Param price query number false "Total price"
+// @Param operator query string false "Price operator (eq, gt, lt)"
+// @Param create query string false "Created at date (format: yyyy-mm-dd)"
+// @Param update query string false "Updated at date (format: yyyy-mm-dd)"
+// @Param status query string false "Order status"
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
