@@ -19,11 +19,11 @@ type Users struct {
 }
 
 type CreateUser struct {
-	Firstname string `json:"firstname"`
-	Lastname  string `json:"lastname"`
-	Address   string `json:"address"`
-	Email     string `gorm:"unique" json:"email"`
-	Password  string `gorm:"not null" json:"password"`
+	Firstname string `json:"firstname" validate:"required"`
+	Lastname  string `json:"lastname" validate:"required"`
+	Address   string `json:"address" validate:"required"`
+	Email     string `gorm:"unique" json:"email" validate:"required"`
+	Password  string `gorm:"not null" json:"password" validate:"required"`
 }
 
 type UserUpdate struct {

@@ -136,13 +136,16 @@ func loginHandler(userReq users.Login) (user users.Users, err error) {
 func Signup(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 	now := time.Now()
-
 	// ANCHOR -  - ดึงข้อมูลจาก Body มาใส่ตัวแปร
 	var newUser users.CreateUser
+
 	if err := ctx.Bind(&newUser); err != nil {
 		return ctx.JSON(400, map[string]interface{}{"message": "Invalid request body"})
 	} else if newUser.Email == "" {
 		return ctx.JSON(400, map[string]interface{}{"message": "Please enter an email address"})
+	}
+	if err := ctx.Validate(newUser); err != nil {
+		return err
 	}
 
 	if hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost); err != nil {

@@ -255,7 +255,7 @@ func UpdateById(ctx echo.Context) error {
 func AdminUpdateById(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
-	user_id := ctx.Param("id")
+	userid := ctx.Param("id")
 	claim := ctx.Get("user").(*jwt.Token)
 	userClaim := claim.Claims.(*auth.Claims)
 	id := userClaim.UserID
@@ -290,7 +290,7 @@ func AdminUpdateById(ctx echo.Context) error {
 		UpdatedAt: now,
 	}
 
-	if result := userModelHelper.UpdateUser(user_id, id, &user); result != nil {
+	if result := userModelHelper.UpdateUser(userid, id, &user); result != nil {
 		return ctx.JSON(500, map[string]interface{}{"message": "Update user error"})
 	}
 

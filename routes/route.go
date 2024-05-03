@@ -1,10 +1,15 @@
 package routes
 
 import (
+	guestcontroller "Intern_shopping/controller/guestController"
+
 	"github.com/labstack/echo/v4"
 )
 
 func Init(e *echo.Echo) (string, error) {
+
+	e.POST("upload/stream", guestcontroller.ImageStreamTesting)
+	e.POST("upload/blob", guestcontroller.ImageBlobTesting)
 
 	authRoute(e)
 	userRoute(e)
@@ -13,5 +18,3 @@ func Init(e *echo.Echo) (string, error) {
 
 	return "Route works as expected", nil
 }
-
-// TODO - SuperAdmin for backOffice

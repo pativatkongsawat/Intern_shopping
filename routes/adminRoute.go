@@ -92,7 +92,7 @@ func superAdminRoute(e *echo.Echo) {
 	userGroup.DELETE("/delete/:id", userController.DeleteById)
 	// userGroup.DELETE("/delete", userController.DeleteUsers)
 
-	// TODO - For only Request Needed
+	// For only Request Needed
 	// userGroup.DELETE("/remove/:id", userController.RemoveUser)
 	// userGroup.DELETE("/removes", userController.RemoveUsers)
 	// !SECTION - USER

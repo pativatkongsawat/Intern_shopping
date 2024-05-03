@@ -7,11 +7,30 @@ import (
 	"Intern_shopping/routes"
 	"fmt"
 
+	"github.com/go-playground/validator"
 	echoSwagger "github.com/swaggo/echo-swagger"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
+
+type CustomValidator struct {
+	validator *validator.Validate
+}
+
+func (cv *CustomValidator) Validate(i interface{}) error {
+	if errs := cv.validator.Struct(i); errs != nil {
+		var errMsg []string
+		for _, err := range errs.(validator.ValidationErrors) {
+			errMsg = append(errMsg, err.Field())
+		}
+		return echo.NewHTTPError(400, map[string]interface{}{
+			"message": "Error Input field is required",
+			"field":   errMsg,
+		})
+	}
+	return nil
+}
 
 // @title			Intern_shopping
 // @version		1.0
@@ -31,7 +50,7 @@ import (
 func main() {
 
 	e := echo.New()
-
+	e.Validator = &CustomValidator{validator: validator.New()}
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
 	config.Init()
