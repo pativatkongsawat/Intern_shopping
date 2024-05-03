@@ -24,44 +24,44 @@ import (
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
 // @Router /user/product/by [get]
-func GetProductBy(ctx echo.Context) error {
+// func GetProductBy(ctx echo.Context) error {
 
-	pname := ctx.QueryParam("pname")
-	getlimit := ctx.QueryParam("limit")
-	getpage := ctx.QueryParam("page")
+// 	pname := ctx.QueryParam("pname")
+// 	getlimit := ctx.QueryParam("limit")
+// 	getpage := ctx.QueryParam("page")
 
-	limit, _ := strconv.Atoi(getlimit)
-	page, _ := strconv.Atoi(getpage)
+// 	limit, _ := strconv.Atoi(getlimit)
+// 	page, _ := strconv.Atoi(getpage)
 
-	// userModelHelper := {DB: database.DBMYSQL}
+// 	// userModelHelper := {DB: database.DBMYSQL}
 
-	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
+// 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
 
-	product, count, err := productModelHelper.Getproduct(pname, limit, page)
+// 	product, count, err := productModelHelper.Getproduct(pname, limit, page)
 
-	if err != nil {
-		return ctx.JSON(500, utils.ResponseMessage{
-			Status:  500,
-			Message: "Error Get Product",
-			Result:  err.Error(),
-		})
-	}
+// 	if err != nil {
+// 		return ctx.JSON(500, utils.ResponseMessage{
+// 			Status:  500,
+// 			Message: "Error Get Product",
+// 			Result:  err.Error(),
+// 		})
+// 	}
 
-	totalpage := count / int64(limit)
+// 	totalpage := count / int64(limit)
 
-	return ctx.JSON(200, map[string]interface{}{
-		"Meta": helper.Fil{
-			Totalpage:     int(totalpage),
-			Totalrows:     int(count),
-			TotalNextpage: int(totalpage) - page,
-			Totalprevpage: page - 1,
-			Prevpage:      page - 1,
-			Nextpage:      page + 1,
-		},
-		"Product": product,
-	})
+// 	return ctx.JSON(200, map[string]interface{}{
+// 		"Meta": helper.Fil{
+// 			Totalpage:     int(totalpage),
+// 			Totalrows:     int(count),
+// 			TotalNextpage: int(totalpage) - page,
+// 			Totalprevpage: page - 1,
+// 			Prevpage:      page - 1,
+// 			Nextpage:      page + 1,
+// 		},
+// 		"Product": product,
+// 	})
 
-}
+// }
 
 // @Tags Product
 // @Summary Admin Insert a new product
@@ -154,34 +154,6 @@ func DeleteProductBy(ctx echo.Context) error {
 
 		"product": deletedProduct,
 		"message": "Product deleted successfully",
-	})
-}
-
-// @Tags Product
-// @Summary User Get all Product
-// @Description User Get all Product from the database
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @SecurityDefinitions ApiKeyAuth
-// @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /user/product [get]
-func ProductGetAll(ctx echo.Context) error {
-
-	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
-
-	product, err := productModelHelper.GetproductAll()
-
-	if err != nil {
-		return ctx.JSON(500, utils.ResponseMessage{
-			Status:  500,
-			Message: "Can not Get Product",
-		})
-	}
-
-	return ctx.JSON(200, map[string]interface{}{
-		"Product": product,
-		"Message": "Successfully retrieved all products",
 	})
 }
 
@@ -286,20 +258,29 @@ func DeleteProductSoft(ctx echo.Context) error {
 
 }
 
-// @Tags Product
-// @Summary Admin Get Product and Category name
-// @Description Admin Get Product and Category name
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @SecurityDefinitions ApiKeyAuth
-// @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /admin/product/category [get]
 func ProductGetCategory(ctx echo.Context) error {
 
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
 
-	product, err := productModelHelper.ProductGet()
+	pname := ctx.QueryParam("pname")
+	cname := ctx.QueryParam("cname")
+	getlimit := ctx.QueryParam("limit")
+	getpage := ctx.QueryParam("page")
+	sort := ctx.QueryParam("sort")
+
+	if getlimit == "" {
+
+		getlimit = "10"
+	}
+
+	if getpage == "" {
+		getpage = "1"
+	}
+
+	limit, _ := strconv.Atoi(getlimit)
+	page, _ := strconv.Atoi(getpage)
+
+	product, count, err := productModelHelper.ProductGet(pname, cname, sort, limit, page)
 
 	if err != nil {
 		return ctx.JSON(500, utils.ResponseMessage{
@@ -309,8 +290,19 @@ func ProductGetCategory(ctx echo.Context) error {
 		})
 	}
 
+	totalpage := count / int64(limit)
+
+	pagegination := helper.Pagination{
+		TotalRows:  count,
+		TotalPages: float64(totalpage),
+		Page:       page,
+		Row:        limit,
+		Sort:       sort,
+	}
+
 	return ctx.JSON(200, map[string]interface{}{
 		"product": product,
 		"Message": "Success",
+		"Page":    pagegination,
 	})
 }

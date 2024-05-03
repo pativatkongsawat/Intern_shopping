@@ -35,3 +35,5 @@ type OrderFilter struct {
 	MinPrice   int        `json:"min_price"`
 	MaxPrice   int        `json:"max_price"`
 }
+
+

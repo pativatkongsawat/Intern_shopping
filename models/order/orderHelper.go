@@ -201,3 +201,34 @@ func (u *OrderModelHelper) DeleteOrder(orderId int64) (*Order, []OrderHasProduct
 
 	return &order, orderhas, nil
 }
+
+func (u *OrderModelHelper) GetOrderAll(user_id string, limit, page int) (*[]ResponseOrderHasProduct, int64, error) {
+
+	var data []ResponseOrderHasProduct
+	db := u.DB
+
+	var count int64
+
+	offset := (page - 1) * limit
+
+	rows, err := db.Table("orders").
+		Select("orders.id AS order_id, orders.user_id AS user_id, orders.create_at, orders.updated_at, orders.created_by, JSON_ARRAYAGG(JSON_OBJECT('id', products.id, 'name', products.name, 'description', products.description, 'quantity', order_has_products.order_product_total, 'price', products.price, 'image', products.image, 'total_products_price', order_has_products.order_product_total * products.price, 'category_id', products.category_id)) AS products, SUM(order_has_products.order_product_total) AS total_products, orders.total_price, orders.status").
+		Joins("JOIN order_has_products ON orders.id = order_has_products.order_id").
+		Joins("JOIN products ON order_has_products.product_id = products.id").
+		Group("orders.id, orders.user_id").Where("orders.deleted_at IS NULL AND orders.user_id =?", user_id).
+		Limit(limit).
+		Offset(offset).
+		Count(&count).
+		Rows()
+	if err != nil {
+		return nil, 0, err
+	}
+	orders, err := rowUnmarshal(rows, data)
+	if err != nil {
+		return nil, 0, err
+	}
+	if orders == nil || len(*orders) == 0 {
+		return nil, 0, nil
+	}
+	return orders, 0, nil
+}
