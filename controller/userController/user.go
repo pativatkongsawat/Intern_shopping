@@ -251,7 +251,7 @@ func UpdateById(ctx echo.Context) error {
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /admin/user/id [put]
+// @Router /admin/user/{id} [put]
 func AdminUpdateById(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 

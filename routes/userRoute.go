@@ -24,7 +24,7 @@ func userRoute(e *echo.Echo) {
 	userGroup.PUT("/profile", userController.UpdateById)
 
 	// NOTE - Delete
-	userGroup.DELETE("/profile/:id", userController.DeleteById)
+	// userGroup.DELETE("/profile/:id", userController.DeleteById)
 
 	// !SECTION - Model User
 
@@ -39,8 +39,8 @@ func userRoute(e *echo.Echo) {
 	//SECTION - Model Product
 
 	// NOTE - Get product by product name
-	product.GET("/by", productController.GetProductBy)
-	product.GET("", productController.ProductGetAll)
+	// product.GET("", productController.GetProductBy)
+	product.GET("", productController.ProductGetCategory)
 
 	//!SECTION - Model Product
 

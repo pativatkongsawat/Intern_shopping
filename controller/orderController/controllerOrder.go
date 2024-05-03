@@ -128,7 +128,6 @@ func OrderDelete(ctx echo.Context) error {
 // @Description Admin SelfOrderDetail
 // @Accept json
 // @Produce json
-// @Param UserID query string true "user_id"
 // @Security ApiKeyAuth
 // @SecurityDefinitions ApiKeyAuth
 // @response 200 {object} helper.SuccessResponse "Success response"

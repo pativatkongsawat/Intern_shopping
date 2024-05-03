@@ -23,10 +23,12 @@ func adminRoute(e *echo.Echo) {
 	// NOTE - Get all users
 	userGroup.GET("", userController.GetUsers)
 	// NOTE - GET all deleted users
-	userGroup.GET("/deleted", userController.GetDeletedUsers)
+
+	//userGroup.GET("/deleted", userController.GetDeletedUsers)
 
 	// NOTE - Create Multiple Users
-	userGroup.POST("", userController.CreateUsers)
+
+	//userGroup.POST("", userController.CreateUsers)
 
 	// NOTE - UPDATE
 	// userGroup.PUT("/:id", adminController.UpdateAdmin)
@@ -37,18 +39,18 @@ func adminRoute(e *echo.Echo) {
 	// !SECTION - USER
 
 	// SECTION - ORDER
-	orderGroup.GET("", orderController.SelfOrderDetail)
+	orderGroup.GET("", orderController.SuperAdminAllOrdersDetail)
+	orderGroup.DELETE("", orderController.OrderDelete)
 
-	orderGroup.POST("", orderController.UserCreateOrder)
+	//orderGroup.POST("", orderController.UserCreateOrder)
 
 	// !SECTION - ORDER
 
 	// SECTION - PRODUCT
 	//NOTE - Get product by name
-	productGroup.GET("/by", productController.GetProductBy)
+	// productGroup.GET("/by", productController.GetProductBy)
 
 	//NOTE - Get products
-	productGroup.GET("", productController.ProductGetAll)
 
 	productGroup.GET("/category", productController.ProductGetCategory)
 
@@ -107,7 +109,8 @@ func superAdminRoute(e *echo.Echo) {
 
 	//Get order-products detail
 	orderGroup.GET("/detail", orderController.SuperAdminOrderDetailByUserID)
-	orderGroup.GET("/all", orderController.SuperAdminAllOrdersDetail)
+
+	orderGroup.GET("", orderController.SuperAdminAllOrdersDetail)
 
 	//!SECTION - ORDER HAS PRODUCTS
 
@@ -115,12 +118,10 @@ func superAdminRoute(e *echo.Echo) {
 
 	// SECTION - PRODUCT
 	//NOTE - Get product by name
-	productGroup.GET("/by", productController.GetProductBy)
+	// productGroup.GET("", productController.GetProductBy)
 
 	//NOTE - Get products
-	productGroup.GET("", productController.ProductGetAll)
-
-	productGroup.GET("/category", productController.ProductGetCategory)
+	productGroup.GET("", productController.ProductGetCategory)
 
 	productGroup.POST("", productController.InsertproductBy)
 

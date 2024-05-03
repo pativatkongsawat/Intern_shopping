@@ -32,17 +32,6 @@ func (u *ProductModelHelper) Getproduct(pname string, limit, page int) ([]*Produ
 
 }
 
-func (u *ProductModelHelper) GetproductAll() ([]*Product, error) {
-
-	product := []*Product{}
-
-	if err := u.DB.Find(&product).Error; err != nil {
-		return nil, err
-	}
-
-	return product, nil
-}
-
 func (u *ProductModelHelper) Insertproduct(products []*Product) error {
 	tx := u.DB.Begin()
 
@@ -119,14 +108,36 @@ func (u *ProductModelHelper) SoftDelete(id int) ([]*Product, error) {
 	return product, nil
 }
 
-func (u *ProductModelHelper) ProductGet() ([]ProductCategory, error) {
+func (u *ProductModelHelper) ProductGet(pname, cname, sort string, limit, page int) ([]ProductCategory, int64, error) {
 
 	product := []ProductCategory{}
 
-	result := "SELECT products.name , products.price  , category.name AS category_name FROM products LEFT JOIN category ON products.category_id = category.id;"
+	// result := "SELECT products.name , products.price  , category.name AS category_name FROM products LEFT JOIN category ON products.category_id = category.id ;"
 
-	if err := u.DB.Debug().Raw(result).Find(&product).Error; err != nil {
-		return nil, err
+	offset := (page - 1) * limit
+
+	query := u.DB.Debug().
+		Model(&Product{}).
+		Select("products.name, products.price, category.name AS category_name").
+		Joins("LEFT JOIN category ON products.category_id = category.id").
+		Where("products.name LIKE ? AND category.name LIKE ?", "%"+pname+"%", "%"+cname+"%")
+
+	if sort != "" {
+		query = query.Order("products.price " + sort)
 	}
-	return product, nil
+
+	query = query.Limit(limit).Offset(offset)
+
+	err := query.Find(&product).Error
+	if err != nil {
+
+		return nil, 0, err
+	}
+	var count int64
+
+	if err := u.DB.Debug().Model(&Product{}).Count(&count).Error; err != nil {
+		return nil, 0, err
+	}
+
+	return product, count, nil
 }
