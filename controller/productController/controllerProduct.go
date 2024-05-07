@@ -12,18 +12,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// @Tags Product
-// @Summary User Get Product Filter Name data
-// @Description User Get Product from the database Filter
-// @Accept json
-// @Produce json
-// @Param pname query string false "pname"
-// @Param page query int false "page"
-// @Param limit query int false "limit"
-// @Security ApiKeyAuth
-// @SecurityDefinitions ApiKeyAuth
-// @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /user/product/by [get]
 // func GetProductBy(ctx echo.Context) error {
 
 // 	pname := ctx.QueryParam("pname")
@@ -63,16 +51,6 @@ import (
 
 // }
 
-// @Tags Product
-// @Summary Admin Insert a new product
-// @Description Admin Insert a new product
-// @Accept json
-// @Produce json
-// @Param Request body []product.ProductInsert true "Array Product to insert"
-// @Security ApiKeyAuth
-// @SecurityDefinitions ApiKeyAuth
-// @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /admin/product [post]
 func InsertproductBy(ctx echo.Context) error {
 	productdata := []*product.ProductInsert{}
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
@@ -119,16 +97,6 @@ func InsertproductBy(ctx echo.Context) error {
 	})
 }
 
-// @Tags Product
-// @Summary Admin Delete product
-// @Description Admin Delete product
-// @Accept json
-// @Produce json
-// @Param id path int true "Id Product"
-// @Security ApiKeyAuth
-// @SecurityDefinitions ApiKeyAuth
-// @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /admin/product/{id} [delete]
 func DeleteProductBy(ctx echo.Context) error {
 	idStr := ctx.Param("id")
 	id, err := strconv.Atoi(idStr)
@@ -157,16 +125,6 @@ func DeleteProductBy(ctx echo.Context) error {
 	})
 }
 
-// @Tags Product
-// @Summary Admin Update Product
-// @Description Admin Update Product from the database
-// @Accept json
-// @Produce json
-// @Param Request body []product.ProductUpdate true "Update Product"
-// @Security ApiKeyAuth
-// @SecurityDefinitions ApiKeyAuth
-// @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /admin/product [put]
 func UpdateProduct(ctx echo.Context) error {
 
 	productdata := []*product.ProductUpdate{}
@@ -215,16 +173,6 @@ func UpdateProduct(ctx echo.Context) error {
 	})
 }
 
-// @Tags Product
-// @Summary Admin Soft Delete product
-// @Description Admin Spft Delete product
-// @Accept json
-// @Produce json
-// @Param id path string true "Id Product"
-// @Security ApiKeyAuth
-// @SecurityDefinitions ApiKeyAuth
-// @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /admin/product/hide/{id} [delete]
 func DeleteProductSoft(ctx echo.Context) error {
 
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}

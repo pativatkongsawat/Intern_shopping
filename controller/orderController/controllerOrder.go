@@ -14,16 +14,6 @@ import (
 	"github.com/labstack/gommon/log"
 )
 
-// @Tags Order
-// @Summary Admin Delete Order
-// @Description Admin Delete Order
-// @Accept json
-// @Produce json
-// @Param Request body order.OrderCreateRequest true "Update Product"
-// @Security ApiKeyAuth
-// @SecurityDefinitions ApiKeyAuth
-// @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /admin/order [post]
 func UserCreateOrder(ctx echo.Context) error {
 	now := time.Now()
 	reqOrder := order.OrderCreateRequest{}
@@ -79,16 +69,6 @@ func UserCreateOrder(ctx echo.Context) error {
 	}, "Success")
 }
 
-// @Tags Order
-// @Summary  Admin Delete Order
-// @Description Admin Delete Order
-// @Accept json
-// @Produce json
-// @Param id query int true "id"
-// @Security ApiKeyAuth
-// @SecurityDefinitions ApiKeyAuth
-// @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /admin/order [delete]
 func OrderDelete(ctx echo.Context) error {
 
 	getid := ctx.QueryParam("id")
@@ -123,15 +103,6 @@ func OrderDelete(ctx echo.Context) error {
 	})
 }
 
-// @Tags Order
-// @Summary Admin SelfOrderDetail
-// @Description Admin SelfOrderDetail
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @SecurityDefinitions ApiKeyAuth
-// @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /admin/order [get]
 func SelfOrderDetail(e echo.Context) error {
 	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}
 	claim := e.Get("user").(*jwt.Token)
@@ -153,16 +124,6 @@ func SelfOrderDetail(e echo.Context) error {
 
 }
 
-// @Tags Order
-// @Summary Super Admin Get SelfOrderDetail
-// @Description Super Admin Get SelfOrderDetail
-// @Accept json
-// @Produce json
-// @Param id query int true "id"
-// @Security ApiKeyAuth
-// @SecurityDefinitions ApiKeyAuth
-// @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /back-office/order/detail [get]
 func SuperAdminOrderDetailByUserID(e echo.Context) error {
 	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}
 	id := e.QueryParam("id")
@@ -188,25 +149,6 @@ func SuperAdminOrderDetailByUserID(e echo.Context) error {
 
 }
 
-// @Tags Order
-// @Summary SuperAdmin Get Order
-// @Description SuperAdmin Get Order
-// @Accept json
-// @Produce json
-// @Param row query integer false "Number of rows per page (default 5)"
-// @Param page query integer false "Page number (default 1)"
-// @Param sort query string false "Sorting order (asc or desc)"
-// @Param id query integer false "Order ID"
-// @Param user query string false "User ID"
-// @Param price query number false "Total price"
-// @Param operator query string false "Price operator (eq, gt, lt)"
-// @Param create query string false "Created at date (format: yyyy-mm-dd)"
-// @Param update query string false "Updated at date (format: yyyy-mm-dd)"
-// @Param status query string false "Order status"
-// @Security ApiKeyAuth
-// @SecurityDefinitions ApiKeyAuth
-// @response 200 {object} helper.SuccessResponse "Success response"
-// @Router /back-office/order/all [get]
 func SuperAdminAllOrdersDetail(e echo.Context) error {
 	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}
 	var createAt time.Time
