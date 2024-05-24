@@ -51,6 +51,16 @@ import (
 
 // }
 
+// @Tags Product
+// @Summary Created Product
+// @Description Created Product
+// @Accept json
+// @Produce json
+// @Param Request body product.ProductInsert true "Created Product"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /order [post]
 func InsertproductBy(ctx echo.Context) error {
 	productdata := []*product.ProductInsert{}
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}
@@ -81,7 +91,7 @@ func InsertproductBy(ctx echo.Context) error {
 		products = append(products, &product)
 	}
 
-	err := productModelHelper.Insertproduct(products)
+	err := productModelHelper.InsertProduct(products)
 	if err != nil {
 		log.Println("Error inserting product:", err)
 		return ctx.JSON(500, utils.ResponseMessage{
@@ -182,8 +192,8 @@ func DeleteProductSoft(ctx echo.Context) error {
 	id, err := strconv.Atoi(getid)
 
 	if err != nil {
-		return ctx.JSON(500, utils.ResponseMessage{
-			Status:  500,
+		return ctx.JSON(400, utils.ResponseMessage{
+			Status:  400,
 			Message: "Error Delete Soft Product",
 			Result:  err.Error(),
 		})
@@ -206,6 +216,20 @@ func DeleteProductSoft(ctx echo.Context) error {
 
 }
 
+// @Tags Product
+// @Summary User Admin SuperAdmin Get Product
+// @Description User Admin SuperAdmin Get Product
+// @Accept json
+// @Produce json
+// @Param pname query string false "Product Name"
+// @Param cname query string false "Category Name"
+// @Param limit query int false "Limit Row"
+// @Param page query int false "Offset Page"
+// @Param sort query string false "sort(ASC / DESC)"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /product [get]
 func ProductGetCategory(ctx echo.Context) error {
 
 	productModelHelper := product.ProductModelHelper{DB: database.DBMYSQL}

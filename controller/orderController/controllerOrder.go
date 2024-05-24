@@ -14,6 +14,16 @@ import (
 	"github.com/labstack/gommon/log"
 )
 
+// @Tags Order
+// @Summary User Created Order
+// @Description User Created Order
+// @Accept json
+// @Produce json
+// @Param Request body order.OrderCreateRequest true "Order Create"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /order [post]
 func UserCreateOrder(ctx echo.Context) error {
 	now := time.Now()
 	reqOrder := order.OrderCreateRequest{}
@@ -69,6 +79,16 @@ func UserCreateOrder(ctx echo.Context) error {
 	}, "Success")
 }
 
+// @Tags Order
+// @Summary User Delete Order
+// @Description User Delete Order
+// @Accept json
+// @Produce json
+// @Param id query integer false "Order ID"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /order [delete]
 func OrderDelete(ctx echo.Context) error {
 
 	getid := ctx.QueryParam("id")
@@ -103,6 +123,15 @@ func OrderDelete(ctx echo.Context) error {
 	})
 }
 
+// @Tags Order
+// @Summary User Get Order Details
+// @Description User Get Order Details
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /order [get]
 func SelfOrderDetail(e echo.Context) error {
 	orderModelHelper := order.OrderModelHelper{DB: database.DBMYSQL}
 	claim := e.Get("user").(*jwt.Token)

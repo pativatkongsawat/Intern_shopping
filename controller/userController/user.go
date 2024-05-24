@@ -52,6 +52,15 @@ func CreateUsers(ctx echo.Context) error {
 // SECTION - Read
 // NOTE - Get user by Id
 
+// @Tags User
+// @Summary User Get Profile
+// @Description User Get Profile
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /user/profile [get]
 func GetUserSelf(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
@@ -68,6 +77,15 @@ func GetUserSelf(ctx echo.Context) error {
 
 // NOTE - Get all users
 
+// @Tags User
+// @Summary Admin Get all users
+// @Description Admin Get all users
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /admin/user [get]
 func GetUsers(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 
@@ -133,6 +151,16 @@ func GetDeletedUsers(ctx echo.Context) error {
 
 // SECTION - Update
 
+// @Tags User
+// @Summary User Update Profile
+// @Description Admin Delete category
+// @Accept json
+// @Produce json
+// @Param Request body users.UserUpdate true "Update User Profile"
+// @Security ApiKeyAuth
+// @SecurityDefinitions ApiKeyAuth
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /user/profile [put]
 func UpdateById(ctx echo.Context) error {
 	userModelHelper := users.DatabaseRequest{DB: database.DBMYSQL}
 

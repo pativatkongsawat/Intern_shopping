@@ -1,8 +1,10 @@
 package product
 
 import (
+	"fmt"
 	"time"
 
+	"github.com/go-playground/validator"
 	"gorm.io/gorm"
 )
 
@@ -32,10 +34,28 @@ func (u *ProductModelHelper) Getproduct(pname string, limit, page int) ([]*Produ
 
 }
 
-func (u *ProductModelHelper) Insertproduct(products []*Product) error {
+func (u *ProductModelHelper) InsertProduct(products []*Product) error {
+
 	tx := u.DB.Begin()
 
+	validate := validator.New()
+
+	for _, product := range products {
+		if err := validate.Struct(product); err != nil {
+
+			tx.Rollback()
+
+			if _, ok := err.(*validator.InvalidValidationError); ok {
+				fmt.Println("Invalid validation error:", err)
+				return err
+			}
+
+			return fmt.Errorf("validation error: %v", err)
+		}
+	}
+
 	if err := tx.Debug().Create(&products).Error; err != nil {
+
 		tx.Rollback()
 		return err
 	}
