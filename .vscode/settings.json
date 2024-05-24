@@ -1,0 +1,15 @@
+{
+    "cSpell.words": [
+        "createdhasstock",
+        "Dtime",
+        "getid",
+        "gommon",
+        "orderhas",
+        "permissionrequest"
+    ],
+    "cSpell.language": "en,lorem",
+    "cSpell.enableFiletypes": [
+        "makefile",
+        "shellscript"
+    ]
+}
